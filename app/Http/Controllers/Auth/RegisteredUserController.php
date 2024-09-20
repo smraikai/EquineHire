@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -45,6 +45,46 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Start Annual Discount Registration
+        if ($request->session()->has('annual_discount')) {
+            return redirect()->route('eh.checkout');
+        }
+
+        // Start: Trial Registration
+        if ($request->session()->has('trial')) {
+            $request->session()->forget('trial');
+            return redirect()->route('trial.signup');
+        }
+        // End: Trial Registration
+
+        if ($request->session()->has('selected_plan')) {
+            $planId = $request->session()->get('selected_plan');
+            return redirect()->route('subscription.checkout', ['plan' => $planId]);
+        }
+
+        return redirect()->route('subscription.plans');
     }
+
+    ////////////////////////////////////////////////////////////////
+    // Annual Discount
+    ////////////////////////////////////////////////////////////////
+    public function createWithDiscount(): View
+    {
+        session(['annual_discount' => true]);
+        return view('auth.register');
+    }
+    public function handleLoggedInDiscount(Request $request)
+    {
+        if (!$request->user()->subscribed('default')) {
+            // User is logged in but not subscribed, redirect to checkout
+            session(['annual_discount' => true]);
+            return redirect()->route('eh.checkout');
+        } else {
+            // User is already subscribed, redirect to dashboard with a message
+            return redirect()->route('businesses.index')
+                ->with('info', 'You are already subscribed. Check your billing portal for plan changes or upgrades.');
+        }
+    }
+
+
 }

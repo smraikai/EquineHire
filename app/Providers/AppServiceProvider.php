@@ -2,7 +2,16 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+// Models
+use App\Models\Business;
+
+// Observers
+use App\Observers\BusinessObserver;
+
+// Policies
+use App\Policies\BusinessPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,10 +24,24 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * The model to policy mappings for the application.
+     *
+     * @var array
      */
-    public function boot(): void
+    protected $policies = [
+        Business::class => BusinessPolicy::class,
+    ];
+
+    /**
+     * Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
     {
-        //
+        Business::observe(BusinessObserver::class);
+        $this->registerPolicies();
+
+        // Additional gates or policy registrations can be added here
     }
 }
