@@ -15,61 +15,63 @@
         <div class="container py-6 mx-auto">
             <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="pb-5">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900 sm:text-xl">Business Listing</h3>
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 sm:text-xl">Job Listings</h3>
                 </div>
                 @if ($jobListings->count() > 0)
                     <div class="overflow-hidden bg-white border sm:rounded-lg">
                         <div class="px-4 py-4 sm:px-6 sm:py-5">
                             <h2 class="text-lg font-medium leading-6 text-gray-900 sm:text-lg">Listing Management Options
                             </h2>
-                            <p class="max-w-2xl mt-1 text-sm text-gray-500">View, edit, or delete your listing.</p>
+                            <p class="max-w-2xl mt-1 text-sm text-gray-500">View, edit, or delete your job listings.</p>
                         </div>
                         <div class="border-t border-gray-200">
                             <dl>
-                                <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">Title</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {{ $businesses->first()->name }}</dd>
-                                </div>
-                                <div class="px-4 py-4 bg-white sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">Status</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ $businesses->first()->post_status }}
-                                        </span>
-                                    </dd>
-                                </div>
-                                <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                                    @foreach ($jobListings as $jobListing)
+                                @foreach ($jobListings as $jobListing)
+                                    <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                                        <dt class="text-sm font-medium text-gray-500">Title</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                            {{ $jobListing->title }}
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-4 bg-white sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                                        <dt class="text-sm font-medium text-gray-500">Status</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                {{ $jobListing->status }}
+                                            </span>
+                                        </dd>
+                                    </div>
+                                    <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                                         <dt class="text-sm font-medium text-gray-500">Actions</dt>
                                         <dd class="mt-2 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                             <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
                                                 @if ($jobListing->is_active)
-                                                    <a href="{{ route('jobs.show', ['id' => $jobListing->id, 'slug' => $jobListing->slug]) }}"
+                                                    <a href="{{ route('jobs.show', ['job_slug' => $jobListing->slug, 'id' => $jobListing->id]) }}"
                                                         class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md hover:border-blue-600 hover:text-white sm:w-auto hover:bg-blue-600">View</a>
                                                 @endif
-                                                <a href="{{ route('job-listings.edit', $jobListing->id) }}"
+                                                <a href="{{ route('dashboard.job-listings.edit', $jobListing->id) }}"
                                                     class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md hover:border-blue-600 hover:text-white sm:w-auto hover:bg-blue-600">Edit</a>
                                                 <button onclick="confirmDelete({{ $jobListing->id }})"
                                                     class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md sm:w-auto hover:border-red-600 hover:text-white hover:bg-red-600">Delete</button>
                                             </div>
                                         </dd>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </dl>
                         </div>
                     </div>
                 @else
                     <div class="flex flex-col items-center p-6 bg-white border rounded-md">
                         <p class="text-sm text-gray-600">You don't have any job listings yet.</p>
-                        <a href="{{ route('job-listings.create') }}"
+                        <a href="{{ route('dashboard.job-listings.create') }}"
                             class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border border-gray-300 rounded-md shadow-sm sm:w-auto sm:px-6 hover:bg-gray-100">
                             <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create New Job Listing
                         </a>
                     </div>
                 @endif
             </div>
+        </div>
     @endif
 
     <div class="container py-12 mx-auto">
@@ -131,8 +133,8 @@
                     </div>
                 </div>
                 <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
-                    @if ($businesses->isNotEmpty())
-                        <form action="{{ route('company.destroy', $businesses->first()->id) }}" method="POST">
+                    @if ($jobListings->isNotEmpty())
+                        <form action="{{ route('company.destroy', $jobListings->first()->id) }}" method="POST">
                         @else
                             <form action="#" method="POST">
                     @endif

@@ -25,12 +25,14 @@ class Company extends Model
         'phone',
         'logo',
         'latitude',
-        'longitude'
+        'longitude',
+        'is_active'
     ];
 
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
+        'is_active' => 'boolean',
     ];
 
     public function photos()
@@ -51,6 +53,21 @@ class Company extends Model
     public function jobListings()
     {
         return $this->hasMany(JobListing::class);
+    }
+
+    public function activeJobListings()
+    {
+        return $this->jobListings()->where('status', 'active');
+    }
+
+    public function inactiveJobListings()
+    {
+        return $this->jobListings()->where('status', 'inactive');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 
     public function searchableAs()

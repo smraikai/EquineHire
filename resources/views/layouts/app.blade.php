@@ -14,8 +14,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $metaTitle ?? 'EquineHire' }}">
-    <meta property="og:description"
-        content="{{ $metaDescription ?? 'Find equine services near you with EquineHire' }}">
+    <meta property="og:description" content="{{ $metaDescription ?? 'Find equine services near you with EquineHire' }}">
     <meta property="og:image" content="https://EquineHire-static-assets.s3.amazonaws.com/socialshare.jpg">
 
     <!-- Twitter -->
@@ -41,7 +40,6 @@
         }
     </script>
 
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -57,6 +55,7 @@
 <body class="font-sans antialiased">
     <div class="">
         @include('layouts.navigation')
+
 
         <!-- Page Heading -->
         @if (isset($header))

@@ -3,30 +3,24 @@
 namespace App\Http\Controllers;
 
 // Requests
-use App\Http\Requests\UpdateBusinessRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 
 use Algolia\AlgoliaSearch\SearchIndex;
 
 // Models
-use App\Models\Company;
 use App\Models\JobListingCategory;
 use App\Models\JobListing;
 use Illuminate\Support\Facades\Cache;
 
 // Illumination
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 // Services 
 use App\Services\SeoService;
-
-// Analytics for Users Dashboard
-use App\Models\PageView;
-use Carbon\Carbon;
-
-use Illuminate\Support\Facades\Log;
-
 
 class JobListingController extends Controller
 {
@@ -324,5 +318,107 @@ class JobListingController extends Controller
             ]);
         }
         return response()->json(['completed' => false]);
+    }
+
+    ////////////////////////////////////////////////////////////////
+    // Backend for Companies Posting Jobs
+    ////////////////////////////////////////////////////////////////
+    public function dashboardIndex()
+    {
+        $jobListings = auth()->user()->company->jobListings()->paginate(10);
+        return view('dashboard.job-listings.index', compact('jobListings'));
+    }
+
+    public function dashboardCreate()
+    {
+        $categories = JobListingCategory::all();
+        return view('dashboard.job-listings.create', compact('categories'));
+    }
+
+    public function dashboardStore(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'job_type' => 'required',
+            'experience_required' => 'required',
+            'salary_type' => 'required',
+            'salary_min' => 'required|numeric',
+            'salary_max' => 'required|numeric',
+            'remote_position' => 'boolean',
+            'categories' => 'required|array',
+            'photos' => 'nullable|array',
+            'photos.*' => 'string', // FilePond sends file paths
+        ]);
+
+        $jobListing = auth()->user()->jobListings()->create($validatedData);
+        $jobListing->company_id = auth()->user()->company->id;
+        $jobListing->slug = Str::slug($validatedData['title']);
+        $jobListing->save();
+
+        $jobListing->categories()->sync($validatedData['categories']);
+
+        if ($request->has('photos')) {
+            foreach ($request->input('photos', []) as $tempPath) {
+                if (Storage::disk('public')->exists($tempPath)) {
+                    $newPath = 'job-listings/' . basename($tempPath);
+                    Storage::disk('public')->move($tempPath, $newPath);
+                    $jobListing->photos()->create(['path' => $newPath]);
+                }
+            }
+        }
+
+        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
+    }
+
+    public function dashboardEdit(JobListing $jobListing)
+    {
+        $this->authorize('update', $jobListing);
+        $categories = JobListingCategory::all();
+        return view('dashboard.job-listings.edit', compact('jobListing', 'categories'));
+    }
+
+    public function dashboardUpdate(Request $request, JobListing $jobListing)
+    {
+        $this->authorize('update', $jobListing);
+
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'job_type' => 'required',
+            'experience_required' => 'required',
+            'salary_type' => 'required',
+            'salary_min' => 'required|numeric',
+            'salary_max' => 'required|numeric',
+            'remote_position' => 'boolean',
+            'categories' => 'required|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:3072', // 3MB max
+        ]);
+
+        $jobListing->update($validatedData);
+        $jobListing->categories()->sync($validatedData['categories']);
+
+        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        $file = $request->file('photo');
+        $path = $file->store('temp-photos', 'public');
+        return response()->json(['path' => $path]);
+    }
+
+    public function removePhoto(Request $request)
+    {
+        $path = $request->getContent();
+        Storage::disk('public')->delete($path);
+        return response()->json(['success' => true]);
+    }
+
+    public function dashboardDestroy(JobListing $jobListing)
+    {
+        $this->authorize('delete', $jobListing);
+        $jobListing->delete();
+        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing deleted successfully.');
     }
 }

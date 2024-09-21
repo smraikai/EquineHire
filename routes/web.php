@@ -162,3 +162,15 @@ Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
 // Check Processing Status for Business Updates
 ////////////////////////////////////////////////////////////////////
 Route::get('/check-processing-status/{business}', [CompanyController::class, 'checkProcessingStatus'])->name('business.check-status');
+
+// Job Listing Dashboard Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('dashboard/job-listings')->name('dashboard.job-listings.')->group(function () {
+        Route::get('/', [JobListingController::class, 'dashboardIndex'])->name('index');
+        Route::get('/create', [JobListingController::class, 'dashboardCreate'])->name('create');
+        Route::post('/', [JobListingController::class, 'dashboardStore'])->name('store');
+        Route::get('/{jobListing}/edit', [JobListingController::class, 'dashboardEdit'])->name('edit');
+        Route::put('/{jobListing}', [JobListingController::class, 'dashboardUpdate'])->name('update');
+        Route::delete('/{jobListing}', [JobListingController::class, 'dashboardDestroy'])->name('destroy');
+    });
+});

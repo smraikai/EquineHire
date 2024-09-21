@@ -13,97 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class FileDeleteController extends Controller
 {
-    public function deleteLogo(Request $request)
-    {
-        $request->validate([
-            'job_listing_id' => 'required|integer|exists:businesses,id',
-        ]);
-
-        $business = Business::findOrFail($request->input('job_listing_id'));
-
-        if ($business->logo) {
-            $originalKey = $this->extractKeyFromUrl($business->logo);
-            $webpKey = $this->getWebpPath($originalKey);
-
-            Storage::disk('public')->delete($originalKey);
-            Storage::disk('public')->delete($webpKey);
-
-            $business->logo = null;
-            $business->save();
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Logo deleted successfully',
-        ]);
-    }
-    public function deleteFeaturedImage(Request $request)
-    {
-        $request->validate([
-            'job_listing_id' => 'required|integer|exists:businesses,id',
-        ]);
-
-        $business = Business::findOrFail($request->input('job_listing_id'));
-
-        if ($business->featured_image) {
-            $originalKey = $this->extractKeyFromUrl($business->featured_image);
-            $webpKey = $this->getWebpPath($originalKey);
-
-            Storage::disk('public')->delete($originalKey);
-            Storage::disk('public')->delete($webpKey);
-
-            $business->featured_image = null;
-            $business->save();
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Featured image deleted successfully',
-        ]);
-    }
-
     public function deleteAdditionalPhoto(Request $request)
     {
-        $request->validate([
-            'job_listing_id' => 'required|integer|exists:businesses,id',
-            'file_path' => 'required|string',
-        ]);
-
-        $businessId = $request->input('job_listing_id');
-        $filePath = $request->input('file_path');
-
-        DB::beginTransaction();
-
-        try {
-            $photo = BusinessPhoto::where('job_listing_id', $businessId)
-                ->where('path', $filePath)
-                ->firstOrFail();
-
-            $originalKey = $this->extractKeyFromUrl($filePath);
-            $webpKey = $this->getWebpPath($originalKey);
-
-            $deleteOriginal = Storage::disk('public')->delete($originalKey);
-            $deleteWebp = Storage::disk('public')->delete($webpKey);
-
-            if (!$deleteOriginal && !$deleteWebp) {
-                throw new \Exception("Failed to delete both original and WEBP versions of the file: " . $filePath);
-            }
-
-            $photo->delete();
-            DB::commit();
-
-            return response()->json(['success' => true, 'message' => 'Photo successfully deleted']);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error("Exception during deletion: " . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to delete the photo'], 500);
+        $filePath = $request->getContent();
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+            return response('File deleted', 200);
         }
-    }
-
-    private function getWebpPath($originalPath)
-    {
-        $pathInfo = pathinfo($originalPath);
-        return $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.webp';
+        return response('File not found', 404);
     }
 
     private function extractKeyFromUrl($url)

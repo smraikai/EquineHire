@@ -31,17 +31,14 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Log;
 
-
 class CompanyController extends Controller
 {
     // Functions for Business Owners
     public function index(Request $request)
     {
         $user = auth()->user();
-        $companies = $user->companies;
-        $jobListings = JobListing::where('user_id', auth()->id())->get();
-        $jobListings = JobListing::where('user_id', auth()->id())->get();
-
+        $company = $user->company;
+        $jobListings = $company ? $company->jobListings()->latest()->take(5)->get() : collect();
 
         // Check if the user is a new subscriber. If so, pass off info to the DataLayer
         if ($request->query('subscription_completed')) {
@@ -50,13 +47,11 @@ class CompanyController extends Controller
             $price = Price::retrieve($subscription->stripe_price);
             $amount = $price->unit_amount / 100; // Convert cents to dollars
 
-            return view('dashboard.index', compact('companies', 'subscription', 'amount'));
+            return view('dashboard.index', compact('user', 'company', 'jobListings', 'subscription', 'amount'));
         }
-        ;
 
-        return view('dashboard.index', compact('jobListings'));
+        return view('dashboard.index', compact('user', 'company', 'jobListings'));
     }
-
 
     public function create()
     {
