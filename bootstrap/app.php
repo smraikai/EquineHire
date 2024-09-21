@@ -17,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'stripe/*',
         ]);
-        $middleware->append(ClearDraftsMiddleware::class);
         $middleware->alias([
             'track.pageviews' => TrackPageViews::class,
         ]);

@@ -11,11 +11,11 @@
     <div class="container p-4 mx-auto mt-10 sm:p-10 max-w-7xl">
         <div class="flex flex-col gap-2">
             <div class="flex items-center text-sm">
-                <a href="{{ route('home') }}" class="text-emerald-600 hover:text-emerald-700">Home</a>
+                <a href="{{ route('home') }}" class="text-blue-600 hover:text-blue-700">Home</a>
                 <x-coolicon-chevron-right-md class="w-5 h-5 mx-2 text-gray-400" />
-                <span class="text-gray-600">Find Services</span>
+                <span class="text-gray-600">Search Jobs</span>
             </div>
-            <h1 class="mb-5 text-2xl font-bold text-gray-800">Find Services</h1>
+            <h1 class="mb-5 text-2xl font-bold text-gray-800">Search Jobs</h1>
         </div>
         <div class="flex flex-col justify-around gap-5 md:flex-row">
             <div class="order-2 w-full md:w-3/4 md:order-1">

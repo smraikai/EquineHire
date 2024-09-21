@@ -9,8 +9,8 @@
         <!-- Left side: Login form -->
         <div class="flex items-center justify-center w-full px-4 py-8 md:w-1/2">
             <div class="w-full max-w-xl">
-                <p class="mb-8 text-sm md:text-base">Not a business owner? <a
-                        href="{{ route('businesses.directory') }}" class="text-blue-600 hover:text-blue-800">Explore Equine services in
+                <p class="mb-8 text-sm md:text-base">Not a business owner? <a href="{{ route('jobs.index') }}"
+                        class="text-blue-600 hover:text-blue-800">Explore Equine services in
                         your area</a>.</p>
 
                 <div class="mb-8">

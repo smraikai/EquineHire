@@ -12,12 +12,11 @@
 }" class="mb-10">
     <label for="name" class="block mb-2 font-medium text-gray-500 text-md">Name</label>
     <div class="relative">
-        <input type="text" name="name" id="name" placeholder="Enter business name" required
-            class="input"
+        <input type="text" name="name" id="name" placeholder="Enter business name" required class="input"
             x-model="name" @input="validateName()">
         <div x-show="!nameError && name.length > 0"
             class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <x-coolicon-circle-check class="w-5 h-5 text-emerald-500" />
+            <x-coolicon-circle-check class="w-5 h-5 text-blue-500" />
         </div>
     </div>
     <div id="nameError" class="mt-1 text-sm text-red-500" x-text="nameError"></div>

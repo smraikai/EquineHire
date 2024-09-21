@@ -11,14 +11,7 @@ use Laravel\Cashier\Billable;
 class User extends Authenticatable
 {
 
-
-    public function businesses()
-    {
-        return $this->hasMany(Business::class);
-    }
-
-    use HasFactory, Notifiable;
-    use Billable;
+    use HasFactory, Notifiable, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -46,11 +39,19 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'trial_ends_at' => 'datetime',
+    ];
+
+    public function jobListings()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(JobListing::class);
+    }
+
+    public function companies()
+    {
+        return $this->hasMany(Company::class);
     }
 }

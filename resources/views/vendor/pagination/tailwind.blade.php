@@ -69,7 +69,7 @@
                     @for ($page = $start; $page <= $end; $page++)
                         @if ($page == $paginator->currentPage())
                             <span
-                                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-emerald-500 cursor-default">
+                                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-500 cursor-default">
                                 {{ $page }}
                             </span>
                         @else

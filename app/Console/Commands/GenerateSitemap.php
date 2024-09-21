@@ -31,7 +31,7 @@ class GenerateSitemap extends Command
         $businesses = Business::all();
         foreach ($businesses as $business) {
             $url = $business->state_slug && $business->slug
-                ? route('businesses.directory.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id])
+                ? route('jobs.index.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id])
                 : null;
 
             if ($url) {

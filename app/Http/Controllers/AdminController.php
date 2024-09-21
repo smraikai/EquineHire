@@ -74,7 +74,7 @@ class AdminController extends Controller
         $business->save();
 
         // Handle categories after saving the business
-        if (! empty($validatedData['categories'][0])) {
+        if (!empty($validatedData['categories'][0])) {
             // Split the first element (expecting a string of comma-separated integers)
             $categoryIds = explode(',', $validatedData['categories'][0]);
             $categoryIds = array_map('intval', $categoryIds);
@@ -87,7 +87,7 @@ class AdminController extends Controller
         }
 
         // Handle discipline after saving the business
-        if (! empty($validatedData['disciplines'][0])) {
+        if (!empty($validatedData['disciplines'][0])) {
             // Split the first element (expecting a string of comma-separated integers)
             $disciplineIds = explode(',', $validatedData['disciplines'][0]);
             $disciplineIds = array_map('intval', $disciplineIds);
@@ -99,7 +99,7 @@ class AdminController extends Controller
             $business->disciplines()->detach();
         }
         // Redirect to the updated business directory page with success message
-        return redirect()->route('businesses.directory.show', [
+        return redirect()->route('jobs.index.show', [
             'state_slug' => $business->state_slug,
             'id' => $business->id,
             'slug' => $business->slug,

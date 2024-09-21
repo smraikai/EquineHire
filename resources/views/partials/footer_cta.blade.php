@@ -13,7 +13,7 @@
                     class="w-full sm:w-auto rounded-md bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
                     Showcase Your Expertise
                 </a>
-                <a href="{{ route('businesses.directory') }}" class="text-sm font-semibold leading-6 text-blue-900">
+                <a href="{{ route('jobs.index') }}" class="text-sm font-semibold leading-6 text-blue-900">
                     Discover Equine Services <span aria-hidden="true">→</span>
                 </a>
             </div>

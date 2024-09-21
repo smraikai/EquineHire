@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 // Requests
 use App\Http\Requests\UpdateBusinessRequest;
 
+use Algolia\AlgoliaSearch\SearchClient;
+
 // Models
-use App\Models\Business;
-use App\Models\BusinessCategory;
-use App\Models\BusinessDiscipline;
+use App\Models\Company;
+use App\Models\JobListingCategory;
+use App\Models\JobListing;
 use Illuminate\Support\Facades\Cache;
 
 // Illumination
@@ -30,35 +32,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
-class BusinessController extends Controller
+class JobListingController extends Controller
 {
-    // Functions for Business Owners
-    public function index(Request $request)
-    {
-        $user = auth()->user();
-        $businesses = $user->businesses;
-
-        // Check if the user is a new subscriber. If so, pass off info to the DataLayer
-        if ($request->query('subscription_completed')) {
-            Stripe::setApiKey(config('services.stripe.secret'));
-            $subscription = $user->subscription('default');
-            $price = Price::retrieve($subscription->stripe_price);
-            $amount = $price->unit_amount / 100; // Convert cents to dollars
-
-            return view('businesses.index', compact('businesses', 'subscription', 'amount'));
-        }
-        ;
-
-        foreach ($businesses as $business) {
-            if (!$user->subscription('default') || !$user->subscription('default')->active()) {
-                $business->update(['post_status' => 'Draft']);
-            }
-        }
-
-
-        return view('businesses.index', compact('businesses'));
-    }
-
 
     public function create()
     {
@@ -66,7 +41,7 @@ class BusinessController extends Controller
             return redirect()->route('login')->with('error', 'You must be logged in to create a business.');
         }
 
-        $business = Business::create([
+        $job_listing = JobListing::create([
             'name' => '',
             'description' => '',
             'post_status' => 'Draft',
@@ -75,19 +50,19 @@ class BusinessController extends Controller
         ]);
 
         // Redirect to the edit page of the newly created business
-        return redirect()->route('businesses.edit', $business->id);
+        return redirect()->route('businesses.edit', $job_listing->id);
     }
 
-    public function edit(Business $business)
+    public function edit(JobListing $job_listing)
     {
-        if (auth()->id() === $business->user_id) {
+        if (auth()->id() === $job_listing->user_id) {
             // Check for active subscription
             if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
                 return redirect()->route('businesses.index')->with('error', 'You need an active subscription to edit your business listing.');
             }
 
-            $categories = BusinessCategory::all();
-            $disciplines = BusinessDiscipline::all();
+            $categories = JobListingCategory::all();
+
             return view('businesses.edit', compact('business', 'categories', 'disciplines'));
         }
 
@@ -95,16 +70,14 @@ class BusinessController extends Controller
     }
 
 
-    public function update(
-        Business $business,
-        UpdateBusinessRequest $request
-    ) {
+    public function update(JobListing $job_listing, $request)
+    {
 
         \Log::info('Auth user ID: ' . auth()->user()->id);
-        \Log::info('Business user ID: ' . $business->user_id);
+        \Log::info('Business user ID: ' . $job_listing->user_id);
 
         // Check if the user is the owner of the business
-        if (auth()->user()->id !== $business->user_id) {
+        if (auth()->user()->id !== $job_listing->user_id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -117,15 +90,15 @@ class BusinessController extends Controller
         $validatedData = $request->validated();
 
         // Update slug if 'name' or 'state' has changed
-        if ($business->name !== $validatedData['name']) {
-            $business->slug = Str::slug($validatedData['name']);
+        if ($job_listing->name !== $validatedData['name']) {
+            $job_listing->slug = Str::slug($validatedData['name']);
         }
-        if ($business->state !== $validatedData['state']) {
-            $business->state_slug = Str::slug($validatedData['state']);
+        if ($job_listing->state !== $validatedData['state']) {
+            $job_listing->state_slug = Str::slug($validatedData['state']);
         }
 
         // Update post status to 'Published'
-        if ($business->post_status !== 'Published') {
+        if ($job_listing->post_status !== 'Published') {
             $validatedData['post_status'] = 'Published';
         }
 
@@ -143,7 +116,7 @@ class BusinessController extends Controller
 
         if ($additionalPhotoUrls) {
             foreach ($additionalPhotoUrls as $url) {
-                $business->photos()->create([
+                $job_listing->photos()->create([
                     'path' => $url
                 ]);
             }
@@ -151,10 +124,10 @@ class BusinessController extends Controller
 
 
         // Mass assign all validated data
-        $business->fill($validatedData);
+        $job_listing->fill($validatedData);
 
         // Save the updated business details to the database
-        $business->save();
+        $job_listing->save();
 
         // Handle categories after saving the business
         if (!empty($validatedData['categories'][0])) {
@@ -164,9 +137,9 @@ class BusinessController extends Controller
             $categoryIds = array_filter($categoryIds);
 
             // Sync the categories to the business
-            $business->categories()->sync($categoryIds);
+            $job_listing->categories()->sync($categoryIds);
         } else {
-            $business->categories()->detach();
+            $job_listing->categories()->detach();
         }
 
         // Handle discipline after saving the business
@@ -177,97 +150,87 @@ class BusinessController extends Controller
             $disciplineIds = array_filter($disciplineIds);
 
             // Sync the disciplines to the business
-            $business->disciplines()->sync($disciplineIds);
+            $job_listing->disciplines()->sync($disciplineIds);
         } else {
-            $business->disciplines()->detach();
+            $job_listing->disciplines()->detach();
         }
 
         // Redirect to processing page
-        return view('businesses.process', ['business' => $business]);
+        return view('businesses.process', ['business' => $job_listing]);
 
         // Redirect to the updated business directory page with success message
         // return redirect()->route('businesses.index')
         //    ->with('success', 'Business listing updated successfully.');
     }
 
-    public function destroy(Business $business)
+    public function destroy(JobListing $job_listing)
     {
         // Check if the authenticated user owns the business listing
-        if ($business->user_id !== auth()->user()->id) {
+        if ($job_listing->user_id !== auth()->user()->id) {
             abort(403, 'Unauthorized action.');
         }
 
         // Delete the business listing
-        $business->delete();
+        $job_listing->delete();
 
         return redirect()->route('businesses.index')
             ->with('success', 'Business listing deleted successfully.');
     }
 
     // Search Directory View and Functions
-    public function directory(Request $request)
+    public function index(Request $request)
     {
         $validatedData = $request->validate([
             'keyword' => 'nullable|string|max:255',
             'location' => 'nullable|string',
             'categories' => 'nullable|array',
-            'disciplines' => 'nullable|array',
         ]);
 
         $keyword = $request->input('keyword', '');
         $location = $request->input('location');
         $categoryIds = $request->input('categories', []);
-        $disciplineIds = $request->input('disciplines', []);
 
-        if (empty($latitude) || empty($longitude)) {
+        $query = JobListing::search($keyword);
+
+        if ($location) {
             $locationData = $this->getLatLongFromAddress($location);
             $latitude = $locationData['lat'] ?? null;
             $longitude = $locationData['lng'] ?? null;
-        }
 
-        $query = Business::search($keyword);
-
-        if ($latitude && $longitude) {
-            $query->with([
-                'aroundLatLng' => "{$latitude}, {$longitude}",
-                // 'aroundRadius' => 80467, // Around 50 Miles
-            ]);
+            if ($latitude && $longitude) {
+                $query->aroundLatLng($latitude, $longitude, 80467); // Around 50 Miles
+            }
         }
 
         if (!empty($categoryIds)) {
             $query->whereIn('category_ids', $categoryIds);
         }
 
-        if (!empty($disciplineIds)) {
-            $query->whereIn('discipline_ids', $disciplineIds);
-        }
-
-        $businesses = $query->paginate(10);
+        $results = $query->paginate(10);
 
         $facets = [
-            'categories' => BusinessCategory::all(),
-            'disciplines' => BusinessDiscipline::all(),
+            'categories' => JobListingCategory::all(),
         ];
 
-        return view('businesses.directory', compact('businesses', 'facets'));
+        return view('jobs.index', compact('results', 'facets'));
     }
 
     public function directoryShow(Request $request, $state, $slug, $id, SeoService $seoService)
     {
-        $business = Business::where('id', $id)
+        $job_listing = Business::where('id', $id)
             ->where('state_slug', $state)
             ->with('photos') // Eager load the photos relationship
             ->firstOrFail();
 
         // Check if the business is a draft and the user is not the owner
-        if ($business->post_status === 'Draft') {
-            if (!auth()->check() || auth()->id() !== $business->user_id) {
+        if ($job_listing->post_status === 'Draft') {
+            if (!auth()->check() || auth()->id() !== $job_listing->user_id) {
                 abort(404);
             }
         }
 
-        $canonicalSlug = $business->slug;
-        $canonicalUrl = route('businesses.directory.show', [
+        $canonicalSlug = $job_listing->slug;
+        $canonicalUrl = route('jobs.index.show', [
             'state_slug' => $state,
             'slug' => $canonicalSlug,
             'id' => $id,
@@ -278,12 +241,12 @@ class BusinessController extends Controller
         }
 
         // Generate meta title and description using SeoService
-        $metaTitle = $seoService->generateMetaTitle($business->name, $business->city, $business->state);
-        $metaDescription = $seoService->generateMetaDescription($business->description);
+        $metaTitle = $seoService->generateMetaTitle($job_listing->name, $job_listing->city, $job_listing->state);
+        $metaDescription = $seoService->generateMetaDescription($job_listing->description);
 
-        $isOwner = auth()->check() && auth()->user()->id === $business->user_id;
+        $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
 
-        return view('businesses.directory-show', compact('business', 'isOwner', 'metaTitle', 'metaDescription'));
+        return view('jobs.index-show', compact('business', 'isOwner', 'metaTitle', 'metaDescription'));
     }
 
     public function getLatLongFromAddress($address)
@@ -307,9 +270,9 @@ class BusinessController extends Controller
     public function getAnalytics(Request $request)
     {
         $user = $request->user();
-        $business = $user->businesses()->first();
+        $job_listing = $user->businesses()->first();
 
-        if (!$business) {
+        if (!$job_listing) {
             return response()->json([
                 'labels' => [],
                 'data' => [],
@@ -317,7 +280,7 @@ class BusinessController extends Controller
             ]);
         }
 
-        $pageViews = PageView::where('job_listing_id', $business->id)
+        $pageViews = PageView::where('job_listing_id', $job_listing->id)
             ->orderBy('date')
             ->get()
             ->groupBy(function ($date) {
@@ -339,17 +302,17 @@ class BusinessController extends Controller
     }
 
     // Business Processing Status
-    public function checkProcessingStatus(Business $business)
+    public function checkProcessingStatus(Business $job_listing)
     {
-        $completed = Cache::get("business_{$business->id}_processed", false);
+        $completed = Cache::get("business_{$job_listing->id}_processed", false);
         if ($completed) {
             session()->flash('success', 'Business listing updated successfully.');
             return response()->json([
                 'completed' => true,
-                'redirect' => route('businesses.directory.show', [
-                    'state_slug' => $business->state_slug,
-                    'slug' => $business->slug,
-                    'id' => $business->id
+                'redirect' => route('jobs.index.show', [
+                    'state_slug' => $job_listing->state_slug,
+                    'slug' => $job_listing->slug,
+                    'id' => $job_listing->id
                 ])
             ]);
         }

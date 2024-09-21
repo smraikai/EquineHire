@@ -33,7 +33,7 @@ class TrackPageViews
     {
         $response = $next($request);
 
-        if ($request->route()->getName() === 'businesses.directory.show') {
+        if ($request->route()->getName() === 'jobs.index.show') {
             $businessId = $request->route('id');
             $business = Business::find($businessId);
 

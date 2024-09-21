@@ -39,7 +39,7 @@
                         the equine industry.</p>
                     <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                         <a href="{{ route('subscription.plans') }}" class="text-center text-md btn accent">Post a Job</a>
-                        <a href="{{ route('businesses.directory') }}" class="text-center text-md btn main">Find a Job</a>
+                        <a href="{{ route('jobs.index') }}" class="text-center text-md btn main">Find a Job</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                     services, from veterinary care and farrier services to training programs and boarding facilities, all on
                     one convenient platform.</p>
                 <div class="grid grid-cols-2 gap-4 mt-8 sm:gap-6 lg:grid-cols-4">
-                    <a href="{{ route('businesses.directory', ['categories[]' => 5]) }}"
+                    <a href="{{ route('jobs.index', ['categories[]' => 5]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
                         <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_farrier.svg" alt="Farriers"
                             loading="lazy" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
@@ -84,7 +84,7 @@
                             Farriers
                         </div>
                     </a>
-                    <a href="{{ route('businesses.directory', ['categories[]' => 14]) }}"
+                    <a href="{{ route('jobs.index', ['categories[]' => 14]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
                         <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_trainers.svg" alt="Trainers"
                             loading="lazy" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
@@ -92,7 +92,7 @@
                             Trainers
                         </div>
                     </a>
-                    <a href="{{ route('businesses.directory', ['categories[]' => 1]) }}"
+                    <a href="{{ route('jobs.index', ['categories[]' => 1]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
                         <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_boarding_facilities.svg"
                             loading="lazy" alt="Boarding Facilities" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
@@ -100,7 +100,7 @@
                             Boarding Facilities
                         </div>
                     </a>
-                    <a href="{{ route('businesses.directory', ['categories[]' => 6]) }}"
+                    <a href="{{ route('jobs.index', ['categories[]' => 6]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
                         <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg" loading="lazy"
                             alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
@@ -137,7 +137,7 @@
                 business reach, EquineHire bridges the gap.</p>
             <div class="flex flex-col mt-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <x-eqpf-btn-alt href="{{ route('subscription.plans') }}" text="Post a Job" />
-                <x-eqpf-btn-alt href="{{ route('businesses.directory') }}" text="Find Services" />
+                <x-eqpf-btn-alt href="{{ route('jobs.index') }}" text="Search Jobs" />
             </div>
         </div>
     </section>

@@ -2,53 +2,66 @@
 
 namespace App\Models;
 
-// Laravel Scout
 use Laravel\Scout\Searchable;
-
-// Illumination
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Business extends Model
+class JobListing extends Model
 {
-    use HasFactory;
-    use Searchable;
+    use HasFactory, Searchable;
+
     protected $fillable = [
-        'user_id',
-        'name',
+        'company_id',
+        'title',
         'description',
-        'address',
+        'remote_position',
         'city',
         'state',
-        'zip_code',
-        'website',
-        'email',
-        'phone',
-        'logo',
-        'featured_image',
-        'post_status',
+        'job_type',
+        'experience_required',
+        'salary_type',
+        'hourly_rate_min',
+        'hourly_rate_max',
+        'salary_range_min',
+        'salary_range_max',
+        'application_type',
+        'application_link',
+        'email_link',
+        'is_active',
+        'is_boosted',
+        'is_sticky',
         'latitude',
-        'longitude'
+        'longitude',
+        'post_status',
     ];
 
     protected $casts = [
+        'remote_position' => 'boolean',
+        'is_active' => 'boolean',
+        'is_boosted' => 'boolean',
+        'is_sticky' => 'boolean',
         'latitude' => 'float',
         'longitude' => 'float',
     ];
 
-    public function photos()
+    public function company()
     {
-        return $this->hasMany(BusinessPhoto::class, 'job_listing_id');
+        return $this->belongsTo(Company::class);
     }
 
-    // Liknking Together Other Categories
+    public function photos()
+    {
+        return $this->hasMany(JobListingPhoto::class);
+    }
+
     public function categories()
     {
-        return $this->belongsToMany(BusinessCategory::class, 'business_category_associations', 'job_listing_id', 'category_id');
+        return $this->belongsToMany(JobListingCategory::class, 'job_listing_category_associations');
     }
+
     public function disciplines()
     {
-        return $this->belongsToMany(BusinessDiscipline::class, 'business_discipline_associations', 'job_listing_id', 'discipline_id');
+        return $this->belongsToMany(JobListingDiscipline::class, 'job_listing_discipline_associations');
     }
 
     // Users
@@ -60,7 +73,7 @@ class Business extends Model
     // Search Functionality
     public function searchableAs()
     {
-        return 'businesses_listings';
+        return 'job_listings';
     }
 
     public function toSearchableArray(): array
@@ -78,12 +91,8 @@ class Business extends Model
         // Add category IDs
         $array['category_ids'] = $this->categories->pluck('id')->toArray();
 
-        // Add discipline IDs
-        $array['discipline_ids'] = $this->disciplines->pluck('id')->toArray();
-
         return $array;
     }
-
 
     /**
      * Determine if the model should be searchable.
@@ -92,7 +101,9 @@ class Business extends Model
      */
     public function shouldBeSearchable()
     {
-        // Only index the model if its post_status is 'Published'
-        return $this->post_status === 'Published';
+        // Only index the model if it's active
+        return $this->is_active === true;
     }
+
+    // ... (keep any other existing methods)
 }

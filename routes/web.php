@@ -1,7 +1,8 @@
 <?php
 
 // Controllers
-use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\FileUploadController;
@@ -60,9 +61,9 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 ////////////////////////////////////////////////////////////////////
 // Business Directory (Public) Routes
 ////////////////////////////////////////////////////////////////////
-Route::get('/explore', [BusinessController::class, 'directory'])->name('businesses.directory');
-Route::get('/{state_slug}/{slug}-{id}', [BusinessController::class, 'directoryShow'])
-    ->name('businesses.directory.show')
+Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
+Route::get('/{state_slug}/{slug}-{id}', [JobListingController::class, 'job.single'])
+    ->name('jobs.index.show')
     ->where('slug', '.*')
     ->middleware('track.pageviews');
 

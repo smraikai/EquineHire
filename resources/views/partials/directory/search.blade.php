@@ -1,4 +1,4 @@
-<form action="{{ route('businesses.directory') }}" method="GET"
+<form action="{{ route('jobs.index') }}" method="GET"
     class="flex flex-col lg:flex-row items-stretch p-0 bg-white rounded-md overflow-hidden {{ Route::currentRouteName() === 'home' ? 'border-none' : 'lg:border lg:border-gray-200' }}">
     <!-- Keyword Input -->
     <div class="w-full mb-2 lg:flex-grow lg:mb-0">

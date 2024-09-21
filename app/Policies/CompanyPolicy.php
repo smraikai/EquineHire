@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Business;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class BusinessPolicy
+class CompanyPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class BusinessPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Business $business): bool
+    public function view(User $user, Company $Company): bool
     {
         //
     }
@@ -35,16 +35,16 @@ class BusinessPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Business $business)
+    public function update(User $user, Company $Company)
     {
-        // Allow update if the user is the owner of the business
-        return $user->id === $business->user_id;
+        // Allow update if the user is the owner of the Company
+        return $user->id === $Company->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Business $business): bool
+    public function delete(User $user, Company $Company): bool
     {
         //
     }
@@ -52,7 +52,7 @@ class BusinessPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Business $business): bool
+    public function restore(User $user, Company $Company): bool
     {
         //
     }
@@ -60,7 +60,7 @@ class BusinessPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Business $business): bool
+    public function forceDelete(User $user, Company $Company): bool
     {
         //
     }

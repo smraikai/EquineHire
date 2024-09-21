@@ -42,7 +42,7 @@
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 text-sm font-medium text-emerald-600">
+                        <p class="mt-2 text-sm font-medium text-blue-600">
                             {{ __('A new verification link has been sent to your email address.') }}
                         </p>
                     @endif
@@ -55,7 +55,7 @@
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
-                    class="text-sm text-emerald-600">{{ __('Information updated.') }}</p>
+                    class="text-sm text-blue-600">{{ __('Information updated.') }}</p>
             @endif
         </div>
     </form>

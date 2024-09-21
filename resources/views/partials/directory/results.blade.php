@@ -1,7 +1,7 @@
 @if (isset($businesses))
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         @forelse($businesses as $business)
-            <a href="{{ route('businesses.directory.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id]) }}"
+            <a href="{{ route('jobs.index.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id]) }}"
                 class="block overflow-hidden transition-shadow bg-white border border-gray-200 rounded-lg hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-50">
                 <div class="flex flex-col">
                     @if ($business->featured_image)
@@ -25,7 +25,7 @@
                         </div>
                         <div class="flex flex-wrap gap-2 mt-4">
                             @foreach ($business->categories->take(5) as $category)
-                                <span class="px-2 py-1 text-xs font-semibold text-emerald-800 bg-emerald-100 rounded">
+                                <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded">
                                     {{ $category->name }}
                                 </span>
                             @endforeach

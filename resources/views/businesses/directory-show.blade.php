@@ -107,7 +107,7 @@
                     <!-- Main title -->
                     <h1 class="text-3xl font-semibold text-gray-900 sm:text-4xl fancy-title">{!! $business->name !!}</h1>
                     <!-- City and State -->
-                    <p class="text-sm text-emerald-800 fancy-subtitle">{!! $business->city !!}, {!! $business->state !!}</p>
+                    <p class="text-sm text-blue-800 fancy-subtitle">{!! $business->city !!}, {!! $business->state !!}</p>
                 </div>
             </div>
             <!-- Buttons on a new row -->
@@ -139,7 +139,7 @@
                         <div id="categoryContainer" class="flex flex-wrap gap-2 pt-1">
                             @foreach ($business->categories as $key => $category)
                                 <span
-                                    class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $category->name }}</span>
+                                    class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $category->name }}</span>
                             @endforeach
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                             <div id="categoryContainer" class="flex flex-wrap gap-2 pt-1">
                                 @foreach ($business->disciplines as $key => $discipline)
                                     <span
-                                        class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $discipline->name }}</span>
+                                        class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $discipline->name }}</span>
                                 @endforeach
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                             <div class="flex items-center gap-3">
                                 <x-coolicon-link class="flex-none w-5 h-5 text-gray-600" />
                                 <a href="{{ $business->website }}" target="\_blank"
-                                    class="text-emerald-600 hover:underline">{{ $business->website }}</a>
+                                    class="text-blue-600 hover:underline">{{ $business->website }}</a>
                             </div>
                         @endif
 
@@ -190,7 +190,7 @@
                             <div class="flex items-center gap-3">
                                 <x-coolicon-mail class="flex-none w-5 h-5 text-gray-600" />
                                 <a href="mailto:{{ $business->email }}"
-                                    class="text-emerald-600 hover:underline">{{ $business->email }}</a>
+                                    class="text-blue-600 hover:underline">{{ $business->email }}</a>
                             </div>
                         @endif
 
@@ -278,7 +278,7 @@
             "addressCountry": "US"
         },
         "telephone": "{{ $business->phone }}",
-        "url": "{{ route('businesses.directory.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id]) }}",
+        "url": "{{ route('jobs.index.show', ['state_slug' => $business->state_slug, 'slug' => $business->slug, 'id' => $business->id]) }}",
         "hasMap": "{{ $business->google_maps_url }}",
         "sameAs": [
             "{{ $business->facebook_url }}",

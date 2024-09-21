@@ -35,7 +35,7 @@
                                     <dt class="text-sm font-medium text-gray-500">Status</dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                         <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                             {{ $businesses->first()->post_status }}
                                         </span>
                                     </dd>
@@ -46,7 +46,7 @@
                                         <dd class="mt-2 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                             <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
                                                 @if ($business->post_status === 'Published')
-                                                    <a href="{{ route('businesses.directory.show', ['state_slug' => $business->state_slug, 'id' => $business->id, 'slug' => $business->slug]) }}"
+                                                    <a href="{{ route('jobs.index.show', ['state_slug' => $business->state_slug, 'id' => $business->id, 'slug' => $business->slug]) }}"
                                                         class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md hover:border-blue-600 hover:text-white sm:w-auto hover:bg-blue-600">View</a>
                                                 @endif
                                                 <a href="{{ route('businesses.edit', $businesses->first()->id) }}"

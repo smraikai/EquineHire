@@ -6,7 +6,7 @@
                 <a href="{{ route('businesses.index') }}"
                     class="px-4 py-2 text-white transition duration-150 ease-in-out border rounded hover:text-black hover:bg-white">Cancel</a>
                 <a id="publishUpdateBtn1"
-                    class="px-4 py-2 text-white transition duration-150 ease-in-out bg-emerald-500 rounded cursor-pointer hover:bg-emerald-600"
+                    class="px-4 py-2 text-white transition duration-150 ease-in-out bg-blue-500 rounded cursor-pointer hover:bg-blue-600"
                     onclick="submitForm()">{{ $business->post_status == 'Draft' ? 'Publish' : 'Update' }}</a>
             </div>
         </div>

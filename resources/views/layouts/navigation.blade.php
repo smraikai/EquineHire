@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <a href="{{ route('businesses.directory') }}"
+                <a href="{{ route('jobs.index') }}"
                     class="inline-flex items-center px-2 py-2 {{ Route::currentRouteName() === 'home' ? 'text-white hover:text-gray-300' : 'text-gray-700 hover:text-gray-500' }} bg-transparent  focus:outline-none focus:text-gray-500">
                     Search Jobs
                 </a>
@@ -141,15 +141,15 @@
                         </svg>
                     </button>
                     <div x-show="open" class="mt-2 space-y-2">
-                        <a href="{{ route('businesses.directory', ['categories[]' => 5]) }}"
+                        <a href="{{ route('jobs.index', ['categories[]' => 5]) }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">Farriers</a>
-                        <a href="{{ route('businesses.directory', ['categories[]' => 14]) }}"
+                        <a href="{{ route('jobs.index', ['categories[]' => 14]) }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">Trainers</a>
-                        <a href="{{ route('businesses.directory', ['categories[]' => 1]) }}"
+                        <a href="{{ route('jobs.index', ['categories[]' => 1]) }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">Boarding Facilities</a>
-                        <a href="{{ route('businesses.directory', ['categories[]' => 6]) }}"
+                        <a href="{{ route('jobs.index', ['categories[]' => 6]) }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">Riding Lessons</a>
-                        <a href="{{ route('businesses.directory') }}"
+                        <a href="{{ route('jobs.index') }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">View All Services</a>
                     </div>
                 </div>
