@@ -2,12 +2,15 @@
 
 @php
     // Meta Tags
-    $metaTitle = 'Explore Equine Services | EquineHire';
+    $metaTitle = 'Search for Equine Jobs | EquineHire';
     $metaDescription =
-        'Browse our comprehensive directory of equine professionals. Easily locate and connect with farriers, veterinarians, trainers, boarding facilities, and more in your area.';
+        'Unleash your equine passion! Search for high-paying jobs in the equine industry – trainers, vet techs, grooms &amp; more. Search now!';
 @endphp
 
 @section('content')
+    <x-custom.hero-light kicker="Your Journey Starts Here" title="Search Equine Jobs"
+        subtitle="Discover rewarding career opportunities in the equine industry." />
+
     <div class="container p-4 mx-auto mt-10 sm:p-10 max-w-7xl">
         <div class="flex flex-col gap-2">
             <div class="flex items-center text-sm">
