@@ -5,7 +5,8 @@
                 <div class="relative group">
                     <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
                         class="block relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm group-hover:shadow-md {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
-                        <div class="relative flex items-start p-4 sm:items-center sm:p-6">
+                        <div class="relative flex items-center justify-between p-4 sm:p-6">
+
                             <!-- Logo -->
                             <img class="object-cover w-12 h-12 mr-3 rounded-full sm:w-16 sm:h-16 sm:mr-4"
                                 src="{{ $job_listing->company->logo ?? 'https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_placeholder.jpg' }}"
