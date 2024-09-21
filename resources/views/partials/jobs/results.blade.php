@@ -1,49 +1,62 @@
 @if (isset($results))
     <div class="space-y-6">
         @forelse($results as $job_listing)
-            <div
-                class="relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm hover:shadow-md {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
-                <div class="flex items-center p-6">
-                    <!-- Logo -->
-                    <img class="object-cover w-16 h-16 mr-4 rounded-full"
-                        src="{{ $job_listing->company->logo ?? 'https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_placeholder.jpg' }}"
-                        alt="{{ $job_listing->company->name }} logo">
+            <div class="relative group">
+                <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
+                    class="block relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm group-hover:shadow-md {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
+                    <div class="relative flex items-center p-6">
+                        <!-- Logo -->
+                        <img class="object-cover w-16 h-16 mr-4 rounded-full"
+                            src="{{ $job_listing->company->logo ?? 'https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_placeholder.jpg' }}"
+                            alt="{{ $job_listing->company->name }} logo">
 
-                    <!-- Job details and location -->
-                    <div class="flex flex-col flex-grow sm:flex-row sm:justify-between sm:items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">{{ $job_listing->title }}</h3>
-                            <p class="text-sm text-gray-600">{{ $job_listing->company->name }}</p>
-                        </div>
+                        <!-- Job details and location -->
+                        <div class="flex flex-col flex-grow sm:flex-row sm:justify-between sm:items-start">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $job_listing->title }}</h3>
+                                <p class="text-sm text-gray-600">{{ $job_listing->company->name }}</p>
+                            </div>
 
-                        <!-- Featured tag, Location, and Time -->
-                        <div class="mt-2 sm:mt-0 sm:ml-4 sm:text-right">
-                            <!-- ... (rest of the code remains the same) ... -->
+                            <!-- Featured tag, Location, and Time -->
+                            <div class="mt-2 sm:mt-0 sm:ml-4 sm:text-right">
+                                @if ($job_listing->is_featured)
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        Featured
+                                    </span>
+                                @endif
+                                <p class="mt-1 text-sm text-gray-500">{{ $job_listing->location }}</p>
+                                <p class="mt-1 text-sm text-gray-500">{{ $job_listing->created_at->diffForHumans() }}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- View Job and Apply Now buttons -->
-                    <div class="absolute inset-0 flex items-center justify-end p-6 transition-opacity duration-300 opacity-0 hover:opacity-100"
-                        style="background: linear-gradient(to right, transparent 50%, {{ $job_listing->is_boosted ? 'rgb(240 249 255)' : 'white' }} 50%);">
+                    @if ($job_listing->created_at->gt(now()->subWeeks(1)))
+                        <div class="absolute top-2 left-2">
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                New
+                            </span>
+                        </div>
+                    @endif
+                </a>
+
+                <!-- View Job and Apply Now buttons -->
+                <div
+                    class="absolute inset-0 flex items-center justify-end p-6 transition-all translate-y-4 opacity-0 pointer-events-none duration-50 group-hover:opacity-100 group-hover:translate-y-0">
+                    <div class="pointer-events-auto">
                         <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
-                            class="z-10 inline-flex items-center px-4 py-2 mr-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="inline-flex items-center px-4 py-2 mr-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             View Job
                         </a>
-                        <a href="#"
-                            class="z-10 inline-flex items-center px-4 py-2 text-sm font-medium text-black bg-white border border-black rounded-md shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        <a href="#" onclick="applyNow(event, '{{ $job_listing->id }}')"
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-black bg-white border border-black rounded-md shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                             Apply Now
                         </a>
                     </div>
                 </div>
 
-                @if ($job_listing->created_at->gt(now()->subWeeks(1)))
-                    <div class="absolute top-2 left-2">
-                        <span
-                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            New
-                        </span>
-                    </div>
-                @endif
             </div>
         @empty
             <div class="py-12 text-center">
@@ -69,3 +82,11 @@
         </div>
     </div>
 @endif
+
+<script>
+    function applyNow(event, jobId) {
+        event.preventDefault();
+        // Add your apply now logic here
+        console.log('Apply Now clicked for job ID:', jobId);
+    }
+</script>
