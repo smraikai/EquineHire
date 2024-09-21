@@ -42,9 +42,6 @@
                                         Most popular</p>
                                 @endif
                             </div>
-                            <p class="mt-4 text-sm leading-6 text-gray-600">
-                                {{ $plan['name'] }} plan for growing businesses.
-                            </p>
                             <p class="flex items-baseline mt-6 gap-x-1">
                                 <span class="text-4xl font-bold tracking-tight text-gray-900">
                                     ${{ $plan['price'] }}
@@ -74,7 +71,7 @@
                     {{ $index === 1
                         ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-500 focus-visible:outline-blue-600'
                         : 'bg-blue-50 text-blue-700 shadow-sm hover:bg-blue-100 focus-visible:outline-blue-600' }}">
-                                    Subscribe to {{ $plan['name'] }}
+                                    Choose Plan
                                 </button>
                             </form>
                         </div>
@@ -87,31 +84,29 @@
 
 
 
-    <section class="py-12 ">
+    <section class="py-12">
         <div class="p-12 mx-auto bg-gray-100 max-w-7xl sm:px-6 lg:px-8 rounded-2xl">
             <div class="lg:text-center">
                 <h2 class="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-4xl">
-                    Why Join EquineHire?
+                    Why Post Jobs on EquineHire?
                 </h2>
                 <p class="max-w-2xl mt-4 text-xl text-gray-500 lg:mx-auto">
-                    EquineHire helps equine service providers connect with new customers and grow their business.
-                    Here's how:
+                    EquineHire helps you find the perfect candidates for your equine job openings. Here's how we stand out:
                 </p>
             </div>
 
             <div class="mt-10">
-                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10 lg:grid-cols-3">
                     <div class="relative">
                         <dt>
                             <div
                                 class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-user-add class="w-6 h-6" />
+                                <x-coolicon-search-magnifying-glass class="w-6 h-6" />
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Reach New Customers</p>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Optimized for Google</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Get your equine services in front of thousands of potential customers actively searching for
-                            providers like you.
+                            Our job listings rank well on Google, ensuring maximum exposure for your job openings.
                         </dd>
                     </div>
 
@@ -119,13 +114,13 @@
                         <dt>
                             <div
                                 class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-trending-up class="w-6 h-6" />
+                                <x-coolicon-share-android share class="w-6 h-6" />
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Grow Your Business</p>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Social Media Boost</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Attract new clients and increase your revenue with a professional listing showcasing your
-                            services and expertise.
+                            We share your jobs on relevant Facebook groups, acting like a social media manager to help find
+                            the right candidates.
                         </dd>
                     </div>
 
@@ -133,34 +128,41 @@
                         <dt>
                             <div
                                 class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-book-open class="w-6 h-6" />
+                                <x-coolicon-flag class="w-6 h-6" />
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">
-                                Access Growth Resources
-                                <span
-                                    class="inline-flex items-center px-2 py-1 ml-2 text-xs font-medium text-yellow-800 bg-yellow-200 rounded-md">Coming
-                                    Soon!</span>
-                            </p>
-
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">US-Focused</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Gain exclusive access to our library of educational materials and guides
-                            designed to help you expand and optimize your equine business.
+                            We cater specifically to the US job market, connecting you with local talent in the equine
+                            industry.
                         </dd>
                     </div>
-
 
                     <div class="relative">
                         <dt>
                             <div
                                 class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-chat-circle-check class="w-6 h-6" />
+                                <x-coolicon-octagon-check class="w-6 h-6" />
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Get Expert Support</p>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Equine-Specific</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Our dedicated support team is here to help you make the most of your listing and achieve your
-                            business goals.
+                            Unlike broad job sites, we reach equine job seekers specifically, ensuring more relevant
+                            applicants.
+                        </dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div
+                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
+                                <x-coolicon-edit-pencil-line-01 class="w-6 h-6" />
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Easy Management</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">
+                            Easily add your job post and make any edits you want, giving you full control over your
+                            listings.
                         </dd>
                     </div>
                 </dl>

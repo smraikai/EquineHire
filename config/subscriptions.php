@@ -14,7 +14,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
             [
@@ -28,8 +29,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Posted on social media',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
             [
@@ -43,8 +44,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Posted on social media',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
         ],
@@ -60,7 +61,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
             [
@@ -74,8 +76,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Posted on social media',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
             [
@@ -89,8 +91,8 @@ return [
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
-                    'Posted on social media',
-                    'Shared on top equine Facebook groups',
+                    'Shared on social media',
+                    'Cancel Any Time'
                 ],
             ],
         ],
