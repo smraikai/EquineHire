@@ -62,10 +62,11 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 // Business Directory (Public) Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
-Route::get('/{state_slug}/{slug}-{id}', [JobListingController::class, 'job.single'])
-    ->name('jobs.index.show')
-    ->where('slug', '.*')
+Route::get('/{job_slug}-{id}', [JobListingController::class, 'show'])
+    ->name('jobs.show')
+    ->where('job_slug', '[a-z0-9\-]+')
     ->middleware('track.pageviews');
+
 
 ////////////////////////////////////////////////////////////////////
 // Authentication Routes

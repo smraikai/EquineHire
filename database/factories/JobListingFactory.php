@@ -6,6 +6,7 @@ use App\Models\JobListing;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class JobListingFactory extends Factory
 {
@@ -13,10 +14,12 @@ class JobListingFactory extends Factory
 
     public function definition()
     {
+        $title = $this->faker->jobTitle;
         return [
             'company_id' => Company::factory(),
             'user_id' => User::factory(),
             'title' => $this->faker->jobTitle,
+            'slug' => Str::slug($title . '-' . $this->faker->unique()->numberBetween(1000, 9999)),
             'description' => $this->faker->paragraphs(3, true),
             'remote_position' => $this->faker->boolean(),
             'city' => $this->faker->city,

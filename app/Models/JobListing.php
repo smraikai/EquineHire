@@ -80,6 +80,9 @@ class JobListing extends Model
     {
         $array = $this->toArray();
 
+        // Ensure the 'id' is used as 'objectID'
+        $array['objectID'] = $this->getKey();
+
         // Only add _geoloc if latitude and longitude are not null
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [

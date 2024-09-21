@@ -54,19 +54,6 @@
                                 class="ml-2 text-sm font-normal">{{ $category->name }}</label>
                         </div>
                     @endforeach
-                    @if (count($facets['categories']) > 5)
-                        <button type="button" @click="showAllCategories = !showAllCategories"
-                            class="mt-1 text-blue-500 hover:text-blue-700">
-                            <span x-show="!showAllCategories" class="flex items-center space-x-1 text-sm">
-                                <span>{{ __('Show More') }}</span>
-                                <x-coolicon-caret-down-sm class="w-6 h-6" />
-                            </span>
-                            <span x-show="showAllCategories" class="flex items-center space-x-1 text-sm">
-                                <span>{{ __('Show Less') }}</span>
-                                <x-coolicon-caret-up-sm class="w-6 h-6" />
-                            </span>
-                        </button>
-                    @endif
                 </div>
             </div>
 

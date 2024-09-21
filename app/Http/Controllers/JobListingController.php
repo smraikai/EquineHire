@@ -208,6 +208,14 @@ class JobListingController extends Controller
 
         $results = $query->paginate(10);
 
+        Log::info('Search parameters:', [
+            'keyword' => $keyword,
+            'location' => $location,
+            'categoryIds' => $categoryIds,
+            'resultsCount' => $results->count(),
+            'resultsTotal' => $results->total(),
+        ]);
+
         $facets = [
             'categories' => JobListingCategory::all(),
         ];
