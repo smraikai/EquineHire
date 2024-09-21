@@ -99,7 +99,7 @@ class JobListing extends Model
 
         // Add new facets
         $array['category_ids'] = array_map('strval', $this->categories->pluck('id')->toArray());
-        $array['state'] = $this->state;
+        $array['state'] = $this->state ? trim($this->state) : null;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
         $array['salary_type'] = $this->salary_type;
@@ -112,7 +112,7 @@ class JobListing extends Model
     {
         return [
             'attributesForFaceting' => [
-                'state',
+                'searchable(state)',
                 'job_type',
                 'experience_required',
                 'salary_type',

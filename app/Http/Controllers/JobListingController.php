@@ -181,9 +181,12 @@ class JobListingController extends Controller
     ////////////////////////////////////////////////////////////////
     public function index(Request $request)
     {
+
+        Log::info('Incoming search request:', $request->all());
+
         $validatedData = $request->validate([
             'keyword' => 'nullable|string|max:255',
-            'location' => 'nullable|string',
+            'state' => 'nullable|string|max:255',
             'categories' => 'nullable|array',
             'job_type' => 'nullable|string',
             'experience_level' => 'nullable|string',
@@ -192,19 +195,19 @@ class JobListingController extends Controller
         ]);
 
         $keyword = $request->input('keyword', '');
-        $location = $request->input('location');
+        $state = $validatedData['state'] ?? null;
         $categoryIds = $request->input('categories', []);
         $jobType = $request->input('job_type');
         $experienceLevel = $request->input('experience_level');
         $salaryType = $request->input('salary_type');
         $remotePosition = $request->boolean('remote_position');
 
-        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($location, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($state, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
             $options['facets'] = ['state', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
             $facetFilters = [];
-            if ($location) {
-                $facetFilters[] = "state:{$location}";
+            if ($state) {
+                $facetFilters[] = "state:{$state}";
             }
             if (!empty($categoryIds)) {
                 $categoryFilters = array_map(function ($id) {
@@ -244,7 +247,7 @@ class JobListingController extends Controller
 
         Log::info('Search parameters:', [
             'keyword' => $keyword,
-            'location' => $location,
+            'state' => $state,
             'categoryIds' => $categoryIds,
             'jobType' => $jobType,
             'experienceLevel' => $experienceLevel,
