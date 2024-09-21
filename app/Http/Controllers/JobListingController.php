@@ -21,10 +21,6 @@ use Illuminate\Support\Facades\Http;
 // Services 
 use App\Services\SeoService;
 
-// Stripe Integration for GA Tracking
-use Stripe\Stripe;
-use Stripe\Price;
-
 // Analytics for Users Dashboard
 use App\Models\PageView;
 use Carbon\Carbon;
@@ -312,43 +308,8 @@ class JobListingController extends Controller
         return null;
     }
 
-    // Analytics for Page Views
-    public function getAnalytics(Request $request)
-    {
-        $user = $request->user();
-        $job_listing = $user->businesses()->first();
-
-        if (!$job_listing) {
-            return response()->json([
-                'labels' => [],
-                'data' => [],
-                'message' => 'No business found for this user'
-            ]);
-        }
-
-        $pageViews = PageView::where('job_listing_id', $job_listing->id)
-            ->orderBy('date')
-            ->get()
-            ->groupBy(function ($date) {
-                return Carbon::parse($date->date)->format('W');
-            });
-
-        $labels = [];
-        $data = [];
-
-        foreach ($pageViews as $week => $views) {
-            $labels[] = 'Week ' . $week;
-            $data[] = $views->sum('view_count');
-        }
-
-        return response()->json([
-            'labels' => $labels,
-            'data' => $data,
-        ]);
-    }
-
     // Business Processing Status
-    public function checkProcessingStatus(Business $job_listing)
+    public function checkProcessingStatus(JobListing $job_listing)
     {
         $completed = Cache::get("business_{$job_listing->id}_processed", false);
         if ($completed) {
