@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 // Requests
 use App\Http\Requests\UpdateBusinessRequest;
 
-use Algolia\AlgoliaSearch\SearchClient;
+use Algolia\AlgoliaSearch\SearchIndex;
 
 // Models
 use App\Models\Company;
@@ -111,7 +111,6 @@ class JobListingController extends Controller
         }
 
         // Handle additional photos
-// Handle additional photos
         $additionalPhotoUrls = json_decode($request->input('additional_photos_urls'), true);
 
         if ($additionalPhotoUrls) {
@@ -177,52 +176,73 @@ class JobListingController extends Controller
             ->with('success', 'Business listing deleted successfully.');
     }
 
-    // Search Directory View and Functions
+    ////////////////////////////////////////////////////////////////
+    // Job Index, Views, Etc.
+    ////////////////////////////////////////////////////////////////
     public function index(Request $request)
     {
         $validatedData = $request->validate([
             'keyword' => 'nullable|string|max:255',
             'location' => 'nullable|string',
             'categories' => 'nullable|array',
+            'state' => 'nullable|string',
         ]);
 
         $keyword = $request->input('keyword', '');
+        $state = $request->input('state');
         $location = $request->input('location');
         $categoryIds = $request->input('categories', []);
 
-        $query = JobListing::search($keyword);
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($state, $location, $categoryIds) {
+            $options['facets'] = ['state', 'category_ids'];
 
-        if ($location) {
-            $locationData = $this->getLatLongFromAddress($location);
-            $latitude = $locationData['lat'] ?? null;
-            $longitude = $locationData['lng'] ?? null;
-
-            if ($latitude && $longitude) {
-                $query->aroundLatLng($latitude, $longitude, 80467); // Around 50 Miles
+            $facetFilters = [];
+            if ($state) {
+                $options['facetFilters'] = ["state:" . strtolower($state)];
             }
-        }
+            if (!empty($categoryIds)) {
+                $facetFilters[] = array_map(function ($id) {
+                    return "category_ids:{$id}";
+                }, $categoryIds);
+            }
+            if (!empty($facetFilters)) {
+                $options['facetFilters'] = $facetFilters;
+            }
 
-        if (!empty($categoryIds)) {
-            $query->whereIn('category_ids', $categoryIds);
-        }
+            Log::info('Algolia search query:', [
+                'query' => $query,
+                'options' => $options
+            ]);
 
-        $results = $query->paginate(10);
+            $results = $algolia->search($query, $options);
+            Log::info('Algolia raw results:', $results);
+
+            return $results;
+        });
+
+        $results = $algoliaResults->paginate(10);
+        $rawResults = $algoliaResults->raw();
+        $facets = $rawResults['facets'] ?? [];
 
         Log::info('Search parameters:', [
             'keyword' => $keyword,
             'location' => $location,
+            'state' => $state,
             'categoryIds' => $categoryIds,
             'resultsCount' => $results->count(),
             'resultsTotal' => $results->total(),
         ]);
 
-        $facets = [
-            'categories' => JobListingCategory::all(),
-        ];
+        $categories = JobListingCategory::all();
 
-        return view('jobs.index', compact('results', 'facets'));
+        return view('jobs.index', [
+            'results' => $results,
+            'facets' => [
+                'categories' => $categories,
+                'states' => $facets['state'] ?? [],
+            ],
+        ]);
     }
-
     public function show(Request $request, $job_slug, $id, SeoService $seoService)
     {
         $job_listing = JobListing::findOrFail($id);

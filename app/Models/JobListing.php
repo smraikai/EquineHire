@@ -70,7 +70,9 @@ class JobListing extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Search Functionality
+    ///////////////////////////////////////////////////////////////
+    // Algolia Settings
+    ///////////////////////////////////////////////////////////////
     public function searchableAs()
     {
         return 'job_listings';
@@ -82,6 +84,8 @@ class JobListing extends Model
 
         // Ensure the 'id' is used as 'objectID'
         $array['objectID'] = $this->getKey();
+        // Add state as a facet
+        $array['state'] = $this->state;
 
         // Only add _geoloc if latitude and longitude are not null
         if ($this->latitude && $this->longitude) {
@@ -111,5 +115,26 @@ class JobListing extends Model
         return $this->is_active === true;
     }
 
-    // ... (keep any other existing methods)
+    public function getAlgoliaSettings()
+    {
+        return [
+            'attributesForFaceting' => ['state'],
+        ];
+    }
+
+    /**
+     * Get unique states from active job listings.
+     *
+     * @return array
+     */
+    public static function getUniqueStates()
+    {
+        return self::where('is_active', true)
+            ->whereNotNull('state')
+            ->distinct()
+            ->pluck('state')
+            ->sort()
+            ->values()
+            ->toArray();
+    }
 }
