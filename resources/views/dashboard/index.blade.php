@@ -17,7 +17,7 @@
                 <div class="pb-5">
                     <h3 class="text-lg font-medium leading-6 text-gray-900 sm:text-xl">Business Listing</h3>
                 </div>
-                @if ($businesses->count() > 0)
+                @if ($jobListings->count() > 0)
                     <div class="overflow-hidden bg-white border sm:rounded-lg">
                         <div class="px-4 py-4 sm:px-6 sm:py-5">
                             <h2 class="text-lg font-medium leading-6 text-gray-900 sm:text-lg">Listing Management Options
@@ -41,20 +41,19 @@
                                     </dd>
                                 </div>
                                 <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                                    @foreach ($businesses as $business)
+                                    @foreach ($jobListings as $jobListing)
                                         <dt class="text-sm font-medium text-gray-500">Actions</dt>
                                         <dd class="mt-2 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                             <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
-                                                @if ($business->post_status === 'Published')
-                                                    <a href="{{ route('jobs.index.show', ['state_slug' => $business->state_slug, 'id' => $business->id, 'slug' => $business->slug]) }}"
+                                                @if ($jobListing->is_active)
+                                                    <a href="{{ route('jobs.show', ['id' => $jobListing->id, 'slug' => $jobListing->slug]) }}"
                                                         class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md hover:border-blue-600 hover:text-white sm:w-auto hover:bg-blue-600">View</a>
                                                 @endif
-                                                <a href="{{ route('businesses.edit', $businesses->first()->id) }}"
+                                                <a href="{{ route('job-listings.edit', $jobListing->id) }}"
                                                     class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md hover:border-blue-600 hover:text-white sm:w-auto hover:bg-blue-600">Edit</a>
-                                                <button onclick="confirmDelete()"
+                                                <button onclick="confirmDelete({{ $jobListing->id }})"
                                                     class="w-full px-4 py-2 text-center transition-colors duration-200 border rounded-md sm:w-auto hover:border-red-600 hover:text-white hover:bg-red-600">Delete</button>
                                             </div>
-
                                         </dd>
                                     @endforeach
                                 </div>
@@ -63,10 +62,10 @@
                     </div>
                 @else
                     <div class="flex flex-col items-center p-6 bg-white border rounded-md">
-                        <p class="text-sm text-gray-600">You don't have a business listings yet.</p>
-                        <a href="{{ route('businesses.create') }}"
+                        <p class="text-sm text-gray-600">You don't have any job listings yet.</p>
+                        <a href="{{ route('job-listings.create') }}"
                             class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border border-gray-300 rounded-md shadow-sm sm:w-auto sm:px-6 hover:bg-gray-100">
-                            <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create New Listing
+                            <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create New Job Listing
                         </a>
                     </div>
                 @endif
@@ -133,7 +132,7 @@
                 </div>
                 <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                     @if ($businesses->isNotEmpty())
-                        <form action="{{ route('businesses.destroy', $businesses->first()->id) }}" method="POST">
+                        <form action="{{ route('company.destroy', $businesses->first()->id) }}" method="POST">
                         @else
                             <form action="#" method="POST">
                     @endif

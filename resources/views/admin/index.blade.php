@@ -16,7 +16,7 @@
                 <div class="p-6 bg-white rounded-lg shadow-md">
                     <h2 class="mb-4 text-2xl font-semibold text-gray-800">Create New Listings</h2>
                     <p class="mb-4 text-gray-600">You don't have any business listings yet.</p>
-                    <a href="{{ route('businesses.create') }}"
+                    <a href="{{ route('company.create') }}"
                         class="inline-flex items-center px-6 py-3 text-sm font-medium text-white transition duration-150 ease-in-out rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         <x-coolicon-add-plus-circle class="w-5 h-5 mr-2" />
                         Create New Listing
@@ -48,9 +48,9 @@
                                         </td>
                                         <td class="p-3">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('admin.businesses.edit', $business) }}"
+                                                <a href="{{ route('admin.company.edit', $business) }}"
                                                     class="text-blue-600 hover:text-blue-800">Edit</a>
-                                                <form action="{{ route('admin.businesses.destroy', $business) }}"
+                                                <form action="{{ route('admin.company.destroy', $business) }}"
                                                     method="POST" class="inline"
                                                     onsubmit="return confirm('Are you sure you want to delete this business listing?');">
                                                     @csrf

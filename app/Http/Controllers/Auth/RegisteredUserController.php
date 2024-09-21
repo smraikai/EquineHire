@@ -81,7 +81,7 @@ class RegisteredUserController extends Controller
             return redirect()->route('eh.checkout');
         } else {
             // User is already subscribed, redirect to dashboard with a message
-            return redirect()->route('businesses.index')
+            return redirect()->route('company.index')
                 ->with('info', 'You are already subscribed. Check your billing portal for plan changes or upgrades.');
         }
     }

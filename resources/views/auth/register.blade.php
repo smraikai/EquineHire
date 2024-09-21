@@ -11,7 +11,7 @@
             <div class="w-full max-w-xl">
                 <div class="mb-8">
                     <h1 class="mb-6 text-3xl font-bold md:text-4xl fancy-title">Let's Get Started</h1>
-                    <p class="text-base text-gray-600 md:text-lg">Create an account to list your services. From there, you'll be able to complete your subscription through Stripe.</p>
+                    <p class="text-base text-gray-600 md:text-lg">Create an account to start listing your job.</p>
                 </div>
 
                 @if (session('error'))
@@ -59,7 +59,7 @@
                         <x-secondary-button class="justify-center mb-4">
                             {{ __('Register') }}
                         </x-secondary-button>
-                        
+
                         <a class="text-sm text-center text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
                             {{ __('Already registered?') }}
                         </a>
@@ -71,8 +71,8 @@
 
         <!-- Right side: Full-size image (hidden on mobile) -->
         <div class="relative hidden w-1/2 md:block">
-            <img src="https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_register.jpg" alt="Registration Image"
-                class="object-cover w-full h-full max-h-screen">
+            <img src="https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_register.jpg"
+                alt="Registration Image" class="object-cover w-full h-full max-h-screen">
             <div class="absolute inset-0 bg-gradient-to-br from-black/70 to-transparent"></div>
         </div>
     </div>

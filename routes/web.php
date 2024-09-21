@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 // Classes
+use App\Models\JobListingCategory;
 use Illuminate\Http\Request;
 // Routes
 use Illuminate\Support\Facades\Route;
@@ -67,7 +68,6 @@ Route::get('/{job_slug}-{id}', [JobListingController::class, 'show'])
     ->where('job_slug', '[a-z0-9\-]+')
     ->middleware('track.pageviews');
 
-
 ////////////////////////////////////////////////////////////////////
 // Authentication Routes
 ////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['get', 'post'], '/subscription/checkout', [SubscriptionController::class, 'initiateCheckout'])->name('subscription.checkout');
     Route::get('/subscription/incomplete', [SubscriptionController::class, 'handleIncompletePayment'])->name('subscription.incomplete');
     Route::get('/billing', function (Request $request) {
-        return $request->user()->redirectToBillingPortal(route('businesses.index'));
+        return $request->user()->redirectToBillingPortal(route('company.index'));
     })->name('billing');
 });
 
@@ -100,11 +100,11 @@ Route::middleware('auth')->group(function () {
 // Subscriber-Only Routes
 ////////////////////////////////////////////////////////////////////
 Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
-    Route::get('/dashboard', [BusinessController::class, 'index'])->name('businesses.index');
-    Route::get('/dashboard/create', [BusinessController::class, 'create'])->name('businesses.create');
-    Route::get('/dashboard/{business}/edit', [BusinessController::class, 'edit'])->name('businesses.edit')->middleware(ClearDraftsMiddleware::class);
-    Route::delete('/dashboard/{business}', [BusinessController::class, 'destroy'])->name('businesses.destroy');
-    Route::put('/dashboard/{business}', [BusinessController::class, 'update'])->name('businesses.update');
+    Route::get('/dashboard', [CompanyController::class, 'index'])->name('company.index');
+    Route::get('/dashboard/create', [CompanyController::class, 'create'])->name('company.create');
+    Route::get('/dashboard/{business}/edit', [CompanyController::class, 'edit'])->name('company.edit')->middleware(ClearDraftsMiddleware::class);
+    Route::delete('/dashboard/{business}', [CompanyController::class, 'destroy'])->name('company.destroy');
+    Route::put('/dashboard/{business}', [CompanyController::class, 'update'])->name('company.update');
 
     // Handle Image Processing
     Route::post('/upload', [FileUploadController::class, 'upload']);
@@ -119,9 +119,9 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
 ////////////////////////////////////////////////////////////////////
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::put('/businesses/{business}', [AdminController::class, 'update'])->name('admin.businesses.update');
-    Route::get('/businesses/{business}/edit', [AdminController::class, 'edit'])->name('admin.businesses.edit');
-    Route::delete('/businesses/{business}', [AdminController::class, 'destroy'])->name('admin.businesses.destroy');
+    Route::put('/businesses/{business}', [AdminController::class, 'update'])->name('admin.company.update');
+    Route::get('/businesses/{business}/edit', [AdminController::class, 'edit'])->name('admin.company.edit');
+    Route::delete('/businesses/{business}', [AdminController::class, 'destroy'])->name('admin.company.destroy');
     Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('admin.users.show');
     Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
@@ -132,7 +132,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class])->prefix('admin'
 ////////////////////////////////////////////////////////////////////
 Route::get('/categories', function () {
     return Cache::remember('categories', 60 * 60, function () {
-        return BusinessCategory::all();
+        return JobListingCategory::all();
     });
 });
 Route::get('/disciplines', function () {
@@ -154,11 +154,11 @@ Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookControll
 ////////////////////////////////////////////////////////////////////
 /// Business Analytics Route
 ////////////////////////////////////////////////////////////////////
-Route::get('/business/analytics', [BusinessController::class, 'getAnalytics'])
+Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
     ->name('business.analytics')
     ->middleware('auth');
 
 ////////////////////////////////////////////////////////////////////
 // Check Processing Status for Business Updates
 ////////////////////////////////////////////////////////////////////
-Route::get('/check-processing-status/{business}', [BusinessController::class, 'checkProcessingStatus'])->name('business.check-status');
+Route::get('/check-processing-status/{business}', [CompanyController::class, 'checkProcessingStatus'])->name('business.check-status');

@@ -9,7 +9,6 @@
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-
 @endsection
 
 @section('content')
@@ -50,7 +49,7 @@
                 <div class="section">
                     <div class="container px-4 mx-auto">
                         <div class="epf_form">
-                            <form action="{{ route('admin.businesses.update', $business->id) }}" method="POST"
+                            <form action="{{ route('admin.company.update', $business->id) }}" method="POST"
                                 id="listing_form" enctype="multipart/form-data" data-business-id="{{ $business->id }}">
                                 @csrf
                                 @method('PUT')

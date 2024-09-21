@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateBusinessRequest;
 
 // Models
+use App\Models\JobListing;
+
 use App\Models\Business;
 use App\Models\BusinessCategory;
 use App\Models\BusinessDiscipline;
@@ -37,6 +39,9 @@ class CompanyController extends Controller
     {
         $user = auth()->user();
         $companies = $user->companies;
+        $jobListings = JobListing::where('user_id', auth()->id())->get();
+        $jobListings = JobListing::where('user_id', auth()->id())->get();
+
 
         // Check if the user is a new subscriber. If so, pass off info to the DataLayer
         if ($request->query('subscription_completed')) {
@@ -49,14 +54,7 @@ class CompanyController extends Controller
         }
         ;
 
-        foreach ($companies as $company) {
-            if (!$user->subscription('default') || !$user->subscription('default')->active()) {
-                $company->update(['post_status' => 'Draft']);
-            }
-        }
-
-
-        return view('dashboard.index', compact('companies'));
+        return view('dashboard.index', compact('jobListings'));
     }
 
 
@@ -75,7 +73,7 @@ class CompanyController extends Controller
         ]);
 
         // Redirect to the edit page of the newly created business
-        return redirect()->route('businesses.edit', $business->id);
+        return redirect()->route('company.edit', $business->id);
     }
 
     public function edit(Business $business)
@@ -83,12 +81,12 @@ class CompanyController extends Controller
         if (auth()->id() === $business->user_id) {
             // Check for active subscription
             if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-                return redirect()->route('businesses.index')->with('error', 'You need an active subscription to edit your business listing.');
+                return redirect()->route('company.index')->with('error', 'You need an active subscription to edit your business listing.');
             }
 
             $categories = BusinessCategory::all();
             $disciplines = BusinessDiscipline::all();
-            return view('businesses.edit', compact('business', 'categories', 'disciplines'));
+            return view('company.edit', compact('business', 'categories', 'disciplines'));
         }
 
         abort(403, 'Unauthorized action.');
@@ -110,7 +108,7 @@ class CompanyController extends Controller
 
         // Check for active subscription
         if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-            return redirect()->route('businesses.index')->with('error', 'You need an active subscription to update your business listing.');
+            return redirect()->route('company.index')->with('error', 'You need an active subscription to update your business listing.');
         }
 
         // Validate the incoming request
@@ -186,7 +184,7 @@ class CompanyController extends Controller
         return view('businesses.process', ['business' => $business]);
 
         // Redirect to the updated business directory page with success message
-        // return redirect()->route('businesses.index')
+        // return redirect()->route('company.index')
         //    ->with('success', 'Business listing updated successfully.');
     }
 
@@ -200,7 +198,7 @@ class CompanyController extends Controller
         // Delete the business listing
         $business->delete();
 
-        return redirect()->route('businesses.index')
+        return redirect()->route('company.index')
             ->with('success', 'Business listing deleted successfully.');
     }
 

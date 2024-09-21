@@ -2,7 +2,7 @@
         <div class="flex items-center justify-between">
             <h1 class="text-xl font-semibold leading-tight">Edit Business Listing</h1>
             <div class="flex gap-2">
-                <a href="{{ route('businesses.index') }}"
+                <a href="{{ route('company.index') }}"
                     class="px-4 py-2 text-black transition duration-150 ease-in-out border border-black rounded hover:text-white hover:bg-black">Cancel</a>
                 <a id="publishUpdateBtn2"
                     class="px-4 py-2 text-white transition duration-150 ease-in-out bg-blue-500 rounded cursor-pointer hover:bg-blue-600"

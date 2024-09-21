@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-       return redirect()->intended(route('businesses.index', absolute: false));
+        return redirect()->intended(route('company.index', absolute: false));
     }
 
     /**

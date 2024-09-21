@@ -44,7 +44,7 @@ class AdminController extends Controller
 
         $categories = BusinessCategory::all();
         $disciplines = BusinessDiscipline::all();
-        return view('admin.businesses.edit', compact('business', 'categories', 'disciplines'));
+        return view('admin.company.edit', compact('business', 'categories', 'disciplines'));
     }
 
     public function update(Business $business, UpdateBusinessRequest $request)

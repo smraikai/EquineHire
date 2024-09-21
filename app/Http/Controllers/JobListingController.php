@@ -46,7 +46,7 @@ class JobListingController extends Controller
         ]);
 
         // Redirect to the edit page of the newly created business
-        return redirect()->route('businesses.edit', $job_listing->id);
+        return redirect()->route('company.edit', $job_listing->id);
     }
 
     public function edit(JobListing $job_listing)
@@ -54,12 +54,12 @@ class JobListingController extends Controller
         if (auth()->id() === $job_listing->user_id) {
             // Check for active subscription
             if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-                return redirect()->route('businesses.index')->with('error', 'You need an active subscription to edit your business listing.');
+                return redirect()->route('company.index')->with('error', 'You need an active subscription to edit your business listing.');
             }
 
             $categories = JobListingCategory::all();
 
-            return view('businesses.edit', compact('business', 'categories', 'disciplines'));
+            return view('company.edit', compact('business', 'categories', 'disciplines'));
         }
 
         abort(403, 'Unauthorized action.');
@@ -79,7 +79,7 @@ class JobListingController extends Controller
 
         // Check for active subscription
         if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-            return redirect()->route('businesses.index')->with('error', 'You need an active subscription to update your business listing.');
+            return redirect()->route('company.index')->with('error', 'You need an active subscription to update your business listing.');
         }
 
         // Validate the incoming request
@@ -154,7 +154,7 @@ class JobListingController extends Controller
         return view('businesses.process', ['business' => $job_listing]);
 
         // Redirect to the updated business directory page with success message
-        // return redirect()->route('businesses.index')
+        // return redirect()->route('company.index')
         //    ->with('success', 'Business listing updated successfully.');
     }
 
@@ -168,7 +168,7 @@ class JobListingController extends Controller
         // Delete the business listing
         $job_listing->delete();
 
-        return redirect()->route('businesses.index')
+        return redirect()->route('company.index')
             ->with('success', 'Business listing deleted successfully.');
     }
 

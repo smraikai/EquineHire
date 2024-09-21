@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
                 $checkout = $user->newSubscription('default', $planId)
                     ->allowPromotionCodes()
                     ->checkout([
-                        'success_url' => route('businesses.index', ['subscription_completed' => true]), // True for Stripe GA4 tracking
+                        'success_url' => route('company.index', ['subscription_completed' => true]), // True for Stripe GA4 tracking
                         'cancel_url' => route('subscription.plans'),
                     ]);
 
@@ -81,7 +81,7 @@ class SubscriptionController extends Controller
         $checkout = $user->newSubscription('default', $planId)
             ->trialDays(101)
             ->checkout([
-                'success_url' => route('businesses.index'),
+                'success_url' => route('company.index'),
                 'cancel_url' => route('subscription.plans'),
                 'subscription_data' => [
                     'trial_settings' => [
@@ -110,7 +110,7 @@ class SubscriptionController extends Controller
                 $checkout = $user->newSubscription('default', $planId)
                     ->withCoupon($couponId)
                     ->checkout([
-                        'success_url' => route('businesses.index', ['subscription_completed' => true]),
+                        'success_url' => route('company.index', ['subscription_completed' => true]),
                         'cancel_url' => route('subscription.plans'),
                     ]);
 

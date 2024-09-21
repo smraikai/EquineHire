@@ -17,7 +17,7 @@
                     <!-- Edit Button if Owner is Viewing Listing -->
                     @if ($isOwner)
                         <div class="flex justify-center sm:justify-start">
-                            <a href="{{ route('businesses.edit', $job_listing->id) }}"
+                            <a href="{{ route('company.edit', $job_listing->id) }}"
                                 class="px-4 py-2 font-bold bg-gray-200 rounded hover:bg-gray-300">
                                 Edit My Listing
                             </a>

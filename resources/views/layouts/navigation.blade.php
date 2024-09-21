@@ -55,7 +55,7 @@
                 <!-- User Interaction Links -->
                 @auth
                     <!-- Links for Logged-in Users -->
-                    <a href="{{ route('businesses.index') }}"
+                    <a href="{{ route('company.index') }}"
                         class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">My
                         Account</a>
                     <a href="{{ route('logout') }}"
@@ -162,7 +162,7 @@
                             class="block w-full py-3 mt-4 text-xl font-medium text-center text-blue-700 transition duration-150 ease-in-out border border-blue-700 rounded-md hover:bg-blue-50">Log
                             in</a>
                     @else
-                        <a href="{{ route('businesses.index') }}"
+                        <a href="{{ route('company.index') }}"
                             class="block w-full py-3 text-xl font-medium text-center text-white transition duration-150 ease-in-out bg-blue-700 rounded-md hover:bg-blue-800">My
                             Account</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">

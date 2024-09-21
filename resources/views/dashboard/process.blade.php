@@ -85,13 +85,13 @@
 
         $(document).ready(function() {
             // Replace the current state in history with the edit page URL
-            history.replaceState(null, '', '{{ route('businesses.edit', $business->id) }}');
+            history.replaceState(null, '', '{{ route('company.edit', $business->id) }}');
 
             setTimeout(checkProcessingStatus, 3000);
 
             // Add automatic redirect after 8 seconds
             setTimeout(function() {
-                window.location.href = '{{ route('businesses.edit', $business->id) }}';
+                window.location.href = '{{ route('company.edit', $business->id) }}';
             }, 8000);
         });
     </script>

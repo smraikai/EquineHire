@@ -104,7 +104,7 @@
                 <div class="section">
                     <div class="container px-0 mx-auto sm:px-4">
                         <div class="epf_form">
-                            <form action="{{ route('businesses.update', $business->id) }}" method="POST" id="listing_form"
+                            <form action="{{ route('company.update', $business->id) }}" method="POST" id="listing_form"
                                 enctype="multipart/form-data" data-business-id="{{ $business->id }}">
                                 @csrf
                                 @method('PUT')

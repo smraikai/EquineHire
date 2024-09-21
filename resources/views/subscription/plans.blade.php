@@ -84,86 +84,76 @@
 
 
 
-    <section class="py-12">
-        <div class="p-12 mx-auto bg-gray-100 max-w-7xl sm:px-6 lg:px-8 rounded-2xl">
-            <div class="lg:text-center">
-                <h2 class="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-4xl">
-                    Why Post Jobs on EquineHire?
-                </h2>
-                <p class="max-w-2xl mt-4 text-xl text-gray-500 lg:mx-auto">
-                    EquineHire helps you find the perfect candidates for your equine job openings. Here's how we stand out:
-                </p>
+    <section class="py-24 bg-white sm:py-32">
+        <div class="px-6 mx-auto max-w-7xl lg:px-8">
+            <div class="max-w-2xl mx-auto lg:text-center">
+                <h2 class="text-base font-semibold leading-7 text-blue-600">Why Choose Us</h2>
+                <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Why Post Jobs on EquineHire?</p>
+                <p class="mt-6 text-lg leading-8 text-gray-600">EquineHire helps you find the perfect candidates for your
+                    equine job openings. Here's how we stand out:</p>
             </div>
-
-            <div class="mt-10">
-                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10 lg:grid-cols-3">
-                    <div class="relative">
-                        <dt>
+            <div class="max-w-2xl mx-auto mt-16 sm:mt-20 lg:mt-24 lg:max-w-4xl">
+                <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
                             <div
-                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-search-magnifying-glass class="w-6 h-6" />
+                                class="absolute top-0 left-0 flex items-center justify-center w-10 h-10 bg-blue-600 rounded-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                </svg>
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Optimized for Google</p>
+                            Optimized for Google
                         </dt>
-                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Our job listings rank well on Google, ensuring maximum exposure for your job openings.
+                        <dd class="mt-2 text-base leading-7 text-gray-600">Our job listings rank well on search engines
+                            (such as Google) for job searches in your area, ensuring maximum exposure for your job openings.
                         </dd>
                     </div>
-
-                    <div class="relative">
-                        <dt>
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
                             <div
-                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-share-android share class="w-6 h-6" />
+                                class="absolute top-0 left-0 flex items-center justify-center w-10 h-10 bg-blue-600 rounded-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                                </svg>
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Social Media Boost</p>
+                            Social Media Boost
                         </dt>
-                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                            We share your jobs on relevant Facebook groups, acting like a social media manager to help find
-                            the right candidates.
-                        </dd>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">We share your jobs on relevant Facebook groups,
+                            acting like a social media manager to help find the right candidates.</dd>
                     </div>
-
-                    <div class="relative">
-                        <dt>
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
                             <div
-                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-flag class="w-6 h-6" />
+                                class="absolute top-0 left-0 flex items-center justify-center w-10 h-10 bg-blue-600 rounded-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
+                                </svg>
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">US-Focused</p>
+                            US-Focused
                         </dt>
-                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                            We cater specifically to the US job market, connecting you with local talent in the equine
-                            industry.
-                        </dd>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">We cater specifically to the US job market,
+                            connecting you with local talent in the equine industry.</dd>
                     </div>
-
-                    <div class="relative">
-                        <dt>
+                    <div class="relative pl-16">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
                             <div
-                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-octagon-check class="w-6 h-6" />
+                                class="absolute top-0 left-0 flex items-center justify-center w-10 h-10 bg-blue-600 rounded-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
                             </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Equine-Specific</p>
+                            Equine-Specific
                         </dt>
-                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Unlike broad job sites, we reach equine job seekers specifically, ensuring more relevant
-                            applicants.
-                        </dd>
-                    </div>
-
-                    <div class="relative">
-                        <dt>
-                            <div
-                                class="absolute flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-md">
-                                <x-coolicon-edit-pencil-line-01 class="w-6 h-6" />
-                            </div>
-                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Easy Management</p>
-                        </dt>
-                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Easily add your job post and make any edits you want, giving you full control over your
-                            listings.
-                        </dd>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">Unlike broad job sites, we reach equine job
+                            seekers specifically, ensuring more relevant applicants.</dd>
                     </div>
                 </dl>
             </div>
@@ -182,7 +172,7 @@
                             <button class="flex items-start justify-between w-full text-left text-gray-400"
                                 aria-expanded="false">
                                 <span class="font-medium text-gray-900">
-                                    What is included in the subscription?
+                                    What is included in the subscription plans?
                                 </span>
                                 <span class="flex items-center ml-6 h-7">
                                     <svg class="w-6 h-6 transform rotate-0" xmlns="http://www.w3.org/2000/svg"
@@ -195,9 +185,12 @@
                         </dt>
                         <dd class="pr-12 mt-2" style="display: none;">
                             <p class="text-base text-gray-500">
-                                The subscription includes a professional listing to showcase your services, allowing
-                                potential clients to find your business through search engines. This maximizes your exposure
-                                and helps you gain new clients by increasing your online visibility.</p>
+                                We offer three subscription plans to suit your needs. The Basic Plan ($50/month) includes 1
+                                job post. Our Pro Plan ($120/3 months) allows up to 5 concurrent job posts. For unlimited
+                                job posts, choose our Premium Plan ($400/year). All plans feature company logo display, job
+                                images, dedicated support, newsletter features, and social media sharing. You can cancel
+                                your subscription at any time.
+                            </p>
                         </dd>
                     </div>
 
