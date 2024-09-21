@@ -26,7 +26,13 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <p class="text-sm text-gray-600 truncate">{{ $job_listing->company->name }}</p>
+                                        <p class="flex items-center text-sm text-gray-500 truncate">
+                                            <x-coolicon-house-03 class="w-4 h-4 mr-1" />
+                                            {{ $job_listing->company->name }}
+                                            <span class="mx-2">|</span>
+                                            <x-coolicon-checkbox-check class="w-4 h-4 mr-1" />
+                                            {{ $job_listing->job_type }}
+                                        </p>
                                         <div class="flex items-center mt-1 text-sm text-gray-500 sm:hidden">
                                             <x-coolicon-map-pin class="flex-shrink-0 w-4 h-4 mr-1" />
                                             <span class="truncate">
