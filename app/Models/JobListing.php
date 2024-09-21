@@ -77,14 +77,16 @@ class JobListing extends Model
     {
         return 'job_listings';
     }
-
+    public function getScoutKey()
+    {
+        return $this->id;
+    }
     // Define what is searchable or not
     public function toSearchableArray(): array
     {
         $array = $this->toArray();
 
         $array['objectID'] = $this->getKey();
-        $array['state'] = $this->state;
 
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
@@ -93,14 +95,15 @@ class JobListing extends Model
             ];
         }
 
-        $array['category_ids'] = $this->categories->pluck('id')->toArray();
         $array['sticky_rank'] = $this->is_sticky ? 1 : 0;
 
         // Add new facets
+        $array['category_ids'] = array_map('strval', $this->categories->pluck('id')->toArray());
+        $array['state'] = $this->state;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
         $array['salary_type'] = $this->salary_type;
-        $array['remote_position'] = $this->remote_position;
+        $array['remote_position'] = (bool) $this->remote_position;
 
         return $array;
     }
@@ -114,7 +117,8 @@ class JobListing extends Model
                 'experience_required',
                 'salary_type',
                 'remote_position',
-                'category_ids'
+                'filterOnly(category_ids)',
+                'filterOnly(remote_position)'
             ],
         ];
     }

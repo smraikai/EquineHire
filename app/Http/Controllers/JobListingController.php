@@ -185,26 +185,46 @@ class JobListingController extends Controller
             'keyword' => 'nullable|string|max:255',
             'location' => 'nullable|string',
             'categories' => 'nullable|array',
-            'state' => 'nullable|string',
+            'job_type' => 'nullable|string',
+            'experience_level' => 'nullable|string',
+            'salary_type' => 'nullable|string',
+            'remote_position' => 'nullable|boolean',
         ]);
 
         $keyword = $request->input('keyword', '');
-        $state = $request->input('state');
         $location = $request->input('location');
         $categoryIds = $request->input('categories', []);
+        $jobType = $request->input('job_type');
+        $experienceLevel = $request->input('experience_level');
+        $salaryType = $request->input('salary_type');
+        $remotePosition = $request->boolean('remote_position');
 
-        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($state, $location, $categoryIds) {
-            $options['facets'] = ['state', 'category_ids'];
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($location, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
+            $options['facets'] = ['state', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
             $facetFilters = [];
-            if ($state) {
-                $options['facetFilters'] = ["state:" . strtolower($state)];
+            if ($location) {
+                $facetFilters[] = "state:{$location}";
             }
             if (!empty($categoryIds)) {
-                $facetFilters[] = array_map(function ($id) {
+                $categoryFilters = array_map(function ($id) {
                     return "category_ids:{$id}";
                 }, $categoryIds);
+                $facetFilters[] = $categoryFilters;
             }
+            if ($jobType) {
+                $facetFilters[] = "job_type:{$jobType}";
+            }
+            if ($experienceLevel) {
+                $facetFilters[] = "experience_required:{$experienceLevel}";
+            }
+            if ($salaryType) {
+                $facetFilters[] = "salary_type:{$salaryType}";
+            }
+            if ($remotePosition) {
+                $facetFilters[] = 'remote_position:true';
+            }
+
             if (!empty($facetFilters)) {
                 $options['facetFilters'] = $facetFilters;
             }
@@ -214,21 +234,22 @@ class JobListingController extends Controller
                 'options' => $options
             ]);
 
-            $results = $algolia->search($query, $options);
-            Log::info('Algolia raw results:', $results);
-
-            return $results;
+            return $algolia->search($query, $options);
         });
 
-        $results = $algoliaResults->paginate(10);
+
+        $results = $algoliaResults->paginate(15);
         $rawResults = $algoliaResults->raw();
         $facets = $rawResults['facets'] ?? [];
 
         Log::info('Search parameters:', [
             'keyword' => $keyword,
             'location' => $location,
-            'state' => $state,
             'categoryIds' => $categoryIds,
+            'jobType' => $jobType,
+            'experienceLevel' => $experienceLevel,
+            'salaryType' => $salaryType,
+            'remotePosition' => $remotePosition,
             'resultsCount' => $results->count(),
             'resultsTotal' => $results->total(),
         ]);
@@ -240,9 +261,14 @@ class JobListingController extends Controller
             'facets' => [
                 'categories' => $categories,
                 'states' => $facets['state'] ?? [],
+                'job_types' => $facets['job_type'] ?? [],
+                'experience_levels' => $facets['experience_required'] ?? [],
+                'salary_types' => $facets['salary_type'] ?? [],
+                'remote_positions' => $facets['remote_position'] ?? [],
             ],
         ]);
     }
+
     public function show(Request $request, $job_slug, $id, SeoService $seoService)
     {
         $job_listing = JobListing::findOrFail($id);

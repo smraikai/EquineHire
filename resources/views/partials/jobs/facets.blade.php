@@ -24,7 +24,22 @@
 @endphp
 <!-- Facets -->
 <div x-data="{
-    showAllCategories: false,
+    categories: {
+        open: false,
+        selected: {{ $checkedCategoryCount }}
+    },
+    jobTypes: {
+        open: false,
+        selected: {{ count(request()->input('job_types', [])) }}
+    },
+    experienceLevels: {
+        open: false,
+        selected: {{ count(request()->input('experience_levels', [])) }}
+    },
+    salaryTypes: {
+        open: false,
+        selected: {{ count(request()->input('salary_types', [])) }}
+    },
     clearAll() {
         const allCheckboxes = [...this.$refs.facetForm.querySelectorAll('.category-checkbox')];
         allCheckboxes.forEach(checkbox => checkbox.checked = false);
@@ -55,50 +70,39 @@
 
             <!-- Job Type -->
             <div class="mt-4">
-                <span class="text-sm font-medium">Job Type</span>
-                <div class="flex flex-col gap-2 mt-2">
+                <label for="job_type" class="block text-sm font-medium text-gray-700">Job Type</label>
+                <select id="job_type" name="job_type" x-ref="jobTypeSelect"
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">All Job Types</option>
                     @foreach ($jobTypes as $jobType)
-                        <div class="flex items-center w-full">
-                            <input type="checkbox" name="job_types[]" value="{{ $jobType }}"
-                                id="job-type-{{ $jobType }}" class="job-type-checkbox"
-                                @checked(in_array($jobType, request()->input('job_types', [])))>
-                            <label for="job-type-{{ $jobType }}"
-                                class="ml-2 text-sm font-normal">{{ $jobType }}</label>
-                        </div>
+                        <option value="{{ $jobType }}" @selected(request('job_type') == $jobType)>{{ $jobType }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
 
             <!-- Experience Required -->
             <div class="mt-4">
-                <span class="text-sm font-medium">Experience Required</span>
-                <div class="flex flex-col gap-2 mt-2">
+                <label for="experience_level" class="block text-sm font-medium text-gray-700">Experience
+                    Required</label>
+                <select id="experience_level" name="experience_level" x-ref="experienceLevelSelect"
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">All Experience Levels</option>
                     @foreach ($experienceLevels as $level)
-                        <div class="flex items-center w-full">
-                            <input type="checkbox" name="experience_levels[]" value="{{ $level }}"
-                                id="experience-{{ $level }}" class="experience-checkbox"
-                                @checked(in_array($level, request()->input('experience_levels', [])))>
-                            <label for="experience-{{ $level }}"
-                                class="ml-2 text-sm font-normal">{{ $level }}</label>
-                        </div>
+                        <option value="{{ $level }}" @selected(request('experience_level') == $level)>{{ $level }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
 
             <!-- Salary Type -->
             <div class="mt-4">
-                <span class="text-sm font-medium">Salary Type</span>
-                <div class="flex flex-col gap-2 mt-2">
+                <label for="salary_type" class="block text-sm font-medium text-gray-700">Salary Type</label>
+                <select id="salary_type" name="salary_type" x-ref="salaryTypeSelect"
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="">All Salary Types</option>
                     @foreach ($salaryTypes as $salaryType)
-                        <div class="flex items-center w-full">
-                            <input type="checkbox" name="salary_types[]" value="{{ $salaryType }}"
-                                id="salary-type-{{ $salaryType }}" class="salary-type-checkbox"
-                                @checked(in_array($salaryType, request()->input('salary_types', [])))>
-                            <label for="salary-type-{{ $salaryType }}"
-                                class="ml-2 text-sm font-normal">{{ $salaryType }}</label>
-                        </div>
+                        <option value="{{ $salaryType }}" @selected(request('salary_type') == $salaryType)>{{ $salaryType }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
 
             <!-- Remote Position -->
