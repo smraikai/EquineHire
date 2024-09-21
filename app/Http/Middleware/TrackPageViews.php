@@ -37,11 +37,13 @@ class TrackPageViews
             $businessId = $request->route('id');
             $business = Business::find($businessId);
 
-            if ($business &&
-                (! Auth::check() || Auth::id() !== $business->user_id) &&
-                $this->isHumanUserAgent($request->header('User-Agent'))) {
+            if (
+                $business &&
+                (!Auth::check() || Auth::id() !== $business->user_id) &&
+                $this->isHumanUserAgent($request->header('User-Agent'))
+            ) {
                 $pageView = PageView::firstOrNew([
-                    'business_id' => $business->id,
+                    'job_listing_id' => $business->id,
                     'date' => now()->toDateString()
                 ]);
                 $pageView->view_count = ($pageView->view_count ?? 0) + 1;

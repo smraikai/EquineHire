@@ -11,12 +11,7 @@
                         EquineHire
                     </a>
                 </div>
-                <!-- Search Bar -->
-                <div id="search-container" class="hidden ml-4 lg:block md:w-full lg:w-auto">
-                    @include('partials.directory.search')
-                </div>
             </div>
-
             <!-- Navigation Links -->
             <div class="items-center hidden space-x-6 lg:flex">
                 <div x-data="{ open: false }" class="relative">
@@ -46,7 +41,7 @@
 
                 <a href="{{ route('businesses.directory') }}"
                     class="inline-flex items-center px-2 py-2 {{ Route::currentRouteName() === 'home' ? 'text-white hover:text-gray-300' : 'text-gray-700 hover:text-gray-500' }} bg-transparent  focus:outline-none focus:text-gray-500">
-                    Explore
+                    Search Jobs
                 </a>
 
                 <a href="{{ route('blog.index') }}"
@@ -75,7 +70,7 @@
                 @guest
                     <!-- Links for Guests -->
                     <a href="{{ route('subscription.plans') }}"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-center text-white border border-transparent rounded-md bg-blue-700 hover:bg-blue-800">
+                        class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-center text-white bg-blue-700 border border-transparent rounded-md hover:bg-blue-800">
                         Post a Job
                     </a>
 
@@ -155,7 +150,7 @@
                         <a href="{{ route('businesses.directory', ['categories[]' => 6]) }}"
                             class="block text-xl text-gray-600 hover:text-gray-900">Riding Lessons</a>
                         <a href="{{ route('businesses.directory') }}"
-                            class="block text-xl text-gray-600 hover:text-gray-900">View All Jobs</a>
+                            class="block text-xl text-gray-600 hover:text-gray-900">View All Services</a>
                     </div>
                 </div>
 
@@ -182,14 +177,14 @@
                 <div class="pt-8 mt-8 border-t border-gray-200">
                     @guest
                         <a href="{{ route('subscription.plans') }}"
-                            class="block w-full py-3 text-xl font-medium text-center text-white transition duration-150 ease-in-out rounded-md bg-blue-700 hover:bg-blue-800">List
+                            class="block w-full py-3 text-xl font-medium text-center text-white transition duration-150 ease-in-out bg-blue-700 rounded-md hover:bg-blue-800">List
                             Your Business</a>
                         <a href="{{ route('login') }}"
-                            class="block w-full py-3 mt-4 text-xl font-medium text-center transition duration-150 ease-in-out border rounded-md text-blue-700 border-blue-700 hover:bg-blue-50">Log
+                            class="block w-full py-3 mt-4 text-xl font-medium text-center text-blue-700 transition duration-150 ease-in-out border border-blue-700 rounded-md hover:bg-blue-50">Log
                             in</a>
                     @else
                         <a href="{{ route('businesses.index') }}"
-                            class="block w-full py-3 text-xl font-medium text-center text-white transition duration-150 ease-in-out rounded-md bg-blue-700 hover:bg-blue-800">My
+                            class="block w-full py-3 text-xl font-medium text-center text-white transition duration-150 ease-in-out bg-blue-700 rounded-md hover:bg-blue-800">My
                             Account</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-4">
                             @csrf

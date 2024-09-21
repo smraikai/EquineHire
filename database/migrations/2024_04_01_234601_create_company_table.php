@@ -4,14 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up()
     {
-        Schema::create('businesses', function (Blueprint $table) {
+        Schema::create('company', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
@@ -24,13 +23,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('logo')->nullable();
-            $table->string('featured_image')->nullable();
             $table->timestamps();
-
-            // Meta Data
-            $table->string('slug')->nullable();
-            $table->string('state_slug')->nullable();
-            $table->enum('post_status', ['Draft', 'Published', 'Archived'])->default('Draft');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -41,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('businesses');
+        Schema::dropIfExists('company');
     }
 };

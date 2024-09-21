@@ -15,11 +15,11 @@ class ClearDraftsMiddleware
             $businessId = $business->id;
 
             // Clear draft entries from business_photos_drafts table
-            DB::table('business_photos_drafts')->where('business_id', $businessId)->delete();
+            DB::table('business_photos_drafts')->where('job_listing_id', $businessId)->delete();
 
-            // Clear 'logo' and 'featured_image' in business_image_drafts table instead of deleting entries
-            DB::table('business_image_drafts')
-                ->where('business_id', $businessId)
+            // Clear 'logo' and 'featured_image' in job_listing_image_drafts table instead of deleting entries
+            DB::table('job_listing_image_drafts')
+                ->where('job_listing_id', $businessId)
                 ->update(['logo' => null, 'featured_image' => null]);
         }
 

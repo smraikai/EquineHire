@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PageView extends Model
 {
     use HasFactory;
-    protected $fillable = ['business_id', 'view_count', 'date'];
+    protected $fillable = ['job_listing_id', 'view_count', 'date'];
 
 }

@@ -50,7 +50,7 @@ class BusinessController extends Controller
         ;
 
         foreach ($businesses as $business) {
-            if (! $user->subscription('default') || ! $user->subscription('default')->active()) {
+            if (!$user->subscription('default') || !$user->subscription('default')->active()) {
                 $business->update(['post_status' => 'Draft']);
             }
         }
@@ -62,7 +62,7 @@ class BusinessController extends Controller
 
     public function create()
     {
-        if (! auth()->check()) {
+        if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to create a business.');
         }
 
@@ -82,7 +82,7 @@ class BusinessController extends Controller
     {
         if (auth()->id() === $business->user_id) {
             // Check for active subscription
-            if (! auth()->user()->subscription('default') || ! auth()->user()->subscription('default')->active()) {
+            if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
                 return redirect()->route('businesses.index')->with('error', 'You need an active subscription to edit your business listing.');
             }
 
@@ -109,7 +109,7 @@ class BusinessController extends Controller
         }
 
         // Check for active subscription
-        if (! auth()->user()->subscription('default') || ! auth()->user()->subscription('default')->active()) {
+        if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
             return redirect()->route('businesses.index')->with('error', 'You need an active subscription to update your business listing.');
         }
 
@@ -157,7 +157,7 @@ class BusinessController extends Controller
         $business->save();
 
         // Handle categories after saving the business
-        if (! empty($validatedData['categories'][0])) {
+        if (!empty($validatedData['categories'][0])) {
             // Split the first element (expecting a string of comma-separated integers)
             $categoryIds = explode(',', $validatedData['categories'][0]);
             $categoryIds = array_map('intval', $categoryIds);
@@ -170,7 +170,7 @@ class BusinessController extends Controller
         }
 
         // Handle discipline after saving the business
-        if (! empty($validatedData['disciplines'][0])) {
+        if (!empty($validatedData['disciplines'][0])) {
             // Split the first element (expecting a string of comma-separated integers)
             $disciplineIds = explode(',', $validatedData['disciplines'][0]);
             $disciplineIds = array_map('intval', $disciplineIds);
@@ -234,11 +234,11 @@ class BusinessController extends Controller
             ]);
         }
 
-        if (! empty($categoryIds)) {
+        if (!empty($categoryIds)) {
             $query->whereIn('category_ids', $categoryIds);
         }
 
-        if (! empty($disciplineIds)) {
+        if (!empty($disciplineIds)) {
             $query->whereIn('discipline_ids', $disciplineIds);
         }
 
@@ -261,7 +261,7 @@ class BusinessController extends Controller
 
         // Check if the business is a draft and the user is not the owner
         if ($business->post_status === 'Draft') {
-            if (! auth()->check() || auth()->id() !== $business->user_id) {
+            if (!auth()->check() || auth()->id() !== $business->user_id) {
                 abort(404);
             }
         }
@@ -296,7 +296,7 @@ class BusinessController extends Controller
 
         $data = $response->json();
 
-        if (! empty($data['results'])) {
+        if (!empty($data['results'])) {
             return $data['results'][0]['geometry']['location'];
         }
 
@@ -309,7 +309,7 @@ class BusinessController extends Controller
         $user = $request->user();
         $business = $user->businesses()->first();
 
-        if (! $business) {
+        if (!$business) {
             return response()->json([
                 'labels' => [],
                 'data' => [],
@@ -317,7 +317,7 @@ class BusinessController extends Controller
             ]);
         }
 
-        $pageViews = PageView::where('business_id', $business->id)
+        $pageViews = PageView::where('job_listing_id', $business->id)
             ->orderBy('date')
             ->get()
             ->groupBy(function ($date) {

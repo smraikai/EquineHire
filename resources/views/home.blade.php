@@ -35,10 +35,11 @@
             <div class="flex w-full max-w-xl text-white">
                 <div class="text">
                     <h1 class="mb-4 text-4xl md:text-5xl lg:text-7xl fancy-title">Find Equine Jobs Near You</h1>
-                    <p class="max-w-lg mb-6 text-lg md:text-xl lg:text-2xl">Browse through amazing career opportunities in the equine industry.</p>
+                    <p class="max-w-lg mb-6 text-lg md:text-xl lg:text-2xl">Browse through amazing career opportunities in
+                        the equine industry.</p>
                     <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                        <a href="{{ route('businesses.directory') }}" class="text-center text-md btn main">Post a Job</a>
-                        <a href="{{ route('subscription.plans') }}" class="text-center text-md btn accent">Find a Job</a>
+                        <a href="{{ route('subscription.plans') }}" class="text-center text-md btn accent">Post a Job</a>
+                        <a href="{{ route('businesses.directory') }}" class="text-center text-md btn main">Find a Job</a>
                     </div>
                 </div>
             </div>
@@ -101,8 +102,8 @@
                     </a>
                     <a href="{{ route('businesses.directory', ['categories[]' => 6]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg"
-                            loading="lazy" alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
+                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg" loading="lazy"
+                            alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
                         <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
                             Riding Lessons
                         </div>
@@ -141,7 +142,7 @@
         </div>
     </section>
 
-{{-- 
+    {{-- 
     <section class="py-24 bg-gray-50">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex flex-col gap-5 text-center">

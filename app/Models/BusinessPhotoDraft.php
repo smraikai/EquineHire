@@ -10,12 +10,13 @@ class BusinessPhotoDraft extends Model
     // Define the table name explicitly if needed
     protected $table = 'business_photos_drafts';
     protected $fillable = [
-        'business_id', 'path'
+        'job_listing_id',
+        'path'
     ];
 
     // Define the relationship with the Business model
     public function business(): BelongsTo
     {
-        return $this->belongsTo(Business::class, 'business_id');
+        return $this->belongsTo(Business::class, 'job_listing_id');
     }
 }

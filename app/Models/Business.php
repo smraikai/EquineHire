@@ -38,17 +38,17 @@ class Business extends Model
 
     public function photos()
     {
-        return $this->hasMany(BusinessPhoto::class, 'business_id');
+        return $this->hasMany(BusinessPhoto::class, 'job_listing_id');
     }
 
     // Liknking Together Other Categories
     public function categories()
     {
-        return $this->belongsToMany(BusinessCategory::class, 'business_category_associations', 'business_id', 'category_id');
+        return $this->belongsToMany(BusinessCategory::class, 'business_category_associations', 'job_listing_id', 'category_id');
     }
     public function disciplines()
     {
-        return $this->belongsToMany(BusinessDiscipline::class, 'business_discipline_associations', 'business_id', 'discipline_id');
+        return $this->belongsToMany(BusinessDiscipline::class, 'business_discipline_associations', 'job_listing_id', 'discipline_id');
     }
 
     // Users

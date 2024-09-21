@@ -16,10 +16,10 @@ class FileDeleteController extends Controller
     public function deleteLogo(Request $request)
     {
         $request->validate([
-            'business_id' => 'required|integer|exists:businesses,id',
+            'job_listing_id' => 'required|integer|exists:businesses,id',
         ]);
 
-        $business = Business::findOrFail($request->input('business_id'));
+        $business = Business::findOrFail($request->input('job_listing_id'));
 
         if ($business->logo) {
             $originalKey = $this->extractKeyFromUrl($business->logo);
@@ -40,10 +40,10 @@ class FileDeleteController extends Controller
     public function deleteFeaturedImage(Request $request)
     {
         $request->validate([
-            'business_id' => 'required|integer|exists:businesses,id',
+            'job_listing_id' => 'required|integer|exists:businesses,id',
         ]);
 
-        $business = Business::findOrFail($request->input('business_id'));
+        $business = Business::findOrFail($request->input('job_listing_id'));
 
         if ($business->featured_image) {
             $originalKey = $this->extractKeyFromUrl($business->featured_image);
@@ -65,17 +65,17 @@ class FileDeleteController extends Controller
     public function deleteAdditionalPhoto(Request $request)
     {
         $request->validate([
-            'business_id' => 'required|integer|exists:businesses,id',
+            'job_listing_id' => 'required|integer|exists:businesses,id',
             'file_path' => 'required|string',
         ]);
 
-        $businessId = $request->input('business_id');
+        $businessId = $request->input('job_listing_id');
         $filePath = $request->input('file_path');
 
         DB::beginTransaction();
 
         try {
-            $photo = BusinessPhoto::where('business_id', $businessId)
+            $photo = BusinessPhoto::where('job_listing_id', $businessId)
                 ->where('path', $filePath)
                 ->firstOrFail();
 
@@ -85,7 +85,7 @@ class FileDeleteController extends Controller
             $deleteOriginal = Storage::disk('public')->delete($originalKey);
             $deleteWebp = Storage::disk('public')->delete($webpKey);
 
-            if (! $deleteOriginal && ! $deleteWebp) {
+            if (!$deleteOriginal && !$deleteWebp) {
                 throw new \Exception("Failed to delete both original and WEBP versions of the file: " . $filePath);
             }
 

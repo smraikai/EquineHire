@@ -31,7 +31,7 @@ class BusinessDisciplineSeeder extends Seeder
         ];
 
         foreach ($disciplines as $discipline) {
-            DB::table('business_disciplines')->updateOrInsert(
+            DB::table('job_listing_disciplines')->updateOrInsert(
                 ['name' => $discipline],
                 ['name' => $discipline]
             );

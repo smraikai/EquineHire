@@ -59,7 +59,7 @@
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                business_id: {{ $business->id }},
+                                job_listing_id: {{ $business->id }},
                                 file_path: source
                             })
                         })
@@ -106,7 +106,7 @@
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                business_id: {{ $business->id }},
+                                job_listing_id: {{ $business->id }},
                                 file_path: source
                             })
                         })
@@ -160,7 +160,7 @@
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                business_id: {{ $business->id }},
+                                job_listing_id: {{ $business->id }},
                                 file_path: source
                             })
                         })

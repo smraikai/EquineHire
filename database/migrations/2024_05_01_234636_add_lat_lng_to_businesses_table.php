@@ -8,9 +8,9 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up() : void
+    public function up(): void
     {
-        Schema::table('businesses', function (Blueprint $table) {
+        Schema::table('company', function (Blueprint $table) {
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
         });
@@ -19,9 +19,9 @@ return new class extends Migration {
     /**
      * Reverse the migrations.
      */
-    public function down() : void
+    public function down(): void
     {
-        Schema::table('businesses', function (Blueprint $table) {
+        Schema::table('company', function (Blueprint $table) {
             $table->dropColumn(['latitude', 'longitude']);
         });
     }

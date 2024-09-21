@@ -7,15 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        if (! Schema::hasTable('business_category_associations')) {
-            Schema::create('business_category_associations', function (Blueprint $table) {
+        if (!Schema::hasTable('job_listing_category_associations')) {
+            Schema::create('job_listing_category_associations', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('business_id');
+                $table->unsignedBigInteger('job_listing_id');
                 $table->unsignedBigInteger('category_id');
                 $table->timestamps();
 
-                $table->foreign('business_id')->references('id')->on('businesses')->onDelete('cascade');
-                $table->foreign('category_id')->references('id')->on('business_categories')->onDelete('cascade');
+                $table->foreign('job_listing_id')->references('id')->on('job_listings')->onDelete('cascade');
+                $table->foreign('category_id')->references('id')->on('job_listing_categories')->onDelete('cascade');
             });
         }
     }
