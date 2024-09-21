@@ -10,7 +10,7 @@ class Company extends Model
 {
     use HasFactory, Searchable;
 
-    protected $table = 'company';
+    protected $table = 'companies';
 
     protected $fillable = [
         'user_id',
@@ -38,9 +38,9 @@ class Company extends Model
         return $this->hasMany(CompanyPhoto::class);
     }
 
-    public function disciplines()
+    public function categories()
     {
-        return $this->belongsToMany(CompanyDiscipline::class, 'company_discipline_associations');
+        return $this->belongsToMany(Category::class, 'company_category');
     }
 
     public function user()
@@ -68,9 +68,6 @@ class Company extends Model
                 'lng' => $this->longitude,
             ];
         }
-
-        $array['category_ids'] = $this->categories->pluck('id')->toArray();
-        $array['discipline_ids'] = $this->disciplines->pluck('id')->toArray();
 
         return $array;
     }

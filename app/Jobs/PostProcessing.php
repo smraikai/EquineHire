@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Business;
+use App\Models\Company;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,15 +14,15 @@ class PostProcessing implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $business;
+    protected $company;
 
-    public function __construct(Business $business)
+    public function __construct(Company $company)
     {
-        $this->business = $business;
+        $this->company = $company;
     }
 
     public function handle()
     {
-        Cache::put("business_{$this->business->id}_processed", true, now()->addMinutes(5));
+        // Cache::put("business_{$this->business->id}_processed", true, now()->addMinutes(5));
     }
 }

@@ -11,11 +11,11 @@ return new class extends Migration {
             Schema::create('job_listing_category_associations', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('job_listing_id');
-                $table->unsignedBigInteger('category_id');
+                $table->unsignedBigInteger('job_listing_category_id');
                 $table->timestamps();
 
                 $table->foreign('job_listing_id')->references('id')->on('job_listings')->onDelete('cascade');
-                $table->foreign('category_id')->references('id')->on('job_listing_categories')->onDelete('cascade');
+                $table->foreign('job_listing_category_id')->references('id')->on('job_listing_categories')->onDelete('cascade');
             });
         }
     }

@@ -11,6 +11,7 @@ class JobListing extends Model
     use HasFactory, Searchable;
 
     protected $fillable = [
+        'user_id',
         'company_id',
         'title',
         'description',
@@ -30,9 +31,6 @@ class JobListing extends Model
         'is_active',
         'is_boosted',
         'is_sticky',
-        'latitude',
-        'longitude',
-        'post_status',
     ];
 
     protected $casts = [
@@ -40,8 +38,10 @@ class JobListing extends Model
         'is_active' => 'boolean',
         'is_boosted' => 'boolean',
         'is_sticky' => 'boolean',
-        'latitude' => 'float',
-        'longitude' => 'float',
+        'hourly_rate_min' => 'decimal:2',
+        'hourly_rate_max' => 'decimal:2',
+        'salary_range_min' => 'decimal:2',
+        'salary_range_max' => 'decimal:2',
     ];
 
     public function company()
