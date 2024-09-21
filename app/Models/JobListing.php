@@ -94,6 +94,9 @@ class JobListing extends Model
         // Add category IDs
         $array['category_ids'] = $this->categories->pluck('id')->toArray();
 
+        // Add custom ranking attribute for sticky posts
+        $array['sticky_rank'] = $this->is_sticky ? 1 : 0;
+
         return $array;
     }
 

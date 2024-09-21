@@ -223,38 +223,27 @@ class JobListingController extends Controller
         return view('jobs.index', compact('results', 'facets'));
     }
 
-    public function directoryShow(Request $request, $state, $slug, $id, SeoService $seoService)
+    public function show(Request $request, $job_slug, $id, SeoService $seoService)
     {
-        $job_listing = Business::where('id', $id)
-            ->where('state_slug', $state)
-            ->with('photos') // Eager load the photos relationship
-            ->firstOrFail();
+        $job_listing = JobListing::findOrFail($id);
 
-        // Check if the business is a draft and the user is not the owner
-        if ($job_listing->post_status === 'Draft') {
-            if (!auth()->check() || auth()->id() !== $job_listing->user_id) {
-                abort(404);
-            }
+        // Check if the slug matches (for SEO purposes)
+        if ($job_listing->slug !== $job_slug) {
+            return redirect()->route('jobs.show', [$job_listing->slug, $job_listing->id], 301);
         }
 
-        $canonicalSlug = $job_listing->slug;
-        $canonicalUrl = route('jobs.index.show', [
-            'state_slug' => $state,
-            'slug' => $canonicalSlug,
-            'id' => $id,
-        ]);
-
-        if ($slug !== $canonicalSlug) {
-            return redirect($canonicalUrl, 301);
+        // Check if the job listing is a draft and the user is not the owner
+        if ($job_listing->post_status === 'Draft' && (!auth()->check() || auth()->id() !== $job_listing->user_id)) {
+            abort(404);
         }
 
         // Generate meta title and description using SeoService
-        $metaTitle = $seoService->generateMetaTitle($job_listing->name, $job_listing->city, $job_listing->state);
+        $metaTitle = $seoService->generateMetaTitle($job_listing->title, $job_listing->city, $job_listing->state);
         $metaDescription = $seoService->generateMetaDescription($job_listing->description);
 
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
 
-        return view('jobs.index-show', compact('business', 'isOwner', 'metaTitle', 'metaDescription'));
+        return view('jobs.show', compact('job_listing', 'isOwner', 'metaTitle', 'metaDescription'));
     }
 
     public function getLatLongFromAddress($address)

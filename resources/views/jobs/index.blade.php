@@ -19,7 +19,7 @@
         </div>
         <div class="flex flex-col justify-around gap-5 md:flex-row">
             <div class="order-2 w-full md:w-3/4 md:order-1">
-                @include('partials.directory.results')
+                @include('partials.jobs.results')
             </div>
             <div x-data="{ isOpen: false }" class="order-1 w-full mb-5 md:w-1/4 md:order-2 md:mb-0">
                 <div class="sticky p-4 bg-white border rounded-md top-5 sm:p-8">
@@ -35,7 +35,7 @@
                         </svg>
                     </button>
                     <div x-show="isOpen || window.innerWidth >= 768" class="mt-4 md:mt-0" x-transition>
-                        @include('partials.directory.facets')
+                        @include('partials.jobs.facets')
                     </div>
                 </div>
             </div>

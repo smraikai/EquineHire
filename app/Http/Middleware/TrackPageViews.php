@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\PageView;
-use App\Models\Business;
+use App\Models\JobListing;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,16 +34,16 @@ class TrackPageViews
         $response = $next($request);
 
         if ($request->route()->getName() === 'jobs.index.show') {
-            $businessId = $request->route('id');
-            $business = Business::find($businessId);
+            $job_listingId = $request->route('id');
+            $job_listing = JobListing::find($job_listingId);
 
             if (
-                $business &&
-                (!Auth::check() || Auth::id() !== $business->user_id) &&
+                $job_listing &&
+                (!Auth::check() || Auth::id() !== $job_listing->user_id) &&
                 $this->isHumanUserAgent($request->header('User-Agent'))
             ) {
                 $pageView = PageView::firstOrNew([
-                    'job_listing_id' => $business->id,
+                    'job_listing_id' => $job_listing->id,
                     'date' => now()->toDateString()
                 ]);
                 $pageView->view_count = ($pageView->view_count ?? 0) + 1;
