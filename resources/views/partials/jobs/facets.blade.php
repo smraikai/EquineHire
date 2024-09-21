@@ -17,6 +17,10 @@
     $sortedCategories = $sortedCategories->get(0)->merge($sortedCategories->get(1));
 
     $checkedCategoryCount = $sortedCategories->where('checked', true)->count();
+
+    $jobTypes = \App\Models\JobListing::distinct()->pluck('job_type')->filter()->sort()->values();
+    $experienceLevels = \App\Models\JobListing::distinct()->pluck('experience_required')->filter()->sort()->values();
+    $salaryTypes = \App\Models\JobListing::distinct()->pluck('salary_type')->filter()->sort()->values();
 @endphp
 <!-- Facets -->
 <div x-data="{
@@ -26,13 +30,6 @@
         allCheckboxes.forEach(checkbox => checkbox.checked = false);
     }
 }" x-ref="facetForm">
-
-    @php
-        $showCountCategories = max(5, $checkedCategoryCount);
-    @endphp
-
-    <h3 class="hidden text-lg font-medium md:block">Filters</h3>
-    <hr class="my-2">
 
     <div class="space-y-8">
         <form action="{{ route('jobs.index') }}" method="GET">
@@ -44,9 +41,8 @@
             <div>
                 <span class="text-sm font-medium">Categories</span>
                 <div class="flex flex-col gap-2 mt-2">
-                    @foreach ($sortedCategories as $key => $category)
-                        <div class="flex items-center w-full"
-                            :class="{ 'hidden': !showAllCategories && {{ $key }} >= {{ $showCountCategories }} }">
+                    @foreach ($sortedCategories as $category)
+                        <div class="flex items-center w-full">
                             <input type="checkbox" name="categories[]" value="{{ $category->id }}"
                                 id="category-{{ $category->id }}" class="category-checkbox"
                                 @checked($category->checked)>
@@ -54,6 +50,64 @@
                                 class="ml-2 text-sm font-normal">{{ $category->name }}</label>
                         </div>
                     @endforeach
+                </div>
+            </div>
+
+            <!-- Job Type -->
+            <div class="mt-4">
+                <span class="text-sm font-medium">Job Type</span>
+                <div class="flex flex-col gap-2 mt-2">
+                    @foreach ($jobTypes as $jobType)
+                        <div class="flex items-center w-full">
+                            <input type="checkbox" name="job_types[]" value="{{ $jobType }}"
+                                id="job-type-{{ $jobType }}" class="job-type-checkbox"
+                                @checked(in_array($jobType, request()->input('job_types', [])))>
+                            <label for="job-type-{{ $jobType }}"
+                                class="ml-2 text-sm font-normal">{{ $jobType }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Experience Required -->
+            <div class="mt-4">
+                <span class="text-sm font-medium">Experience Required</span>
+                <div class="flex flex-col gap-2 mt-2">
+                    @foreach ($experienceLevels as $level)
+                        <div class="flex items-center w-full">
+                            <input type="checkbox" name="experience_levels[]" value="{{ $level }}"
+                                id="experience-{{ $level }}" class="experience-checkbox"
+                                @checked(in_array($level, request()->input('experience_levels', [])))>
+                            <label for="experience-{{ $level }}"
+                                class="ml-2 text-sm font-normal">{{ $level }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Salary Type -->
+            <div class="mt-4">
+                <span class="text-sm font-medium">Salary Type</span>
+                <div class="flex flex-col gap-2 mt-2">
+                    @foreach ($salaryTypes as $salaryType)
+                        <div class="flex items-center w-full">
+                            <input type="checkbox" name="salary_types[]" value="{{ $salaryType }}"
+                                id="salary-type-{{ $salaryType }}" class="salary-type-checkbox"
+                                @checked(in_array($salaryType, request()->input('salary_types', [])))>
+                            <label for="salary-type-{{ $salaryType }}"
+                                class="ml-2 text-sm font-normal">{{ $salaryType }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Remote Position -->
+            <div class="mt-4">
+                <span class="text-sm font-medium">Remote Position</span>
+                <div class="flex items-center w-full mt-2">
+                    <input type="checkbox" name="remote_position" value="1" id="remote-position"
+                        class="remote-position-checkbox" @checked(request()->input('remote_position'))>
+                    <label for="remote-position" class="ml-2 text-sm font-normal">Remote</label>
                 </div>
             </div>
 

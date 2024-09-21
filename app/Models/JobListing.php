@@ -78,16 +78,14 @@ class JobListing extends Model
         return 'job_listings';
     }
 
+    // Define what is searchable or not
     public function toSearchableArray(): array
     {
         $array = $this->toArray();
 
-        // Ensure the 'id' is used as 'objectID'
         $array['objectID'] = $this->getKey();
-        // Add state as a facet
         $array['state'] = $this->state;
 
-        // Only add _geoloc if latitude and longitude are not null
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
                 'lat' => $this->latitude,
@@ -95,13 +93,30 @@ class JobListing extends Model
             ];
         }
 
-        // Add category IDs
         $array['category_ids'] = $this->categories->pluck('id')->toArray();
-
-        // Add custom ranking attribute for sticky posts
         $array['sticky_rank'] = $this->is_sticky ? 1 : 0;
 
+        // Add new facets
+        $array['job_type'] = $this->job_type;
+        $array['experience_required'] = $this->experience_required;
+        $array['salary_type'] = $this->salary_type;
+        $array['remote_position'] = $this->remote_position;
+
         return $array;
+    }
+
+    public function getAlgoliaSettings()
+    {
+        return [
+            'attributesForFaceting' => [
+                'state',
+                'job_type',
+                'experience_required',
+                'salary_type',
+                'remote_position',
+                'category_ids'
+            ],
+        ];
     }
 
     /**
@@ -113,13 +128,6 @@ class JobListing extends Model
     {
         // Only index the model if it's active
         return $this->is_active === true;
-    }
-
-    public function getAlgoliaSettings()
-    {
-        return [
-            'attributesForFaceting' => ['state'],
-        ];
     }
 
     /**
