@@ -3,7 +3,7 @@
         @forelse($results as $job_listing)
             <div class="relative group">
                 <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
-                    class="block relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm group-hover:shadow-md hover:-translate-y-1 {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
+                    class="block relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm group-hover:shadow-md {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
                     <div class="relative flex items-center p-6">
                         <!-- Logo -->
                         <img class="object-cover w-16 h-16 mr-4 rounded-full"
@@ -55,8 +55,8 @@
 
                 <!-- View Job and Apply Now buttons -->
                 <div
-                    class="absolute inset-0 flex items-center justify-end p-6 transition-all duration-300 translate-y-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
-                    <div>
+                    class="absolute inset-0 flex items-center justify-end p-6 transition-all duration-300 translate-y-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0">
+                    <div class="pointer-events-auto">
                         <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
                             class="inline-flex items-center px-4 py-2 mr-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             View Job
@@ -67,7 +67,6 @@
                         </a>
                     </div>
                 </div>
-
             </div>
         @empty
             <div class="py-12 text-center">
