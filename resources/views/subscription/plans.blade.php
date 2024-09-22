@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.site')
 
 @php
     $metaTitle = 'Post A Job | EquineHire';

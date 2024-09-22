@@ -2,17 +2,14 @@
 
 @php
     $metaTitle = 'My Account Dashboard | EquineHire';
+    $pageTitle = 'My Account';
 @endphp
 
+
 @section('content')
-    <header class="text-white bg-blue-700">
-        <div class="px-4 py-6 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-            <h1 class="text-xl font-semibold leading-tight sm:text-2xl">My Account</h1>
-        </div>
-    </header>
 
     @if (auth()->user()->subscriptions()->active()->count() > 0)
-        <div class="container py-6 mx-auto">
+        <div class="container py-12 mx-auto sm:py-24">
             <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="pb-5">
                     <h3 class="text-lg font-medium leading-6 text-gray-900 sm:text-xl">Job Listings</h3>
@@ -80,7 +77,7 @@
                 <!-- Quick Actions Column -->
                 <div>
                     <h2 class="mb-4 text-lg font-medium leading-6 text-gray-900 sm:text-xl">Quick Actions</h2>
-                    <div class="space-y-4 overflow-hidden border rounded-lg">
+                    <div class="space-y-4 overflow-hidden bg-white border rounded-lg">
                         @include('partials.dashboard._manage_billing')
                         <hr class="max-w-[95%] mx-auto">
                         @include('partials.dashboard._manage_account')

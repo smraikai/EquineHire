@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @php
-    $metaTitle = 'Edit Business Listing | EquineHire';
+    $metaTitle = 'Edit Company Profile | EquineHire';
+    $pageTitle = 'Edit Company Profile';
 @endphp
+
 
 @section('scripts_css')
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />

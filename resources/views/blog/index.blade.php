@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.site')
 
 @php
     $metaTitle = 'EquineHire Blog | Equine Expertise & Industry Insights';
@@ -75,8 +75,7 @@
                                         <p class="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">
                                             {{ $post->get('metaDescription') }}</p>
                                     </div>
-                                    <div
-                                        class="inline-flex items-center mt-4 text-sm btn plain group-hover:text-blue-600">
+                                    <div class="inline-flex items-center mt-4 text-sm btn plain group-hover:text-blue-600">
                                         <span>Read More</span> <x-coolicon-chevron-right-md
                                             class="w-5 h-5 ml-2 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
                                     </div>

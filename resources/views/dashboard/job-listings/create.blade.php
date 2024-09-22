@@ -1,10 +1,15 @@
 @extends('layouts.app')
 
+@php
+    $metaTitle = 'Edit Job Listing | EquineHire';
+    $pageTitle = 'Edit Job Listing';
+@endphp
+
 @section('content')
-    <div class="container py-6 mx-auto">
+    <div class="container py-12 mx-auto sm:py-24">
 
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <h1 class="mb-6 text-2xl font-semibold text-gray-900">Let's Build Your Job Posting</h1>
+            <h1 class="mb-6 text-xl font-semibold text-gray-900">Let's Build Your Job Posting</h1>
 
             <form action="{{ route('dashboard.job-listings.store') }}" method="POST" class="p-6 bg-white rounded-lg shadow-sm"
                 enctype="multipart/form-data">

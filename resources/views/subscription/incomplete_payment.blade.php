@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.site')
 
 @section('content')
     <div class="flex flex-col min-h-screen md:flex-row">
