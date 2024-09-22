@@ -99,7 +99,7 @@
             </div>
 
             <main class="">
-                <div class="">
+                <div class="bg-gray-100">
                     @yield('content')
                 </div>
             </main>
