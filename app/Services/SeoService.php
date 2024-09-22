@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\JobListing;
+
 class SeoService
 {
-    public function generateMetaTitle(string $businessName, string $city, string $state): string
+    public function generateMetaTitle(string $title, string $companyName, ?string $location): string
     {
-        return "{$businessName} – {$city}, {$state} | EquineHire";
+        $locationPart = $location ? " – {$location}" : "";
+        return "{$title} at {$companyName}{$locationPart} | EquineHire";
     }
 
     public function generateMetaDescription(string $description): string

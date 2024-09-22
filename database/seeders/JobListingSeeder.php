@@ -2,42 +2,27 @@
 
 namespace Database\Seeders;
 
-use App\Models\JobListing;
-use App\Models\JobListingCategory;
-use App\Models\JobListingDiscipline;
 use Illuminate\Database\Seeder;
+use App\Models\JobListing;
+use App\Models\Company;
+use App\Models\JobListingCategory;
 
 class JobListingSeeder extends Seeder
 {
     public function run()
     {
-        // Create 50 job listings
-        JobListing::factory()->count(50)->create()->each(function ($jobListing) {
-            // Attach random categories (1 to 3)
-            $categories = JobListingCategory::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->categories()->attach($categories);
+        $companies = Company::all();
+        $categories = JobListingCategory::all();
 
-            // Attach random disciplines (1 to 3)
-            $disciplines = JobListingDiscipline::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->disciplines()->attach($disciplines);
-        });
-
-        // Create 10 boosted job listings
-        JobListing::factory()->count(10)->boosted()->create()->each(function ($jobListing) {
-            $categories = JobListingCategory::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->categories()->attach($categories);
-
-            $disciplines = JobListingDiscipline::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->disciplines()->attach($disciplines);
-        });
-
-        // Create 5 sticky job listings
-        JobListing::factory()->count(5)->sticky()->create()->each(function ($jobListing) {
-            $categories = JobListingCategory::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->categories()->attach($categories);
-
-            $disciplines = JobListingDiscipline::inRandomOrder()->take(rand(1, 3))->get();
-            $jobListing->disciplines()->attach($disciplines);
-        });
+        foreach ($companies as $company) {
+            JobListing::factory()->count(rand(1, 5))->create([
+                'company_id' => $company->id,
+                'user_id' => $company->user_id,
+            ])->each(function ($jobListing) use ($categories) {
+                $jobListing->categories()->attach(
+                    $categories->random(rand(1, 3))->pluck('id')->toArray()
+                );
+            });
+        }
     }
 }
