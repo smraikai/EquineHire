@@ -232,8 +232,6 @@ class JobListingController extends Controller
             'application_type' => 'required|in:link,email',
             'application_link' => 'required_if:application_type,link|nullable|url',
             'email_link' => 'required_if:application_type,email|nullable|email',
-            'photos' => 'nullable|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Get the authenticated user's company
@@ -251,14 +249,6 @@ class JobListingController extends Controller
 
         // Attach the category
         $jobListing->categories()->attach($validatedData['category_id']);
-
-        // Handle photo uploads
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('job-listings', 'public');
-                $jobListing->photos()->create(['path' => $path]);
-            }
-        }
 
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
     }
@@ -291,8 +281,6 @@ class JobListingController extends Controller
             'application_type' => 'required|in:link,email',
             'application_link' => 'required_if:application_type,link|nullable|url',
             'email_link' => 'required_if:application_type,email|nullable|email',
-            'photos' => 'nullable|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $jobListing->update($validatedData);
@@ -300,29 +288,7 @@ class JobListingController extends Controller
         // Update the category
         $jobListing->categories()->sync([$validatedData['category_id']]);
 
-        // Handle photo uploads
-        if ($request->hasFile('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('job-listings', 'public');
-                $jobListing->photos()->create(['path' => $path]);
-            }
-        }
-
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
-    }
-
-    public function uploadPhoto(Request $request)
-    {
-        $file = $request->file('photo');
-        $path = $file->store('temp-photos', 'public');
-        return response()->json(['path' => $path]);
-    }
-
-    public function removePhoto(Request $request)
-    {
-        $path = $request->getContent();
-        Storage::disk('public')->delete($path);
-        return response()->json(['success' => true]);
     }
 
     public function dashboardDestroy(JobListing $jobListing)

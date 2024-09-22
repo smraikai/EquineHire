@@ -7,15 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('job_listing_disciplines', function (Blueprint $table) {
+        Schema::create('company_photos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('company_id');
+            $table->string('path');
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('job_listing_disciplines');
+        Schema::dropIfExists('company_photos');
     }
 };
