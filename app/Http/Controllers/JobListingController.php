@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Requests
-use App\Http\Requests\UpdateCompanyRequest;
-
 use Algolia\AlgoliaSearch\SearchIndex;
 
 // Models
@@ -15,9 +12,7 @@ use Illuminate\Support\Facades\Cache;
 // Illumination
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 // Services 
 use App\Services\SeoService;
