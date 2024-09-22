@@ -103,9 +103,16 @@
                     <div>
                         <label for="state" class="block text-sm font-medium text-gray-700">State <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" name="state" id="state"
+                        <select name="state" id="state"
                             class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('state') border-red-500 @enderror"
-                            value="{{ old('state') }}">
+                            required>
+                            <option value="">Select a state</option>
+                            @foreach ($states as $abbr => $name)
+                                <option value="{{ $abbr }}" {{ old('state') == $abbr ? 'selected' : '' }}>
+                                    {{ $name }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('state')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror

@@ -25,147 +25,6 @@ use App\Services\SeoService;
 class JobListingController extends Controller
 {
 
-    public function create()
-    {
-        if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'You must be logged in to create a business.');
-        }
-
-        $job_listing = JobListing::create([
-            'name' => '',
-            'description' => '',
-            'post_status' => 'Draft',
-            'user_id' => auth()->id(),
-            'address' => ''
-        ]);
-
-        // Redirect to the edit page of the newly created business
-        return redirect()->route('company.edit', $job_listing->id);
-    }
-
-    public function edit(JobListing $job_listing)
-    {
-        if (auth()->id() === $job_listing->user_id) {
-            // Check for active subscription
-            if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-                return redirect()->route('company.index')->with('error', 'You need an active subscription to edit your business listing.');
-            }
-
-            $categories = JobListingCategory::all();
-
-            return view('company.edit', compact('business', 'categories', 'disciplines'));
-        }
-
-        abort(403, 'Unauthorized action.');
-    }
-
-
-    public function update(JobListing $job_listing, $request)
-    {
-
-        \Log::info('Auth user ID: ' . auth()->user()->id);
-        \Log::info('Business user ID: ' . $job_listing->user_id);
-
-        // Check if the user is the owner of the business
-        if (auth()->user()->id !== $job_listing->user_id) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        // Check for active subscription
-        if (!auth()->user()->subscription('default') || !auth()->user()->subscription('default')->active()) {
-            return redirect()->route('company.index')->with('error', 'You need an active subscription to update your business listing.');
-        }
-
-        // Validate the incoming request
-        $validatedData = $request->validated();
-
-        // Update slug if 'name' or 'state' has changed
-        if ($job_listing->name !== $validatedData['name']) {
-            $job_listing->slug = Str::slug($validatedData['name']);
-        }
-        if ($job_listing->state !== $validatedData['state']) {
-            $job_listing->state_slug = Str::slug($validatedData['state']);
-        }
-
-        // Update post status to 'Published'
-        if ($job_listing->post_status !== 'Published') {
-            $validatedData['post_status'] = 'Published';
-        }
-
-        // Only update logo and featured_image if they are provided
-        if (empty($validatedData['logo'])) {
-            unset($validatedData['logo']);
-        }
-        if (empty($validatedData['featured_image'])) {
-            unset($validatedData['featured_image']);
-        }
-
-        // Handle additional photos
-        $additionalPhotoUrls = json_decode($request->input('additional_photos_urls'), true);
-
-        if ($additionalPhotoUrls) {
-            foreach ($additionalPhotoUrls as $url) {
-                $job_listing->photos()->create([
-                    'path' => $url
-                ]);
-            }
-        }
-
-
-        // Mass assign all validated data
-        $job_listing->fill($validatedData);
-
-        // Save the updated business details to the database
-        $job_listing->save();
-
-        // Handle categories after saving the business
-        if (!empty($validatedData['categories'][0])) {
-            // Split the first element (expecting a string of comma-separated integers)
-            $categoryIds = explode(',', $validatedData['categories'][0]);
-            $categoryIds = array_map('intval', $categoryIds);
-            $categoryIds = array_filter($categoryIds);
-
-            // Sync the categories to the business
-            $job_listing->categories()->sync($categoryIds);
-        } else {
-            $job_listing->categories()->detach();
-        }
-
-        // Handle discipline after saving the business
-        if (!empty($validatedData['disciplines'][0])) {
-            // Split the first element (expecting a string of comma-separated integers)
-            $disciplineIds = explode(',', $validatedData['disciplines'][0]);
-            $disciplineIds = array_map('intval', $disciplineIds);
-            $disciplineIds = array_filter($disciplineIds);
-
-            // Sync the disciplines to the business
-            $job_listing->disciplines()->sync($disciplineIds);
-        } else {
-            $job_listing->disciplines()->detach();
-        }
-
-        // Redirect to processing page
-        return view('businesses.process', ['business' => $job_listing]);
-
-        // Redirect to the updated business directory page with success message
-        // return redirect()->route('company.index')
-        //    ->with('success', 'Business listing updated successfully.');
-    }
-
-    public function destroy(JobListing $job_listing)
-    {
-        // Check if the authenticated user owns the business listing
-        if ($job_listing->user_id !== auth()->user()->id) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        // Delete the business listing
-        $job_listing->delete();
-
-        return redirect()->route('company.index')
-            ->with('success', 'Business listing deleted successfully.');
-    }
-
     ////////////////////////////////////////////////////////////////
     // Job Index, Views, Etc.
     ////////////////////////////////////////////////////////////////
@@ -285,43 +144,8 @@ class JobListingController extends Controller
         return view('jobs.show', compact('job_listing', 'isOwner', 'metaTitle', 'metaDescription'));
     }
 
-    public function getLatLongFromAddress($address)
-    {
-        $apiKey = config('services.google.maps_api_key');
-        $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
-            'address' => $address,
-            'key' => $apiKey
-        ]);
-
-        $data = $response->json();
-
-        if (!empty($data['results'])) {
-            return $data['results'][0]['geometry']['location'];
-        }
-
-        return null;
-    }
-
-    // Business Processing Status
-    public function checkProcessingStatus(JobListing $job_listing)
-    {
-        $completed = Cache::get("business_{$job_listing->id}_processed", false);
-        if ($completed) {
-            session()->flash('success', 'Business listing updated successfully.');
-            return response()->json([
-                'completed' => true,
-                'redirect' => route('jobs.index.show', [
-                    'state_slug' => $job_listing->state_slug,
-                    'slug' => $job_listing->slug,
-                    'id' => $job_listing->id
-                ])
-            ]);
-        }
-        return response()->json(['completed' => false]);
-    }
-
     ////////////////////////////////////////////////////////////////
-    // Backend for Companies Posting Jobs
+    // Company Job Listing Creation and Edits
     ////////////////////////////////////////////////////////////////
     public function dashboardIndex()
     {
@@ -332,39 +156,107 @@ class JobListingController extends Controller
     public function dashboardCreate()
     {
         $categories = JobListingCategory::all();
-        return view('dashboard.job-listings.create', compact('categories'));
+        $states = [
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+            'NY' => 'New York',
+            'NC' => 'North Carolina',
+            'ND' => 'North Dakota',
+            'OH' => 'Ohio',
+            'OK' => 'Oklahoma',
+            'OR' => 'Oregon',
+            'PA' => 'Pennsylvania',
+            'RI' => 'Rhode Island',
+            'SC' => 'South Carolina',
+            'SD' => 'South Dakota',
+            'TN' => 'Tennessee',
+            'TX' => 'Texas',
+            'UT' => 'Utah',
+            'VT' => 'Vermont',
+            'VA' => 'Virginia',
+            'WA' => 'Washington',
+            'WV' => 'West Virginia',
+            'WI' => 'Wisconsin',
+            'WY' => 'Wyoming',
+        ];
+        return view('dashboard.job-listings.create', compact('categories', 'states'));
     }
 
     public function dashboardStore(Request $request)
     {
+        \Log::error('Job Listing Create Request:', $request->all());
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
+            'category_id' => 'required|exists:job_listing_categories,id',
             'description' => 'required',
-            'job_type' => 'required',
-            'experience_required' => 'required',
-            'salary_type' => 'required',
-            'salary_min' => 'required|numeric',
-            'salary_max' => 'required|numeric',
-            'remote_position' => 'boolean',
-            'categories' => 'required|array',
+            'remote_position' => 'required|boolean',
+            'city' => 'nullable|required_if:remote_position,0|string|max:255',
+            'state' => 'nullable|required_if:remote_position,0|string|size:2|in:' . implode(',', array_keys($this->getStates())),
+            'job_type' => 'required|in:full-time,part-time,contract,temporary',
+            'experience_required' => 'required|in:0-1 Years,1-2 Years,2-5 Years,5+ Years',
+            'salary_type' => 'required|in:hourly,annual',
+            'hourly_rate_min' => 'required_if:salary_type,hourly|nullable|numeric|min:10|max:100',
+            'hourly_rate_max' => 'required_if:salary_type,hourly|nullable|numeric|min:15|max:200|gt:hourly_rate_min',
+            'salary_range_min' => 'required_if:salary_type,annual|nullable|numeric|min:10000|max:100000',
+            'salary_range_max' => 'required_if:salary_type,annual|nullable|numeric|min:20000|max:300000|gt:salary_range_min',
+            'application_type' => 'required|in:link,email',
+            'application_link' => 'required_if:application_type,link|nullable|url',
+            'email_link' => 'required_if:application_type,email|nullable|email',
             'photos' => 'nullable|array',
-            'photos.*' => 'string', // FilePond sends file paths
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $jobListing = auth()->user()->jobListings()->create($validatedData);
-        $jobListing->company_id = auth()->user()->company->id;
-        $jobListing->slug = Str::slug($validatedData['title']);
-        $jobListing->save();
+        // Get the authenticated user's company
+        $company = auth()->user()->company;
 
-        $jobListing->categories()->sync($validatedData['categories']);
+        if (!$company) {
+            return redirect()->back()->with('error', 'You must have a company profile to create job listings.');
+        }
 
-        if ($request->has('photos')) {
-            foreach ($request->input('photos', []) as $tempPath) {
-                if (Storage::disk('public')->exists($tempPath)) {
-                    $newPath = 'job-listings/' . basename($tempPath);
-                    Storage::disk('public')->move($tempPath, $newPath);
-                    $jobListing->photos()->create(['path' => $newPath]);
-                }
+        // Add company_id to the validated data
+        $validatedData['company_id'] = $company->id;
+
+        // Create the job listing
+        $jobListing = JobListing::create($validatedData);
+
+        // Attach the category
+        $jobListing->categories()->attach($validatedData['category_id']);
+
+        // Handle photo uploads
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('job-listings', 'public');
+                $jobListing->photos()->create(['path' => $path]);
             }
         }
 
@@ -375,28 +267,46 @@ class JobListingController extends Controller
     {
         $this->authorize('update', $jobListing);
         $categories = JobListingCategory::all();
-        return view('dashboard.job-listings.edit', compact('jobListing', 'categories'));
+        $states = $this->getStates();
+        return view('dashboard.job-listings.edit', compact('jobListing', 'categories', 'states'));
     }
-
     public function dashboardUpdate(Request $request, JobListing $jobListing)
     {
         $this->authorize('update', $jobListing);
 
         $validatedData = $request->validate([
             'title' => 'required|max:255',
+            'category_id' => 'required|exists:job_listing_categories,id',
             'description' => 'required',
-            'job_type' => 'required',
-            'experience_required' => 'required',
-            'salary_type' => 'required',
-            'salary_min' => 'required|numeric',
-            'salary_max' => 'required|numeric',
-            'remote_position' => 'boolean',
-            'categories' => 'required|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,webp|max:3072', // 3MB max
+            'remote_position' => 'required|boolean',
+            'city' => 'nullable|required_if:remote_position,0|string|max:255',
+            'state' => 'nullable|required_if:remote_position,0|string|size:2|in:' . implode(',', array_keys($this->getStates())),
+            'job_type' => 'required|in:full-time,part-time,contract,temporary',
+            'experience_required' => 'required|in:0-1 Years,1-2 Years,2-5 Years,5+ Years',
+            'salary_type' => 'required|in:hourly,annual',
+            'hourly_rate_min' => 'required_if:salary_type,hourly|nullable|numeric|min:10|max:100',
+            'hourly_rate_max' => 'required_if:salary_type,hourly|nullable|numeric|min:15|max:200|gt:hourly_rate_min',
+            'salary_range_min' => 'required_if:salary_type,annual|nullable|numeric|min:10000|max:100000',
+            'salary_range_max' => 'required_if:salary_type,annual|nullable|numeric|min:20000|max:300000|gt:salary_range_min',
+            'application_type' => 'required|in:link,email',
+            'application_link' => 'required_if:application_type,link|nullable|url',
+            'email_link' => 'required_if:application_type,email|nullable|email',
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $jobListing->update($validatedData);
-        $jobListing->categories()->sync($validatedData['categories']);
+
+        // Update the category
+        $jobListing->categories()->sync([$validatedData['category_id']]);
+
+        // Handle photo uploads
+        if ($request->hasFile('photos')) {
+            foreach ($request->file('photos') as $photo) {
+                $path = $photo->store('job-listings', 'public');
+                $jobListing->photos()->create(['path' => $path]);
+            }
+        }
 
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
     }
@@ -420,5 +330,80 @@ class JobListingController extends Controller
         $this->authorize('delete', $jobListing);
         $jobListing->delete();
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing deleted successfully.');
+    }
+
+    ////////////////////////////////////////////////////
+    // Helpers for Job Listing Selections
+    ////////////////////////////////////////////////////
+    private function getStates()
+    {
+        return [
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+            'NY' => 'New York',
+            'NC' => 'North Carolina',
+            'ND' => 'North Dakota',
+            'OH' => 'Ohio',
+            'OK' => 'Oklahoma',
+            'OR' => 'Oregon',
+            'PA' => 'Pennsylvania',
+            'RI' => 'Rhode Island',
+            'SC' => 'South Carolina',
+            'SD' => 'South Dakota',
+            'TN' => 'Tennessee',
+            'TX' => 'Texas',
+            'UT' => 'Utah',
+            'VT' => 'Vermont',
+            'VA' => 'Virginia',
+            'WA' => 'Washington',
+            'WV' => 'West Virginia',
+            'WI' => 'Wisconsin',
+            'WY' => 'Wyoming',
+        ];
+    }
+    public function getLatLongFromAddress($address)
+    {
+        $apiKey = config('services.google.maps_api_key');
+        $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
+            'address' => $address,
+            'key' => $apiKey
+        ]);
+
+        $data = $response->json();
+
+        if (!empty($data['results'])) {
+            return $data['results'][0]['geometry']['location'];
+        }
+
+        return null;
     }
 }

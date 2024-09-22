@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Cache;
 use App\Http\Middleware\SubscriptionCheck;
 use App\Http\Middleware\ClearDraftsMiddleware;
 // Models
-use App\Models\BusinessCategory;
 use App\Models\BusinessDiscipline;
 
 ////////////////////////////////////////////////////////////////////
@@ -114,18 +113,6 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     Route::delete('/delete-additional-photo', [FileDeleteController::class, 'deleteAdditionalPhoto']);
 });
 
-////////////////////////////////////////////////////////////////////
-// Admin Routes
-////////////////////////////////////////////////////////////////////
-Route::middleware([\App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::put('/businesses/{business}', [AdminController::class, 'update'])->name('admin.company.update');
-    Route::get('/businesses/{business}/edit', [AdminController::class, 'edit'])->name('admin.company.edit');
-    Route::delete('/businesses/{business}', [AdminController::class, 'destroy'])->name('admin.company.destroy');
-    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('admin.users.show');
-    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
-    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
-});
 
 ////////////////////////////////////////////////////////////////////
 // API Routes for Searchable Categories and Disciplines
