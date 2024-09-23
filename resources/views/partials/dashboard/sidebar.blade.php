@@ -20,7 +20,15 @@
                             <a href="{{ route('company.index') }}"
                                 class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
                                 <x-heroicon-o-home class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
-                                Dashboard
+                                Dashboard Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('companies.edit') }}"
+                                class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
+                                <x-heroicon-o-building-office
+                                    class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
+                                {{ auth()->user()->company ? 'Edit' : 'Create' }} Company
                             </a>
                         </li>
                         <li>

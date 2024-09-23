@@ -122,11 +122,6 @@ Route::get('/categories', function () {
         return JobListingCategory::all();
     });
 });
-Route::get('/disciplines', function () {
-    return Cache::remember('disciplines', 60 * 60, function () {
-        return BusinessDiscipline::all();
-    });
-});
 
 ////////////////////////////////////////////////////////////////////
 // Trial Signup
@@ -160,4 +155,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{jobListing}', [JobListingController::class, 'dashboardUpdate'])->name('update');
         Route::delete('/{jobListing}', [JobListingController::class, 'dashboardDestroy'])->name('destroy');
     });
+});
+
+//////////////////////////////////////////////////////////
+// Company Routes
+//////////////////////////////////////////////////////////
+Route::middleware(['auth'])->group(function () {
+    Route::get('/employer/create', [CompanyController::class, 'create'])->name('companies.create');
+    Route::post('/employer', [CompanyController::class, 'store'])->name('companies.store');
+    Route::get('/employer/{company}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
+    Route::put('/employer/{company}', [CompanyController::class, 'update'])->name('companies.update');
+    Route::post('/employer/{company}/photos', [CompanyController::class, 'addPhoto'])->name('companies.addPhoto');
+    Route::delete('/employer-photos/{photo}', [CompanyController::class, 'removePhoto'])->name('companies.removePhoto');
 });

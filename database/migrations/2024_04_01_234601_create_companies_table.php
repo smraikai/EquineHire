@@ -15,15 +15,12 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('description');
-            $table->string('address');
+            $table->string('website')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->string('zip_code')->nullable();
-            $table->string('website')->nullable();
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
             $table->string('logo')->nullable();
             $table->timestamps();
+
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

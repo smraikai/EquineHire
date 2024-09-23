@@ -16,33 +16,20 @@ class Company extends Model
         'user_id',
         'name',
         'description',
-        'address',
+        'website',
         'city',
         'state',
-        'zip_code',
-        'website',
-        'email',
-        'phone',
         'logo',
-        'latitude',
-        'longitude',
-        'is_active'
+
     ];
 
     protected $casts = [
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'is_active' => 'boolean',
+
     ];
 
     public function photos()
     {
         return $this->hasMany(CompanyPhoto::class);
-    }
-
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'company_category');
     }
 
     public function user()
