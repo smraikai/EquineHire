@@ -131,7 +131,7 @@
                 </div>
                 <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                     @if ($jobListings->isNotEmpty())
-                        <form action="{{ route('company.destroy', $jobListings->first()->id) }}" method="POST">
+                        <form action="{{ route('employer.destroy', $jobListings->first()->id) }}" method="POST">
                         @else
                             <form action="#" method="POST">
                     @endif

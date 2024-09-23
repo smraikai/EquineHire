@@ -10,7 +10,7 @@ return [
                 'interval' => 'month',
                 'features' => [
                     '1 Job Post',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
@@ -25,7 +25,7 @@ return [
                 'interval' => '3 months',
                 'features' => [
                     'Up to 5 Concurrent Job Posts',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
@@ -40,7 +40,7 @@ return [
                 'interval' => 'year',
                 'features' => [
                     'Unlimited Job Posts',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
@@ -57,7 +57,7 @@ return [
                 'interval' => 'month',
                 'features' => [
                     '1 Job Post',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
@@ -72,7 +72,7 @@ return [
                 'interval' => '3 months',
                 'features' => [
                     'Up to 5 Concurrent Job Posts',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',
@@ -87,7 +87,7 @@ return [
                 'interval' => 'year',
                 'features' => [
                     'Unlimited Job Posts',
-                    'Display your company logo',
+                    'Display your employer logo',
                     'Display Images For Your Job',
                     'Dedicated support',
                     'Featured in our newsletter',

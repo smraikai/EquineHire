@@ -38,7 +38,7 @@
                                 </h3>
                                 @if ($index === 1)
                                     <p
-                                        class="rounded-full bg-blue-500 px-2.5 py-1 text-xs font-semibold leading-5 text-white">
+                                        class="rounded-full bg-blue-600 px-2.5 py-1 text-xs font-semibold leading-5 text-white">
                                         Most popular</p>
                                 @endif
                             </div>
@@ -69,7 +69,7 @@
                                 <button type="submit"
                                     class="w-full rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
                     {{ $index === 1
-                        ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-500 focus-visible:outline-blue-600'
+                        ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-600 focus-visible:outline-blue-600'
                         : 'bg-blue-50 text-blue-700 shadow-sm hover:bg-blue-100 focus-visible:outline-blue-600' }}">
                                     Choose Plan
                                 </button>
@@ -187,7 +187,7 @@
                             <p class="text-base text-gray-500">
                                 We offer three subscription plans to suit your needs. The Basic Plan ($50/month) includes 1
                                 job post. Our Pro Plan ($120/3 months) allows up to 5 concurrent job posts. For unlimited
-                                job posts, choose our Premium Plan ($400/year). All plans feature company logo display, job
+                                job posts, choose our Premium Plan ($400/year). All plans feature employer logo display, job
                                 images, dedicated support, newsletter features, and social media sharing. You can cancel
                                 your subscription at any time.
                             </p>
@@ -263,7 +263,7 @@
                         <div class="flex items-center mt-4">
                             <div class="flex-shrink-0 mr-4">
                                 <div
-                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-500 rounded-md">
+                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-600 rounded-md">
                                     <img class="w-12 h-12" src="https://dummyimage.com/150x150/000/fff" alt="">
                                 </div>
                             </div>
@@ -272,7 +272,7 @@
                                     John Doe
                                 </div>
                                 <div class="mt-1 text-sm text-gray-500">
-                                    CEO, ABC Company
+                                    CEO, ABC Employer
                                 </div>
                             </div>
                         </div>
@@ -285,7 +285,7 @@
                         <div class="flex items-center mt-4">
                             <div class="flex-shrink-0 mr-4">
                                 <div
-                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-500 rounded-md">
+                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-600 rounded-md">
                                     <img class="w-12 h-12" src="https://dummyimage.com/150x150/000/fff" alt="">
                                 </div>
                             </div>
@@ -307,7 +307,7 @@
                         <div class="flex items-center mt-4">
                             <div class="flex-shrink-0 mr-4">
                                 <div
-                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-500 rounded-md">
+                                    class="flex items-center justify-center w-12 h-12 overflow-hidden text-white bg-blue-600 rounded-md">
                                     <img class="w-12 h-12" src="https://dummyimage.com/150x150/000/fff" alt="">
                                 </div>
                             </div>

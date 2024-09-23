@@ -6,11 +6,11 @@ use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Company extends Model
+class Employer extends Model
 {
     use HasFactory, Searchable;
 
-    protected $table = 'companies';
+    protected $table = 'employers';
 
     protected $fillable = [
         'user_id',
@@ -20,7 +20,6 @@ class Company extends Model
         'city',
         'state',
         'logo',
-
     ];
 
     protected $casts = [
@@ -29,7 +28,7 @@ class Company extends Model
 
     public function photos()
     {
-        return $this->hasMany(CompanyPhoto::class);
+        return $this->hasMany(EmployerPhoto::class);
     }
 
     public function user()
@@ -59,7 +58,7 @@ class Company extends Model
 
     public function searchableAs()
     {
-        return 'companies';
+        return 'employers';
     }
 
     public function toSearchableArray(): array

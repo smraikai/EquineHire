@@ -17,7 +17,7 @@
                     <!-- Edit Button if Owner is Viewing Listing -->
                     @if ($isOwner)
                         <div class="flex justify-center sm:justify-start">
-                            <a href="{{ route('company.edit', $job_listing->id) }}"
+                            <a href="{{ route('employer.edit', $job_listing->id) }}"
                                 class="px-4 py-2 font-bold bg-gray-200 rounded hover:bg-gray-300">
                                 Edit My Listing
                             </a>
@@ -35,15 +35,16 @@
 
             </div>
 
-            <!-- Company Details & Job Information -->
+            <!-- Employer Details & Job Information -->
             <div class="sticky flex flex-col self-start gap-5 top-5 md:w-1/3">
                 <div class="flex flex-col gap-5 p-6 border rounded-md">
-                    <!-- Company Logo and Name -->
+                    <!-- Employer Logo and Name -->
                     <div class="flex items-center gap-4">
-                        @if ($job_listing->company->logo)
-                            <img src="{{ $job_listing->company->logo }}" alt="Company Logo" class="w-16 h-16 rounded-full">
+                        @if ($job_listing->employer->logo)
+                            <img src="{{ $job_listing->employer->logo }}" alt="Employer Logo"
+                                class="w-16 h-16 rounded-full">
                         @endif
-                        <h3 class="text-xl font-semibold">{{ $job_listing->company->name }}</h3>
+                        <h3 class="text-xl font-semibold">{{ $job_listing->employer->name }}</h3>
                     </div>
 
                     <!-- Job Details -->
@@ -102,7 +103,7 @@
         "employmentType": "{{ $job_listing->job_type }}",
         "hiringOrganization": {
             "@type": "Organization",
-            "name": "{{ $job_listing->company->name }}"
+            "name": "{{ $job_listing->employer->name }}"
         },
         "jobLocation": {
             "@type": "Place",

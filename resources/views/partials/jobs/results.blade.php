@@ -9,8 +9,8 @@
 
                             <!-- Logo -->
                             <img class="object-cover w-12 h-12 mr-3 rounded-full sm:w-16 sm:h-16 sm:mr-4"
-                                src="{{ $job_listing->company->logo ?? 'https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_placeholder.jpg' }}"
-                                alt="{{ $job_listing->company->name }} logo">
+                                src="{{ $job_listing->employer->logo ?? 'https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_placeholder.jpg' }}"
+                                alt="{{ $job_listing->employer->name }} logo">
 
                             <!-- Job details and location -->
                             <div class="flex-grow min-w-0">
@@ -28,7 +28,7 @@
                                         </div>
                                         <p class="flex items-center text-sm text-gray-500 truncate">
                                             <x-coolicon-house-03 class="w-4 h-4 mr-1" />
-                                            {{ $job_listing->company->name }}
+                                            {{ $job_listing->employer->name }}
                                             <span class="mx-2">|</span>
                                             <x-coolicon-checkbox-check class="w-4 h-4 mr-1" />
                                             {{ $job_listing->job_type }}

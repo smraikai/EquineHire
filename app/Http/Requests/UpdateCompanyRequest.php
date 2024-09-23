@@ -4,15 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCompanyRequest extends FormRequest
+class UpdateEmployerRequest extends FormRequest
 {
     public function authorize()
     {
-        $company = $this->route('company');
+        $employer = $this->route('employer');
         $user = $this->user();
 
-        // Allow update if the user owns the company or is the admin
-        return ($company && $user->can('update', $company)) ||
+        // Allow update if the user owns the employer or is the admin
+        return ($employer && $user->can('update', $employer)) ||
             $user->email === 'admin@equinehire.com';
     }
 
@@ -37,7 +37,7 @@ class UpdateCompanyRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The company name is required.',
+            'name.required' => 'The employer name is required.',
             // Add more custom messages as needed
         ];
     }

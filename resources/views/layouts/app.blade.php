@@ -29,6 +29,9 @@
 <body class="h-full font-sans antialiased">
     <div class="min-h-full">
 
+        @if (session('success'))
+            <x-success-message :message="session('success')" />
+        @endif
         @include('partials.dashboard.sidebar')
 
         <div class="lg:pl-72">
@@ -60,7 +63,7 @@
                                 aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full bg-gray-50"
-                                    src="{{ Auth::user()->company->logo ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                                    src="{{ Auth::user()->employer->logo ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
                                     alt="{{ Auth::user()->name }}">
                                 <span class="hidden lg:flex lg:items-center">
                                     <span class="ml-4 text-sm font-semibold leading-6 text-gray-900"
@@ -74,7 +77,7 @@
                                 </span>
                             </button>
 
-                            <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100"
                                 x-transition:enter-start="transform opacity-0 scale-95"
                                 x-transition:enter-end="transform opacity-100 scale-100"
                                 x-transition:leave="transition ease-in duration-75"
@@ -97,7 +100,6 @@
                     </div>
                 </div>
             </div>
-
             <main class="">
                 <div class="bg-gray-100">
                     @yield('content')
@@ -107,6 +109,7 @@
     </div>
     @include('partials.scripts._google-maps-locations')
     @yield('scripts')
+
 </body>
 
 </html>

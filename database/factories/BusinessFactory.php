@@ -23,7 +23,7 @@ class BusinessFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->company;
+        $name = $this->faker->employer;
         $slug = Str::slug($name);
 
         return [
@@ -39,9 +39,9 @@ class BusinessFactory extends Factory
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'website' => $this->faker->url,
-            'email' => $this->faker->companyEmail,
+            'email' => $this->faker->employerEmail,
             'phone' => $this->faker->phoneNumber,
-            'logo' => $this->faker->imageUrl, 
+            'logo' => $this->faker->imageUrl,
             'featured_image' => $this->faker->imageUrl,
             'post_status' => 'Published',
         ];

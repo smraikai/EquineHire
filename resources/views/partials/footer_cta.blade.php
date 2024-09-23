@@ -10,7 +10,7 @@
             </p>
             <div class="flex flex-col items-center justify-center gap-4 mt-6 sm:flex-row md:mt-10 sm:gap-x-6">
                 <a href="{{ route('subscription.plans') }}"
-                    class="w-full sm:w-auto rounded-md bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+                    class="w-full sm:w-auto rounded-md bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
                     Showcase Your Expertise
                 </a>
                 <a href="{{ route('jobs.index') }}" class="text-sm font-semibold leading-6 text-blue-900">

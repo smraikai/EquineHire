@@ -1,7 +1,7 @@
 <?php
 
 // Controllers
-use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriptionController;
@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['get', 'post'], '/subscription/checkout', [SubscriptionController::class, 'initiateCheckout'])->name('subscription.checkout');
     Route::get('/subscription/incomplete', [SubscriptionController::class, 'handleIncompletePayment'])->name('subscription.incomplete');
     Route::get('/billing', function (Request $request) {
-        return $request->user()->redirectToBillingPortal(route('company.index'));
+        return $request->user()->redirectToBillingPortal(route('employer.index'));
     })->name('billing');
 });
 
@@ -99,11 +99,19 @@ Route::middleware('auth')->group(function () {
 // Subscriber-Only Routes
 ////////////////////////////////////////////////////////////////////
 Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
-    Route::get('/dashboard', [CompanyController::class, 'index'])->name('company.index');
-    Route::get('/dashboard/create', [CompanyController::class, 'create'])->name('company.create');
-    Route::get('/dashboard/{business}/edit', [CompanyController::class, 'edit'])->name('company.edit')->middleware(ClearDraftsMiddleware::class);
-    Route::delete('/dashboard/{business}', [CompanyController::class, 'destroy'])->name('company.destroy');
-    Route::put('/dashboard/{business}', [CompanyController::class, 'update'])->name('company.update');
+
+
+    Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.index');
+
+
+    Route::get('/dashboard/employers', [EmployerController::class, 'profileIndex'])->name('dashboard.employers.index');
+
+    Route::get('/dashboard/create', [EmployerController::class, 'create'])->name('employer.create');
+    Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
+
+    Route::get('/dashboard/{business}/edit', [EmployerController::class, 'edit'])->name('employer.edit')->middleware(ClearDraftsMiddleware::class);
+    Route::delete('/dashboard/{business}', [EmployerController::class, 'destroy'])->name('employer.destroy');
+
 
     // Handle Image Processing
     Route::post('/upload', [FileUploadController::class, 'upload']);
@@ -143,7 +151,7 @@ Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
 ////////////////////////////////////////////////////////////////////
 // Check Processing Status for Business Updates
 ////////////////////////////////////////////////////////////////////
-Route::get('/check-processing-status/{business}', [CompanyController::class, 'checkProcessingStatus'])->name('business.check-status');
+Route::get('/check-processing-status/{business}', [EmployerController::class, 'checkProcessingStatus'])->name('business.check-status');
 
 // Job Listing Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -158,13 +166,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 //////////////////////////////////////////////////////////
-// Company Routes
+// Employer Routes
 //////////////////////////////////////////////////////////
 Route::middleware(['auth'])->group(function () {
-    Route::get('/employer/create', [CompanyController::class, 'create'])->name('companies.create');
-    Route::post('/employer', [CompanyController::class, 'store'])->name('companies.store');
-    Route::get('/employer/{company}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
-    Route::put('/employer/{company}', [CompanyController::class, 'update'])->name('companies.update');
-    Route::post('/employer/{company}/photos', [CompanyController::class, 'addPhoto'])->name('companies.addPhoto');
-    Route::delete('/employer-photos/{photo}', [CompanyController::class, 'removePhoto'])->name('companies.removePhoto');
+
+    // Profile Index
+    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
+
+    // Create new employer (this will create a draft and redirect to edit)
+    Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
+
+    // Store new employer
+    Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
+
+    // Edit form
+    Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])
+        ->name('employers.edit');
+
+    // Delete Employer Profile
+    Route::delete('/employers/{employer}', [EmployerController::class, 'destroy'])->name('employers.destroy');
+
+    // Update existing employer
+    Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
+
+    // Photos
+    Route::post('/employer/{employer}/photos', [EmployerController::class, 'addPhoto'])->name('employers.addPhoto');
+    Route::delete('/employer-photos/{photo}', [EmployerController::class, 'removePhoto'])->name('employers.removePhoto');
 });

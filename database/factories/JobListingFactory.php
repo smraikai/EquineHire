@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\JobListing;
-use App\Models\Company;
+use App\Models\Employer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ class JobListingFactory extends Factory
     {
         $title = $this->faker->jobTitle;
         return [
-            'company_id' => Company::factory(),
+            'employer_id' => Employer::factory(),
             'user_id' => User::factory(),
             'title' => $this->faker->jobTitle,
             'slug' => Str::slug($title . '-' . $this->faker->unique()->numberBetween(1000, 9999)),

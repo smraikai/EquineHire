@@ -118,7 +118,7 @@ class JobListingController extends Controller
 
     public function show(Request $request, $job_slug, $id, SeoService $seoService)
     {
-        $job_listing = JobListing::with('company')->findOrFail($id);
+        $job_listing = JobListing::with('employer')->findOrFail($id);
 
         // Check if the slug matches (for SEO purposes)
         if ($job_listing->slug !== $job_slug) {
@@ -132,7 +132,7 @@ class JobListingController extends Controller
 
         // Generate meta title and description using SeoService
         $location = $job_listing->remote_position ? null : "{$job_listing->city}, {$job_listing->state}";
-        $metaTitle = $seoService->generateMetaTitle($job_listing->title, $job_listing->company->name, $location);
+        $metaTitle = $seoService->generateMetaTitle($job_listing->title, $job_listing->employer->name, $location);
         $metaDescription = $seoService->generateMetaDescription($job_listing->description);
 
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
@@ -141,13 +141,26 @@ class JobListingController extends Controller
     }
 
     ////////////////////////////////////////////////////////////////
-    // Company Job Listing Creation and Edits
+    // Employer Job Listing: Views
     ////////////////////////////////////////////////////////////////
     public function dashboardIndex()
     {
-        $jobListings = auth()->user()->company->jobListings()->paginate(10);
+        $jobListings = auth()->user()->employer->jobListings()->paginate(10);
         return view('dashboard.job-listings.index', compact('jobListings'));
     }
+
+    public function dashboardEdit(JobListing $jobListing)
+    {
+        $this->authorize('update', $jobListing);
+        $categories = JobListingCategory::all();
+        $states = $this->getStates();
+        return view('dashboard.job-listings.edit', compact('jobListing', 'categories', 'states'));
+    }
+
+
+    ////////////////////////////////////////////////////////////////
+    // Employer Job Listing: Logic
+    ////////////////////////////////////////////////////////////////
 
     public function dashboardCreate()
     {
@@ -230,15 +243,15 @@ class JobListingController extends Controller
             'email_link' => 'required_if:application_type,email|nullable|email',
         ]);
 
-        // Get the authenticated user's company
-        $company = auth()->user()->company;
+        // Get the authenticated user's employer
+        $employer = auth()->user()->employer;
 
-        if (!$company) {
-            return redirect()->back()->with('error', 'You must have a company profile to create job listings.');
+        if (!$employer) {
+            return redirect()->back()->with('error', 'You must have a employer profile to create job listings.');
         }
 
-        // Add company_id to the validated data
-        $validatedData['company_id'] = $company->id;
+        // Add employer_id to the validated data
+        $validatedData['employer_id'] = $employer->id;
 
         // Create the job listing
         $jobListing = JobListing::create($validatedData);
@@ -247,14 +260,6 @@ class JobListingController extends Controller
         $jobListing->categories()->attach($validatedData['category_id']);
 
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
-    }
-
-    public function dashboardEdit(JobListing $jobListing)
-    {
-        $this->authorize('update', $jobListing);
-        $categories = JobListingCategory::all();
-        $states = $this->getStates();
-        return view('dashboard.job-listings.edit', compact('jobListing', 'categories', 'states'));
     }
     public function dashboardUpdate(Request $request, JobListing $jobListing)
     {

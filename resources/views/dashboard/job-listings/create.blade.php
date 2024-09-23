@@ -334,7 +334,9 @@
 
 @section('scripts')
     @include('dashboard.job-listings.scripts.job-listing-scripts')
-    @include('partials.scripts._quill_editor')
+    @include('partials.scripts._quill_editor', [
+        'placeholder' => 'Describe the job role, responsibilities, qualifications, and any other relevant details',
+    ])
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>

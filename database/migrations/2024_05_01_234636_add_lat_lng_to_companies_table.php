@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
+        Schema::table('employers', function (Blueprint $table) {
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
         });
@@ -21,7 +21,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
+        Schema::table('employers', function (Blueprint $table) {
             $table->dropColumn(['latitude', 'longitude']);
         });
     }

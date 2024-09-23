@@ -2,13 +2,13 @@
 
 namespace App\Observers;
 
-use App\Models\Company;
+use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use App\Http\Controllers\FileUploadController;
 use App\Jobs\PostProcessing;
 
-class CompanyObserver
+class EmployerObserver
 {
     protected $request;
     protected $fileUploadController;
@@ -20,14 +20,14 @@ class CompanyObserver
         $this->fileUploadController = $fileUploadController;
     }
 
-    public function saved(Company $company)
+    public function saved(Employer $employer)
     {
         if (self::$handling)
             return;
         self::$handling = true;
 
         $jobChain = [
-            new PostProcessing($company)
+            new PostProcessing($employer)
         ];
 
         Bus::chain($jobChain)->dispatch();

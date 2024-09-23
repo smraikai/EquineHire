@@ -5,13 +5,13 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 // Models
-use App\Models\Company;
+use App\Models\Employer;
 
 // Observers
-use App\Observers\CompanyObserver;
+use App\Observers\EmployerObserver;
 
 // Policies
-use App\Policies\CompanyPolicy;
+use App\Policies\EmployerPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Company::class => CompanyPolicy::class,
+        Employer::class => EmployerPolicy::class,
     ];
 
     /**
@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Company::observe(CompanyObserver::class);
+        Employer::observe(EmployerObserver::class);
         $this->registerPolicies();
 
         // Additional gates or policy registrations can be added here

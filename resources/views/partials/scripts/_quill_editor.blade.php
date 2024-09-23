@@ -5,7 +5,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         var quill = new Quill('#quill_editor', {
             theme: 'snow',
-            placeholder: 'Enter your business description', // Add the placeholder text here
+            placeholder: '{{ $placeholder ?? 'Enter your text here' }}', // Use the passed variable or a default
             modules: {
                 toolbar: [
                     [{

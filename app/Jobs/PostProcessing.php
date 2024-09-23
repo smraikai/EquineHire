@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Company;
+use App\Models\Employer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,11 +14,11 @@ class PostProcessing implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $company;
+    protected $employer;
 
-    public function __construct(Company $company)
+    public function __construct(Employer $employer)
     {
-        $this->company = $company;
+        $this->employer = $employer;
     }
 
     public function handle()

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
+use App\Models\Employer;
 use Illuminate\Support\Facades\Cache;
 
 // Illumination
@@ -20,17 +20,17 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Log;
 
-class CompanyController extends Controller
+class EmployerController extends Controller
 {
 
     /////////////////////////////////////////////////////////////
-    // Company Dashboard
+    // Employer Dashboard
     /////////////////////////////////////////////////////////////
     public function index(Request $request)
     {
         $user = auth()->user();
-        $company = $user->company;
-        $jobListings = $company ? $company->jobListings()->latest()->take(5)->get() : collect();
+        $employer = $user->employer;
+        $jobListings = $employer ? $employer->jobListings()->latest()->take(5)->get() : collect();
 
         // Check if the user is a new subscriber. If so, pass off info to the DataLayer
         if ($request->query('subscription_completed')) {
@@ -39,71 +39,96 @@ class CompanyController extends Controller
             $price = Price::retrieve($subscription->stripe_price);
             $amount = $price->unit_amount / 100; // Convert cents to dollars
 
-            return view('dashboard.index', compact('user', 'company', 'jobListings', 'subscription', 'amount'));
+            return view('dashboard.index', compact('user', 'employer', 'jobListings', 'subscription', 'amount'));
         }
 
-        return view('dashboard.index', compact('user', 'company', 'jobListings'));
+        return view('dashboard.index', compact('user', 'employer', 'jobListings'));
     }
 
-
-
     //////////////////////////////////////////////////////////
-    // Add Edit Delete Company Profile
+    // Employer Profile: Views
+    //////////////////////////////////////////////////////////
+
+    public function profileIndex()
+    {
+        $user = auth()->user();
+        $employer = $user->employer;
+
+        return view('dashboard.employers.index', compact('employer'));
+    }
+
+    public function create(Request $request)
+    {
+        $this->authorize('create', Employer::class);
+
+        $employer = Employer::create([
+            'user_id' => auth()->id(),
+            'name' => '',
+            'description' => '',
+            'website' => '',
+            'city' => '',
+            'state' => '',
+            'logo' => '',
+        ]);
+
+        return redirect()->route('employers.edit', $employer)
+            ->with('info', 'New employer profile created. Please complete the details.');
+    }
+
+    public function edit(Request $request, Employer $employer)
+    {
+        $this->authorize('update', $employer);
+
+        $states = $this->getStates();
+        return view('dashboard.employers.edit', compact('employer', 'states'));
+    }
+    //////////////////////////////////////////////////////////
+    // Emplower Profile: Edit, Update, Destroy
     //////////////////////////////////////////////////////////
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'address' => 'required|string|max:255',
+            'website' => 'nullable|url',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:20',
-            'website' => 'nullable|url',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:20',
             'logo' => 'nullable|image|max:2048',
-            'photos.*' => 'nullable|image|max:2048',
-            'photos' => 'array|max:5', // Limit to 5 photos
         ]);
 
         DB::beginTransaction();
 
         try {
-            $company = new Company($validatedData);
-            $company->user_id = auth()->id();
+            $employer = new Employer($validatedData);
+            $employer->user_id = auth()->id();
 
             if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('company_logos', 'public');
-                $company->logo = $path;
+                $path = $request->file('logo')->store('employer_logos', 'public');
+                $employer->logo = $path;
             }
 
-            $company->save();
+            $employer->save();
 
-            $this->handlePhotos($request, $company);
+            $this->handlePhotos($request, $employer);
 
             DB::commit();
-            return redirect()->route('companies.show', $company)->with('success', 'Company profile created successfully.');
+            return redirect()->route('employers.show', $employer)->with('success', 'Employer profile created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'An error occurred while creating the company profile.');
+            return back()->with('error', 'An error occurred while creating the employer profile.');
         }
     }
 
-    public function update(Request $request, Company $company)
+    public function update(Request $request, Employer $employer)
     {
-        $this->authorize('update', $company);
+        $this->authorize('update', $employer);
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:20',
-            'website' => 'nullable|url',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:20',
+            'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo' => 'nullable|image|max:2048',
             'photos.*' => 'nullable|image|max:2048',
             'photos' => 'array|max:5', // Limit to 5 photos
@@ -113,33 +138,35 @@ class CompanyController extends Controller
 
         try {
             if ($request->hasFile('logo')) {
-                if ($company->logo) {
-                    Storage::disk('public')->delete($company->logo);
+                if ($employer->logo) {
+                    Storage::disk('public')->delete($employer->logo);
                 }
-                $path = $request->file('logo')->store('company_logos', 'public');
+                $path = $request->file('logo')->store('employer_logos', 'public');
                 $validatedData['logo'] = $path;
             }
 
-            $company->update($validatedData);
+            $employer->update($validatedData);
 
-            $this->handlePhotos($request, $company);
+            $this->handlePhotos($request, $employer);
 
             DB::commit();
-            return redirect()->route('companies.show', $company)->with('success', 'Company profile updated successfully.');
+            Log::info('Employer profile updated successfully.', ['employer_id' => $employer->id]);
+            return redirect()->route('employers.index')->with('success', 'Employer profile updated successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'An error occurred while updating the company profile.');
+            Log::error('Error updating employer profile.', ['error' => $e->getMessage()]);
+            return back()->with('error', 'An error occurred while updating the employer profile.');
         }
     }
 
     ////////////////////////////////////////////////////
     // Photo Uploads
     ////////////////////////////////////////////////////
-
-    private function handlePhotos(Request $request, Company $company)
+    private function handlePhotos(Request $request, employer $employer)
     {
         if ($request->hasFile('photos')) {
-            $existingPhotoCount = $company->photos()->count();
+            $existingPhotoCount = $employer->photos()->count();
             $newPhotoCount = count($request->file('photos'));
 
             if ($existingPhotoCount + $newPhotoCount > 5) {
@@ -147,12 +174,11 @@ class CompanyController extends Controller
             }
 
             foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('company_photos', 'public');
-                $company->photos()->create(['path' => $path]);
+                $path = $photo->store('employer_photos', 'public');
+                $employer->photos()->create(['path' => $path]);
             }
         }
     }
-
     public function uploadPhoto(Request $request)
     {
         $file = $request->file('photo');
@@ -237,5 +263,60 @@ class CompanyController extends Controller
             ]);
         }
         return response()->json(['completed' => false]);
+    }
+    private function getStates()
+    {
+        return [
+            'AL' => 'Alabama',
+            'AK' => 'Alaska',
+            'AZ' => 'Arizona',
+            'AR' => 'Arkansas',
+            'CA' => 'California',
+            'CO' => 'Colorado',
+            'CT' => 'Connecticut',
+            'DE' => 'Delaware',
+            'FL' => 'Florida',
+            'GA' => 'Georgia',
+            'HI' => 'Hawaii',
+            'ID' => 'Idaho',
+            'IL' => 'Illinois',
+            'IN' => 'Indiana',
+            'IA' => 'Iowa',
+            'KS' => 'Kansas',
+            'KY' => 'Kentucky',
+            'LA' => 'Louisiana',
+            'ME' => 'Maine',
+            'MD' => 'Maryland',
+            'MA' => 'Massachusetts',
+            'MI' => 'Michigan',
+            'MN' => 'Minnesota',
+            'MS' => 'Mississippi',
+            'MO' => 'Missouri',
+            'MT' => 'Montana',
+            'NE' => 'Nebraska',
+            'NV' => 'Nevada',
+            'NH' => 'New Hampshire',
+            'NJ' => 'New Jersey',
+            'NM' => 'New Mexico',
+            'NY' => 'New York',
+            'NC' => 'North Carolina',
+            'ND' => 'North Dakota',
+            'OH' => 'Ohio',
+            'OK' => 'Oklahoma',
+            'OR' => 'Oregon',
+            'PA' => 'Pennsylvania',
+            'RI' => 'Rhode Island',
+            'SC' => 'South Carolina',
+            'SD' => 'South Dakota',
+            'TN' => 'Tennessee',
+            'TX' => 'Texas',
+            'UT' => 'Utah',
+            'VT' => 'Vermont',
+            'VA' => 'Virginia',
+            'WA' => 'Washington',
+            'WV' => 'West Virginia',
+            'WI' => 'Wisconsin',
+            'WY' => 'Wyoming',
+        ];
     }
 }

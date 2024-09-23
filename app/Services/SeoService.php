@@ -6,10 +6,10 @@ use App\Models\JobListing;
 
 class SeoService
 {
-    public function generateMetaTitle(string $title, string $companyName, ?string $location): string
+    public function generateMetaTitle(string $title, string $employerName, ?string $location): string
     {
         $locationPart = $location ? " – {$location}" : "";
-        return "{$title} at {$companyName}{$locationPart} | EquineHire";
+        return "{$title} at {$employerName}{$locationPart} | EquineHire";
     }
 
     public function generateMetaDescription(string $description): string

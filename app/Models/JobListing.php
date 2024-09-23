@@ -12,7 +12,7 @@ class JobListing extends Model
 
     protected $fillable = [
         'user_id',
-        'company_id',
+        'employer_id',
         'title',
         'description',
         'remote_position',
@@ -44,9 +44,9 @@ class JobListing extends Model
         'salary_range_max' => 'decimal:2',
     ];
 
-    public function company()
+    public function employer()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Employer::class);
     }
 
     public function photos()
