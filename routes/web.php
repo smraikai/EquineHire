@@ -181,7 +181,5 @@ Route::middleware(['auth'])->group(function () {
     // Update existing employer
     Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
 
-    // Photos
-    Route::post('/employer/{employer}/photos', [EmployerController::class, 'addPhoto'])->name('employers.addPhoto');
-    Route::delete('/employer-photos/{photo}', [EmployerController::class, 'removePhoto'])->name('employers.removePhoto');
+
 });

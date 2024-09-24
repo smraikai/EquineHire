@@ -130,8 +130,6 @@
 @endsection
 
 @section('scripts_css')
-    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
@@ -139,55 +137,7 @@
     @include('partials.scripts._quill_editor', [
         'placeholder' => 'Describe your company, its mission, and what makes it a great place to work',
     ])
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-
     <script>
-        // Register plugins
-        FilePond.registerPlugin(FilePondPluginFileValidateType);
-        FilePond.registerPlugin(FilePondPluginImagePreview);
-
-        // Set up Filepond
-        const inputElement = document.querySelector('input[type="file"]');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        const pond = FilePond.create(inputElement, {
-            acceptedFileTypes: ['image/*'],
-            server: {
-                process: {
-                    url: '{{ route('logo.upload') }}',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                },
-                revert: {
-                    url: '{{ route('logo.delete') }}',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                }
-            },
-            onaddfile: (error, file) => {
-                if (error) {
-                    console.error('Error adding file:', error);
-                    return;
-                }
-            },
-            onprocessfile: (error, file) => {
-                if (error) {
-                    console.error('Error processing file:', error);
-                    return;
-                }
-                // Set the logo path to a hidden input field
-                const logoPathInput = document.createElement('input');
-                logoPathInput.type = 'hidden';
-                logoPathInput.name = 'logo';
-                logoPathInput.value = file.serverId;
-                document.querySelector('form').appendChild(logoPathInput);
-            }
-        });
-
         // Auto prepend https:// to website input
         const websiteInput = document.getElementById('website');
         websiteInput.addEventListener('blur', function() {

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 // Stripe Integration for GA Tracking
 use Stripe\Stripe;
@@ -136,16 +137,14 @@ class EmployerController extends Controller
         DB::beginTransaction();
 
         try {
-            if ($request->has('logo') && $request->logo !== $employer->logo) {
+            if ($request->filled('logo') && $request->logo !== $employer->logo) {
                 // Delete old logo if exists
                 if ($employer->logo) {
-                    Storage::disk('s3')->delete($employer->logo);
+                    $oldPath = parse_url($employer->logo, PHP_URL_PATH);
+                    Storage::disk('s3')->delete(ltrim($oldPath, '/'));
                 }
-
-                // Extract the URL from the logo data
-                $validatedData['logo'] = $this->extractLogoUrl($request->logo);
+                $validatedData['logo'] = $request->logo;
             }
-
             $employer->update($validatedData);
             DB::commit();
             return redirect()->route('employers.index', $employer)->with('success', 'Employer profile updated successfully.');
@@ -155,12 +154,6 @@ class EmployerController extends Controller
             return back()->with('error', 'An error occurred while updating the employer profile.');
         }
     }
-
-    ////////////////////////////////////////////////////
-    // Photo Uploads
-    ////////////////////////////////////////////////////
-
-
 
     ////////////////////////////////////////////////////
     // Job View Analytics
@@ -202,15 +195,6 @@ class EmployerController extends Controller
     //////////////////////////////////////////////////////////
     // Helpers
     //////////////////////////////////////////////////////////
-    private function extractLogoUrl($logoData)
-    {
-        if (empty($logoData)) {
-            return null;
-        }
-
-        $decodedData = json_decode($logoData, true);
-        return $decodedData['url'] ?? null;
-    }
     public function getLatLongFromAddress($address)
     {
         $apiKey = config('services.google.maps_api_key');
@@ -226,23 +210,6 @@ class EmployerController extends Controller
         }
 
         return null;
-    }
-    // Business Processing Status
-    public function checkProcessingStatus(JobListing $business)
-    {
-        $completed = Cache::get("business_{$business->id}_processed", false);
-        if ($completed) {
-            session()->flash('success', 'Business listing updated successfully.');
-            return response()->json([
-                'completed' => true,
-                'redirect' => route('jobs.index.show', [
-                    'state_slug' => $business->state_slug,
-                    'slug' => $business->slug,
-                    'id' => $business->id
-                ])
-            ]);
-        }
-        return response()->json(['completed' => false]);
     }
     private function getStates()
     {
