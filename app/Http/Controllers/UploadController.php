@@ -13,7 +13,7 @@ class UploadController extends Controller
             'logo' => 'required|image|max:3072', // 3MB max
         ]);
 
-        $path = $request->file('logo')->store('employer_logos', 'public');
+        $path = $request->file('logo')->store('employer_logos');
 
         return response()->json(['success' => true, 'path' => $path]);
     }
@@ -24,7 +24,7 @@ class UploadController extends Controller
             'featured_image' => 'required|image|max:5120', // 5MB max
         ]);
 
-        $path = $request->file('featured_image')->store('employer_featured_images', 'public');
+        $path = $request->file('featured_image')->store('employer_featured_images');
 
         return response()->json(['success' => true, 'path' => $path]);
     }

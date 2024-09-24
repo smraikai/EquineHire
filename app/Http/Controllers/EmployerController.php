@@ -132,7 +132,7 @@ class EmployerController extends Controller
             'state' => 'required|string|max:2',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo_path' => 'nullable|string',
-            'featured_image_path' => 'nullable|string', // Add this line
+            'featured_image_path' => 'nullable|string',
         ]);
 
         DB::beginTransaction();

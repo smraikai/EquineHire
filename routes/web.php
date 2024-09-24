@@ -186,7 +186,5 @@ Route::middleware(['auth'])->group(function () {
     // Image Handling for Employers
     Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
     Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
-    Route::post('/delete-file', [UploadController::class, 'deleteFile'])->name('delete.file');
-    Route::get('/get-existing-file', [UploadController::class, 'getExistingFile'])->name('get.existing_file');
-
+    Route::post('/upload/delete', [UploadController::class, 'deleteFile'])->name('upload.delete');
 });
