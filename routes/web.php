@@ -113,12 +113,6 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     Route::delete('/dashboard/{business}', [EmployerController::class, 'destroy'])->name('employer.destroy');
 
 
-    // Handle Image Processing
-    Route::post('/upload', [FileUploadController::class, 'upload']);
-    Route::get('/upload', [FileUploadController::class, 'load']);
-    Route::post('/delete-logo', [FileDeleteController::class, 'deleteLogo']);
-    Route::post('/delete-featured-image', [FileDeleteController::class, 'deleteFeaturedImage']);
-    Route::delete('/delete-additional-photo', [FileDeleteController::class, 'deleteAdditionalPhoto']);
 });
 
 

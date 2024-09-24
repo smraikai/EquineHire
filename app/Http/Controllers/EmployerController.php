@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 // Stripe Integration for GA Tracking
 use Stripe\Stripe;
@@ -127,35 +128,35 @@ class EmployerController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
+            'state' => 'required|string|max:2',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
-            'logo' => 'nullable|image|max:2048',
-            'photos.*' => 'nullable|image|max:2048',
-            'photos' => 'array|max:5', // Limit to 5 photos
+            'logo' => 'nullable|image|max:3072', // 3MB max
+            'photos' => 'nullable|array',
+            'photos.*' => 'image|max:5120', // 5MB max
         ]);
 
         DB::beginTransaction();
 
         try {
-            if ($request->hasFile('logo')) {
-                if ($employer->logo) {
-                    Storage::disk('public')->delete($employer->logo);
-                }
-                $path = $request->file('logo')->store('employer_logos', 'public');
-                $validatedData['logo'] = $path;
-            }
-
             $employer->update($validatedData);
 
-            $this->handlePhotos($request, $employer);
+            if ($request->hasFile('logo')) {
+                $logoPath = $request->file('logo')->store('employer_logos', 'public');
+                $employer->logo = $logoPath;
+                $employer->save();
+            }
+
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    $photoPath = $photo->store('employer_photos', 'public');
+                    $employer->photos()->create(['path' => $photoPath]);
+                }
+            }
 
             DB::commit();
-            Log::info('Employer profile updated successfully.', ['employer_id' => $employer->id]);
-            return redirect()->route('employers.index')->with('success', 'Employer profile updated successfully.');
-
+            return redirect()->route('employers.edit', $employer)->with('success', 'Employer profile updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error updating employer profile.', ['error' => $e->getMessage()]);
             return back()->with('error', 'An error occurred while updating the employer profile.');
         }
     }
@@ -163,37 +164,12 @@ class EmployerController extends Controller
     ////////////////////////////////////////////////////
     // Photo Uploads
     ////////////////////////////////////////////////////
-    private function handlePhotos(Request $request, employer $employer)
-    {
-        if ($request->hasFile('photos')) {
-            $existingPhotoCount = $employer->photos()->count();
-            $newPhotoCount = count($request->file('photos'));
 
-            if ($existingPhotoCount + $newPhotoCount > 5) {
-                throw new \Exception('Maximum of 5 photos allowed.');
-            }
 
-            foreach ($request->file('photos') as $photo) {
-                $path = $photo->store('employer_photos', 'public');
-                $employer->photos()->create(['path' => $path]);
-            }
-        }
-    }
-    public function uploadPhoto(Request $request)
-    {
-        $file = $request->file('photo');
-        $path = $file->store('temp-photos', 'public');
-        return response()->json(['path' => $path]);
-    }
 
-    public function removePhoto(Request $request)
-    {
-        $path = $request->getContent();
-        Storage::disk('public')->delete($path);
-        return response()->json(['success' => true]);
-    }
-
-    // Analytics for Page Views
+    ////////////////////////////////////////////////////
+    // Job View Analytics
+    ////////////////////////////////////////////////////
     public function getAnalytics(Request $request)
     {
         $user = $request->user();

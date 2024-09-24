@@ -98,6 +98,10 @@
                     <input type="file" name="logo" id="logo" class="filepond" accept="image/*"
                         data-allow-reorder="true" data-max-file-size="3MB" data-max-files="1">
                     <p class="mt-1 ml-1 text-xs text-gray-500">Upload your company logo (max 3MB)</p>
+                    @if ($employer->logo)
+                        <img src="{{ Storage::url($employer->logo) }}" alt="Current logo"
+                            class="object-cover w-32 h-32 mt-2">
+                    @endif
                     @error('logo')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -108,6 +112,14 @@
                     <input type="file" name="photos[]" id="photos" multiple class="filepond" accept="image/*"
                         data-allow-reorder="true" data-max-file-size="5MB" data-max-files="5">
                     <p class="mt-1 ml-1 text-xs text-gray-500">Upload up to 5 additional photos (max 5MB each)</p>
+                    @if ($employer->photos->count() > 0)
+                        <div class="grid grid-cols-3 gap-4 mt-2">
+                            @foreach ($employer->photos as $photo)
+                                <img src="{{ Storage::url($photo->path) }}" alt="Employer photo"
+                                    class="object-cover w-full h-32">
+                            @endforeach
+                        </div>
+                    @endif
                     @error('photos')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -139,42 +151,13 @@
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            FilePond.registerPlugin(FilePondPluginFileValidateType);
-            FilePond.registerPlugin(FilePondPluginImagePreview);
-
-            // Logo upload
-            FilePond.create(document.querySelector('input[name="logo"]'), {
-                acceptedFileTypes: ['image/*'],
-                server: {
-                    process: '/upload-temp',
-                    revert: '/remove-temp',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                }
-            });
-
-            // Additional photos upload
-            FilePond.create(document.querySelector('input[name="photos[]"]'), {
-                acceptedFileTypes: ['image/*'],
-                allowMultiple: true,
-                server: {
-                    process: '/upload-temp',
-                    revert: '/remove-temp',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                }
-            });
-            // Auto prepend https:// to website input
-            const websiteInput = document.getElementById('website');
-            websiteInput.addEventListener('blur', function() {
-                if (websiteInput.value && !websiteInput.value.startsWith('http://') && !websiteInput.value
-                    .startsWith('https://')) {
-                    websiteInput.value = 'https://' + websiteInput.value;
-                }
-            });
+        // Auto prepend https:// to website input
+        const websiteInput = document.getElementById('website');
+        websiteInput.addEventListener('blur', function() {
+            if (websiteInput.value && !websiteInput.value.startsWith('http://') && !websiteInput.value
+                .startsWith('https://')) {
+                websiteInput.value = 'https://' + websiteInput.value;
+            }
         });
     </script>
 @endsection

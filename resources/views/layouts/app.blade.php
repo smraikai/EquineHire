@@ -64,7 +64,8 @@
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full bg-gray-50"
                                     src="{{ Auth::user()->employer->logo ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
-                                    alt="{{ Auth::user()->name }}">
+                                    alt="{{ Auth::user()->name }}"
+                                    onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Default';">
                                 <span class="hidden lg:flex lg:items-center">
                                     <span class="ml-4 text-sm font-semibold leading-6 text-gray-900"
                                         aria-hidden="true">{{ Auth::user()->name }}</span>
@@ -76,7 +77,6 @@
                                     </svg>
                                 </span>
                             </button>
-
                             <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100"
                                 x-transition:enter-start="transform opacity-0 scale-95"
                                 x-transition:enter-end="transform opacity-100 scale-100"

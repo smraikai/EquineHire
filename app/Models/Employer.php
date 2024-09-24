@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employer extends Model
@@ -26,7 +27,7 @@ class Employer extends Model
 
     ];
 
-    public function photos()
+    public function photos(): HasMany
     {
         return $this->hasMany(EmployerPhoto::class);
     }
