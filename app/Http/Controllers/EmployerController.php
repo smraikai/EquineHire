@@ -131,28 +131,12 @@ class EmployerController extends Controller
             'state' => 'required|string|max:2',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo' => 'nullable|image|max:3072', // 3MB max
-            'photos' => 'nullable|array',
-            'photos.*' => 'image|max:5120', // 5MB max
         ]);
 
         DB::beginTransaction();
 
         try {
             $employer->update($validatedData);
-
-            if ($request->hasFile('logo')) {
-                $logoPath = $request->file('logo')->store('employer_logos', 'public');
-                $employer->logo = $logoPath;
-                $employer->save();
-            }
-
-            if ($request->hasFile('photos')) {
-                foreach ($request->file('photos') as $photo) {
-                    $photoPath = $photo->store('employer_photos', 'public');
-                    $employer->photos()->create(['path' => $photoPath]);
-                }
-            }
-
             DB::commit();
             return redirect()->route('employers.edit', $employer)->with('success', 'Employer profile updated successfully.');
         } catch (\Exception $e) {
