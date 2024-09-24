@@ -98,13 +98,6 @@
                     <input type="file" name="logo" id="logo" class="filepond" accept="image/*"
                         data-allow-reorder="true" data-max-file-size="3MB" data-max-files="1">
                     <p class="mt-1 ml-1 text-xs text-gray-500">Upload your company logo (max 3MB)</p>
-                    @if ($employer->logo)
-                        <img src="{{ Storage::url($employer->logo) }}" alt="Current logo"
-                            class="object-cover w-32 h-32 mt-2">
-                    @endif
-                    @error('logo')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mb-6">
@@ -151,6 +144,50 @@
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
     <script>
+        // Register plugins
+        FilePond.registerPlugin(FilePondPluginFileValidateType);
+        FilePond.registerPlugin(FilePondPluginImagePreview);
+
+        // Set up Filepond
+        const inputElement = document.querySelector('input[type="file"]');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const pond = FilePond.create(inputElement, {
+            acceptedFileTypes: ['image/*'],
+            server: {
+                process: {
+                    url: '{{ route('logo.upload') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                },
+                revert: {
+                    url: '{{ route('logo.delete') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }
+            },
+            onaddfile: (error, file) => {
+                if (error) {
+                    console.error('Error adding file:', error);
+                    return;
+                }
+            },
+            onprocessfile: (error, file) => {
+                if (error) {
+                    console.error('Error processing file:', error);
+                    return;
+                }
+                // Set the logo path to a hidden input field
+                const logoPathInput = document.createElement('input');
+                logoPathInput.type = 'hidden';
+                logoPathInput.name = 'logo';
+                logoPathInput.value = file.serverId;
+                document.querySelector('form').appendChild(logoPathInput);
+            }
+        });
+
         // Auto prepend https:// to website input
         const websiteInput = document.getElementById('website');
         websiteInput.addEventListener('blur', function() {

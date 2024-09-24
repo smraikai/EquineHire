@@ -5,11 +5,9 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\FileUploadController;
-use App\Http\Controllers\FileDeleteController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\LogoUploadController;
 // Classes
 use App\Models\JobListingCategory;
 use Illuminate\Http\Request;
@@ -111,6 +109,9 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
 
     Route::get('/dashboard/{business}/edit', [EmployerController::class, 'edit'])->name('employer.edit')->middleware(ClearDraftsMiddleware::class);
     Route::delete('/dashboard/{business}', [EmployerController::class, 'destroy'])->name('employer.destroy');
+
+    Route::post('/logo/upload', [LogoUploadController::class, 'upload'])->name('logo.upload');
+    Route::delete('/logo/delete', [LogoUploadController::class, 'delete'])->name('logo.delete');
 
 
 });

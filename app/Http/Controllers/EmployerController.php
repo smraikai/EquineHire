@@ -130,17 +130,28 @@ class EmployerController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:2',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
-            'logo' => 'nullable|image|max:3072', // 3MB max
+            'logo' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
 
         try {
+            if ($request->has('logo') && $request->logo !== $employer->logo) {
+                // Delete old logo if exists
+                if ($employer->logo) {
+                    Storage::disk('s3')->delete($employer->logo);
+                }
+
+                // Extract the URL from the logo data
+                $validatedData['logo'] = $this->extractLogoUrl($request->logo);
+            }
+
             $employer->update($validatedData);
             DB::commit();
-            return redirect()->route('employers.edit', $employer)->with('success', 'Employer profile updated successfully.');
+            return redirect()->route('employers.index', $employer)->with('success', 'Employer profile updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Error updating employer profile: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while updating the employer profile.');
         }
     }
@@ -191,6 +202,15 @@ class EmployerController extends Controller
     //////////////////////////////////////////////////////////
     // Helpers
     //////////////////////////////////////////////////////////
+    private function extractLogoUrl($logoData)
+    {
+        if (empty($logoData)) {
+            return null;
+        }
+
+        $decodedData = json_decode($logoData, true);
+        return $decodedData['url'] ?? null;
+    }
     public function getLatLongFromAddress($address)
     {
         $apiKey = config('services.google.maps_api_key');
