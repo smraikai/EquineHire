@@ -8,34 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionCheck
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function handle(Request $request, Closure $next) : Response
+    public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
 
-        // If user is admin, allow access.
-        if ($user->email === 'admin@equinehire.com') {
-            return $next($request);
+        if (!$user) {
+            \Log::warning('SubscriptionCheck: No authenticated user');
+            return redirect()->route('login');
         }
 
-        if (! $user) {
-            return redirect('/login');
+        if (!$user->subscribed('default')) {
+            \Log::info("User {$user->id} is not subscribed, redirecting to subscription page");
+            return redirect()->route('subscription.plans');
         }
 
-        if (! $user->hasStripeId()) {
-            return redirect()->route('subscription.incomplete');
-        }
-
-        if (! $user->subscriptions()->active()->count()) {
-            return redirect()->route('subscription.incomplete');
-        }
-
+        \Log::info("User {$user->id} passed subscription check");
         return $next($request);
     }
 }

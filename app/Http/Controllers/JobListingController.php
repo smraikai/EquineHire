@@ -8,6 +8,7 @@ use Algolia\AlgoliaSearch\SearchIndex;
 use App\Models\JobListingCategory;
 use App\Models\JobListing;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 // Illumination
 use Illuminate\Support\Facades\Log;
@@ -222,8 +223,6 @@ class JobListingController extends Controller
 
     public function dashboardStore(Request $request)
     {
-        \Log::error('Job Listing Create Request:', $request->all());
-
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'category_id' => 'required|exists:job_listing_categories,id',
@@ -243,24 +242,29 @@ class JobListingController extends Controller
             'email_link' => 'required_if:application_type,email|nullable|email',
         ]);
 
-        // Get the authenticated user's employer
-        $employer = auth()->user()->employer;
+        $validatedData['slug'] = $this->generateUniqueSlug($validatedData['title']);
+
+        $user = auth()->user();
+        $employer = $user->employer;
 
         if (!$employer) {
-            return redirect()->back()->with('error', 'You must have a employer profile to create job listings.');
+            return redirect()->back()->with('error', 'You must have an employer profile to create job listings.');
         }
 
-        // Add employer_id to the validated data
         $validatedData['employer_id'] = $employer->id;
+        $validatedData['user_id'] = $user->id;
 
-        // Create the job listing
-        $jobListing = JobListing::create($validatedData);
+        try {
+            $jobListing = JobListing::create($validatedData);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while creating the job listing. Please try again.');
+        }
 
-        // Attach the category
         $jobListing->categories()->attach($validatedData['category_id']);
 
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
     }
+
     public function dashboardUpdate(Request $request, JobListing $jobListing)
     {
         $this->authorize('update', $jobListing);
@@ -268,6 +272,7 @@ class JobListingController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'category_id' => 'required|exists:job_listing_categories,id',
+            'slug',
             'description' => 'required',
             'remote_position' => 'required|boolean',
             'city' => 'nullable|required_if:remote_position,0|string|max:255',
@@ -295,13 +300,29 @@ class JobListingController extends Controller
     public function dashboardDestroy(JobListing $jobListing)
     {
         $this->authorize('delete', $jobListing);
+
         $jobListing->delete();
-        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing deleted successfully.');
+
+        return redirect()->route('dashboard.job-listings.index')
+            ->with('success', 'Job listing deleted successfully.');
     }
 
     ////////////////////////////////////////////////////
-    // Helpers for Job Listing Selections
+    // Helpers
     ////////////////////////////////////////////////////
+    private function generateUniqueSlug($title)
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $count = 2;
+
+        while (JobListing::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
+    }
     private function getStates()
     {
         return [

@@ -14,6 +14,7 @@ class JobListing extends Model
         'user_id',
         'employer_id',
         'title',
+        'slug',
         'description',
         'remote_position',
         'city',
@@ -44,14 +45,10 @@ class JobListing extends Model
         'salary_range_max' => 'decimal:2',
     ];
 
+
     public function employer()
     {
         return $this->belongsTo(Employer::class);
-    }
-
-    public function photos()
-    {
-        return $this->hasMany(JobListingPhoto::class);
     }
 
     public function categories()

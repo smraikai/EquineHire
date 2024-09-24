@@ -32,6 +32,14 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ route('dashboard.job-listings.index') }}"
+                                class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
+                                <x-heroicon-o-briefcase
+                                    class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
+                                Manage Job Listings
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ route('dashboard.job-listings.create') }}"
                                 class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
                                 <x-heroicon-o-plus-circle

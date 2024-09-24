@@ -304,17 +304,6 @@
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
-
-
-                <div class="mb-6">
-                    <label for="photos" class="block mb-2 text-sm font-medium text-gray-700">Job Listing Photos
-                        (optional)</label>
-                    <input type="file" name="photos[]" id="photos" multiple class="filepond" accept="image/*">
-                    @error('photos')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <div class="flex items-center justify-end mt-8">
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-800 focus:ring focus:ring-blue-300 disabled:opacity-25">
@@ -327,8 +316,6 @@
 @endsection
 
 @section('scripts_css')
-    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
