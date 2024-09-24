@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('logo')->nullable();
+            $table->string('featured_image')->nullable();
             $table->timestamps();
 
 

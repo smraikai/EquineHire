@@ -20,7 +20,7 @@ class EmployerFactory extends Factory
             'city' => $this->faker->city,
             'state' => $this->faker->state,
             'logo' => $this->faker->imageUrl(200, 200, 'business'),
-            // Removed fields to match Employer.php model
+            'featured_image' => $this->faker->imageUrl(1920, 1080, 'business'),
         ];
     }
 }

@@ -53,8 +53,8 @@
                     <div class="mb-6">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Employer Logo</label>
                         <div class="block w-full mt-1">
-                            @if ($employer->logo_url)
-                                <img src="{{ $employer->logo_url }}" alt="Employer Logo"
+                            @if ($employer->logo)
+                                <img src="{{ Storage::url($employer->logo) }}" alt="Employer Logo"
                                     class="object-cover w-32 h-32 rounded-md">
                             @else
                                 <p class="text-sm text-gray-600">No logo uploaded.</p>
@@ -64,17 +64,11 @@
 
                     <div class="mb-6">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Additional Photos</label>
-                        @if ($employer->photos->isNotEmpty())
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                @foreach ($employer->photos as $photo)
-                                    <div class="block w-full mt-1">
-                                        <img src="{{ $photo->url }}" alt="Additional Photo"
-                                            class="w-full h-32 rounded-md">
-                                    </div>
-                                @endforeach
-                            </div>
+                        @if ($employer->featured_image)
+                            <img src="{{ Storage::url($employer->featured_image) }}" alt="Featured image"
+                                class="object-cover w-64 h-32 rounded-md">
                         @else
-                            <p class="text-sm text-gray-600">No additional photos uploaded.</p>
+                            <p class="text-sm text-gray-600">No featured image uploaded.</p>
                         @endif
                     </div>
 

@@ -95,28 +95,17 @@
 
                 <div class="mb-6">
                     <label for="logo" class="block mb-2 text-sm font-medium text-gray-700">Employer Logo</label>
-                    <input type="file" name="logo" id="logo" class="filepond" accept="image/*"
-                        data-allow-reorder="true" data-max-file-size="3MB" data-max-files="1">
+                    <div id="logo-uploader"></div>
                     <p class="mt-1 ml-1 text-xs text-gray-500">Upload your company logo (max 3MB)</p>
                 </div>
+                <input type="hidden" name="logo_path" id="logo_path">
 
                 <div class="mb-6">
-                    <label for="photos" class="block mb-2 text-sm font-medium text-gray-700">Additional Photos</label>
-                    <input type="file" name="photos[]" id="photos" multiple class="filepond" accept="image/*"
-                        data-allow-reorder="true" data-max-file-size="5MB" data-max-files="5">
-                    <p class="mt-1 ml-1 text-xs text-gray-500">Upload up to 5 additional photos (max 5MB each)</p>
-                    @if ($employer->photos->count() > 0)
-                        <div class="grid grid-cols-3 gap-4 mt-2">
-                            @foreach ($employer->photos as $photo)
-                                <img src="{{ Storage::url($photo->path) }}" alt="Employer photo"
-                                    class="object-cover w-full h-32">
-                            @endforeach
-                        </div>
-                    @endif
-                    @error('photos')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
+                    <label for="featured_image" class="block mb-2 text-sm font-medium text-gray-700">Featured Image</label>
+                    <div id="featured-image-uploader"></div>
+                    <p class="mt-1 ml-1 text-xs text-gray-500">Upload up a featured image to showcase your business.</p>
                 </div>
+                <input type="hidden" id="featured_image_path" name="featured_image_path">
 
                 <div class="flex items-center justify-end mt-8">
                     <button type="submit"
@@ -131,9 +120,12 @@
 
 @section('scripts_css')
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
+    <link href="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.css" rel="stylesheet">
 @endsection
 
 @section('scripts')
+    <script src="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.js"></script>
+    @include('dashboard.employers.scripts.uppy')
     @include('partials.scripts._quill_editor', [
         'placeholder' => 'Describe your company, its mission, and what makes it a great place to work',
     ])

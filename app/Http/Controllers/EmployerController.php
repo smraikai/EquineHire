@@ -131,29 +131,33 @@ class EmployerController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:2',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
-            'logo' => 'nullable|string',
+            'logo_path' => 'nullable|string',
+            'featured_image_path' => 'nullable|string', // Add this line
         ]);
 
         DB::beginTransaction();
 
         try {
-            if ($request->filled('logo') && $request->logo !== $employer->logo) {
-                // Delete old logo if exists
-                if ($employer->logo) {
-                    $oldPath = parse_url($employer->logo, PHP_URL_PATH);
-                    Storage::disk('s3')->delete(ltrim($oldPath, '/'));
-                }
-                $validatedData['logo'] = $request->logo;
+            if ($request->filled('logo_path')) {
+                $employer->logo = $validatedData['logo_path'];
             }
+
+            if ($request->filled('featured_image_path')) {
+                $employer->featured_image = $validatedData['featured_image_path'];
+            }
+
             $employer->update($validatedData);
+
             DB::commit();
             return redirect()->route('employers.index', $employer)->with('success', 'Employer profile updated successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error updating employer profile: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while updating the employer profile.');
         }
     }
+
 
     ////////////////////////////////////////////////////
     // Job View Analytics

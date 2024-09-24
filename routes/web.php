@@ -7,7 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\LogoUploadController;
+use App\Http\Controllers\UploadController;
+
 // Classes
 use App\Models\JobListingCategory;
 use Illuminate\Http\Request;
@@ -181,5 +182,11 @@ Route::middleware(['auth'])->group(function () {
     // Update existing employer
     Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
 
+
+    // Image Handling for Employers
+    Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
+    Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
+    Route::post('/delete-file', [UploadController::class, 'deleteFile'])->name('delete.file');
+    Route::get('/get-existing-file', [UploadController::class, 'getExistingFile'])->name('get.existing_file');
 
 });

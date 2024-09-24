@@ -6,6 +6,7 @@ use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Employer extends Model
 {
@@ -21,16 +22,12 @@ class Employer extends Model
         'city',
         'state',
         'logo',
+        'featured_image',
     ];
 
     protected $casts = [
 
     ];
-
-    public function photos(): HasMany
-    {
-        return $this->hasMany(EmployerPhoto::class);
-    }
 
     public function user()
     {
@@ -74,5 +71,10 @@ class Employer extends Model
         }
 
         return $array;
+    }
+
+    public function getLogoUrlAttribute()
+    {
+        return $this->logo ? Storage::url($this->logo) : null;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
-use App\Http\Controllers\LogoUploadController;
+use App\Http\Controllers\UploadController;
 use App\Jobs\PostProcessing;
 
 class EmployerObserver
@@ -14,10 +14,10 @@ class EmployerObserver
     protected $fileUploadController;
     protected static $handling = false;
 
-    public function __construct(Request $request, LogoUploadController $logoUploadController)
+    public function __construct(Request $request, UploadController $uploadController)
     {
         $this->request = $request;
-        $this->logoUploadController = $logoUploadController;
+        $this->uploadController = $uploadController;
     }
 
     public function saved(Employer $employer)
