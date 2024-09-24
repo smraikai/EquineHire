@@ -40,10 +40,10 @@ class EmployerController extends Controller
             $price = Price::retrieve($subscription->stripe_price);
             $amount = $price->unit_amount / 100; // Convert cents to dollars
 
-            return view('dashboard.index', compact('user', 'employer', 'jobListings', 'subscription', 'amount'));
+            return view('dashboard.employers.index', compact('user', 'employer', 'jobListings', 'subscription', 'amount'));
         }
 
-        return view('dashboard.index', compact('user', 'employer', 'jobListings'));
+        return view('dashboard.employers.index', compact('user', 'employer', 'jobListings'));
     }
 
     //////////////////////////////////////////////////////////

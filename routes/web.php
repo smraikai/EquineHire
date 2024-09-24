@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['get', 'post'], '/subscription/checkout', [SubscriptionController::class, 'initiateCheckout'])->name('subscription.checkout');
     Route::get('/subscription/incomplete', [SubscriptionController::class, 'handleIncompletePayment'])->name('subscription.incomplete');
     Route::get('/billing', function (Request $request) {
-        return $request->user()->redirectToBillingPortal(route('employer.index'));
+        return $request->user()->redirectToBillingPortal(route('dashboard.employers.index'));
     })->name('billing');
 });
 
@@ -99,10 +99,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
 
 
-    Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.index');
-
-
-    Route::get('/dashboard/employers', [EmployerController::class, 'profileIndex'])->name('dashboard.employers.index');
+    Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
 
     Route::get('/dashboard/create', [EmployerController::class, 'create'])->name('employer.create');
     Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
