@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Employer;
 
 class UploadController extends Controller
 {
@@ -33,12 +34,26 @@ class UploadController extends Controller
     {
         $path = $request->input('path');
         $type = $request->input('type');
+        $employerId = $request->input('employer_id');
+
+        $employer = Employer::findOrFail($employerId);
+        $fileDeleted = false;
 
         if (Storage::exists($path)) {
             Storage::delete($path);
-            return response()->json(['success' => true]);
+            $fileDeleted = true;
         }
 
-        return response()->json(['success' => false], 404);
+        if ($type === 'logo') {
+            $employer->logo = null;
+        } elseif ($type === 'featured_image') {
+            $employer->featured_image = null;
+        }
+        $employer->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $fileDeleted ? 'File deleted from storage and database.' : 'File not found in storage, but removed from database.',
+        ]);
     }
 }
