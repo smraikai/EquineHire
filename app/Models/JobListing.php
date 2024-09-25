@@ -13,6 +13,7 @@ class JobListing extends Model
     protected $fillable = [
         'user_id',
         'employer_id',
+        'category_id',
         'title',
         'slug',
         'description',
@@ -51,14 +52,9 @@ class JobListing extends Model
         return $this->belongsTo(Employer::class);
     }
 
-    public function categories()
+    public function category()
     {
-        return $this->belongsToMany(JobListingCategory::class, 'job_listing_category_associations');
-    }
-
-    public function disciplines()
-    {
-        return $this->belongsToMany(JobListingDiscipline::class, 'job_listing_discipline_associations');
+        return $this->belongsTo(JobListingCategory::class, 'category_id');
     }
 
     // Users
@@ -95,7 +91,7 @@ class JobListing extends Model
         $array['sticky_rank'] = $this->is_sticky ? 1 : 0;
 
         // Add new facets
-        $array['category_ids'] = array_map('strval', $this->categories->pluck('id')->toArray());
+        $array['category_ids'] = [$this->category_id];
         $array['state'] = $this->state ? trim($this->state) : null;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
@@ -113,7 +109,6 @@ class JobListing extends Model
                 'job_type',
                 'experience_required',
                 'salary_type',
-                'remote_position',
                 'filterOnly(category_ids)',
                 'filterOnly(remote_position)'
             ],

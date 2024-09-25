@@ -10,14 +10,20 @@ return new class extends Migration {
         Schema::create('job_listing_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('parent_id')->nullable();  // nullable because top-level categories won't have a parent
-            $table->foreign('parent_id')->references('id')->on('job_listing_categories')->onDelete('cascade');  // optional cascade on delete
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('job_categories');
+        // Remove foreign key and column from job_listings
+        Schema::table('job_listings', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+            $table->dropColumn('category_id');
+        });
+
+        // Drop the job_listing_categories table
+        Schema::dropIfExists('job_listing_categories');
     }
 };

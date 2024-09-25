@@ -99,17 +99,24 @@ Route::middleware('auth')->group(function () {
 ////////////////////////////////////////////////////////////////////
 Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
 
+    //////////////////////////////////////
+    // Employers
+    //////////////////////////////////////
 
     Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
 
-    Route::get('/dashboard/create', [EmployerController::class, 'create'])->name('employer.create');
+    // Employer Routes
+    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
+    Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
+    Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
+    Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])->name('employers.edit');
     Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
+    Route::delete('/employers/{employer}', [EmployerController::class, 'destroy'])->name('employers.destroy');
 
-    Route::get('/dashboard/{business}/edit', [EmployerController::class, 'edit'])->name('employer.edit')->middleware(ClearDraftsMiddleware::class);
-    Route::delete('/dashboard/{business}', [EmployerController::class, 'destroy'])->name('employer.destroy');
-
-    Route::post('/logo/upload', [LogoUploadController::class, 'upload'])->name('logo.upload');
-    Route::delete('/logo/delete', [LogoUploadController::class, 'delete'])->name('logo.delete');
+    // Image Handling for Employers
+    Route::post('/upload/delete', [UploadController::class, 'deleteFile'])->name('upload.delete');
+    Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
+    Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
 
 
 });
@@ -163,28 +170,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //////////////////////////////////////////////////////////
 Route::middleware(['auth'])->group(function () {
 
-    // Profile Index
-    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
-
-    // Create new employer (this will create a draft and redirect to edit)
-    Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
-
-    // Store new employer
-    Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
-
-    // Edit form
-    Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])
-        ->name('employers.edit');
-
-    // Delete Employer Profile
-    Route::delete('/employers/{employer}', [EmployerController::class, 'destroy'])->name('employers.destroy');
-
-    // Update existing employer
-    Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
 
 
-    // Image Handling for Employers
-    Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
-    Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
-    Route::post('/upload/delete', [UploadController::class, 'deleteFile'])->name('upload.delete');
+
 });

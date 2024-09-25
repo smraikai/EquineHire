@@ -146,7 +146,7 @@ class JobListingController extends Controller
     ////////////////////////////////////////////////////////////////
     public function dashboardIndex()
     {
-        $jobListings = auth()->user()->employer->jobListings()->paginate(10);
+        $jobListings = auth()->user()->jobListings()->paginate(10);
         return view('dashboard.job-listings.index', compact('jobListings'));
     }
 
@@ -165,59 +165,15 @@ class JobListingController extends Controller
 
     public function dashboardCreate()
     {
+
+        $user = auth()->user();
+        $employer = $user->employer;
+        if (!$user || !$user->employer) {
+            return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
+        }
+
         $categories = JobListingCategory::all();
-        $states = [
-            'AL' => 'Alabama',
-            'AK' => 'Alaska',
-            'AZ' => 'Arizona',
-            'AR' => 'Arkansas',
-            'CA' => 'California',
-            'CO' => 'Colorado',
-            'CT' => 'Connecticut',
-            'DE' => 'Delaware',
-            'FL' => 'Florida',
-            'GA' => 'Georgia',
-            'HI' => 'Hawaii',
-            'ID' => 'Idaho',
-            'IL' => 'Illinois',
-            'IN' => 'Indiana',
-            'IA' => 'Iowa',
-            'KS' => 'Kansas',
-            'KY' => 'Kentucky',
-            'LA' => 'Louisiana',
-            'ME' => 'Maine',
-            'MD' => 'Maryland',
-            'MA' => 'Massachusetts',
-            'MI' => 'Michigan',
-            'MN' => 'Minnesota',
-            'MS' => 'Mississippi',
-            'MO' => 'Missouri',
-            'MT' => 'Montana',
-            'NE' => 'Nebraska',
-            'NV' => 'Nevada',
-            'NH' => 'New Hampshire',
-            'NJ' => 'New Jersey',
-            'NM' => 'New Mexico',
-            'NY' => 'New York',
-            'NC' => 'North Carolina',
-            'ND' => 'North Dakota',
-            'OH' => 'Ohio',
-            'OK' => 'Oklahoma',
-            'OR' => 'Oregon',
-            'PA' => 'Pennsylvania',
-            'RI' => 'Rhode Island',
-            'SC' => 'South Carolina',
-            'SD' => 'South Dakota',
-            'TN' => 'Tennessee',
-            'TX' => 'Texas',
-            'UT' => 'Utah',
-            'VT' => 'Vermont',
-            'VA' => 'Virginia',
-            'WA' => 'Washington',
-            'WV' => 'West Virginia',
-            'WI' => 'Wisconsin',
-            'WY' => 'Wyoming',
-        ];
+        $states = $this->getStates();
         return view('dashboard.job-listings.create', compact('categories', 'states'));
     }
 
@@ -260,8 +216,6 @@ class JobListingController extends Controller
             return redirect()->back()->with('error', 'An error occurred while creating the job listing. Please try again.');
         }
 
-        $jobListing->categories()->attach($validatedData['category_id']);
-
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
     }
 
@@ -290,9 +244,6 @@ class JobListingController extends Controller
         ]);
 
         $jobListing->update($validatedData);
-
-        // Update the category
-        $jobListing->categories()->sync([$validatedData['category_id']]);
 
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
     }

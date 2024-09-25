@@ -13,6 +13,6 @@ class JobListingCategory extends Model
 
     public function jobListings()
     {
-        return $this->belongsToMany(JobListing::class, 'job_listing_category_associations');
+        return $this->hasMany(JobListing::class);
     }
 }

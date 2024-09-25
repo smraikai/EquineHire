@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             JobListingCategoriesSeeder::class,
-            EmployerSeeder::class, // Add this line
+            EmployerSeeder::class,
             JobListingSeeder::class,
         ]);
     }

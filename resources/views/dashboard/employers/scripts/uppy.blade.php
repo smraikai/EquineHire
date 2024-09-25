@@ -22,7 +22,7 @@
                     inline: true,
                     target: '#logo-uploader',
                     width: '100%',
-                    height: 250,
+                    height: 300,
                     disableStatusBar: true,
                 })
                 .use(XHRUpload, {
@@ -48,7 +48,7 @@
                     inline: true,
                     target: '#featured-image-uploader',
                     width: '100%',
-                    height: 250,
+                    height: 300,
                     disableStatusBar: true,
                 })
                 .use(XHRUpload, {

@@ -18,11 +18,8 @@ class JobListingSeeder extends Seeder
             JobListing::factory()->count(rand(1, 5))->create([
                 'employer_id' => $employer->id,
                 'user_id' => $employer->user_id,
-            ])->each(function ($jobListing) use ($categories) {
-                $jobListing->categories()->attach(
-                    $categories->random(rand(1, 3))->pluck('id')->toArray()
-                );
-            });
+                'category_id' => $categories->random()->id,
+            ]);
         }
     }
 }

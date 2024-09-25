@@ -32,6 +32,9 @@
         @if (session('success'))
             <x-success-message :message="session('success')" />
         @endif
+        @if (session('error'))
+            <x-error-message :message="session('error')" />
+        @endif
         @include('partials.dashboard.sidebar')
 
         <div class="lg:pl-72">

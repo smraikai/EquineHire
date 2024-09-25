@@ -1,22 +1,15 @@
 @php
-    $sortedCategories = collect($facets['categories'])
+    $categories = \App\Models\JobListingCategory::orderBy('name')
+        ->get()
         ->map(function ($category) {
             $category->checked = in_array($category->id, request()->input('categories', []));
             return $category;
         })
         ->sortBy(function ($category) {
-            if ($category->name === 'Other') {
-                return 'zzz';
-            }
-            return strtolower($category->name);
-        })
-        ->partition(function ($category) {
-            return $category->checked;
+            return $category->name === 'Other' ? 'zzz' : strtolower($category->name);
         });
 
-    $sortedCategories = $sortedCategories->get(0)->merge($sortedCategories->get(1));
-
-    $checkedCategoryCount = $sortedCategories->where('checked', true)->count();
+    $checkedCategoryCount = $categories->where('checked', true)->count();
 
     $jobTypes = \App\Models\JobListing::distinct()->pluck('job_type')->filter()->sort()->values();
     $experienceLevels = \App\Models\JobListing::distinct()->pluck('experience_required')->filter()->sort()->values();
@@ -56,7 +49,7 @@
             <div>
                 <span class="text-sm font-medium">Categories</span>
                 <div class="flex flex-col gap-2 mt-2">
-                    @foreach ($sortedCategories as $category)
+                    @foreach ($categories as $category)
                         <div class="flex items-center w-full">
                             <input type="checkbox" name="categories[]" value="{{ $category->id }}"
                                 id="category-{{ $category->id }}" class="category-checkbox"

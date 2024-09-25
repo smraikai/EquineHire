@@ -37,7 +37,7 @@ class JobListingPolicy
      */
     public function update(User $user, JobListing $jobListing): bool
     {
-        //
+        return $user->id === $jobListing->user_id;
     }
 
     /**
