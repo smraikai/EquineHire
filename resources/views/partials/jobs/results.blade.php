@@ -3,7 +3,7 @@
         @forelse($results as $job_listing)
             <div class="relative group">
                 <div class="relative group">
-                    <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) }}"
+                    <a href="{{ route('jobs.show', ['job_slug' => $job_listing->slug, 'id' => $job_listing->id]) . '?' . http_build_query(request()->query()) }}"
                         class="block relative overflow-hidden transition duration-300 bg-white border rounded-lg shadow-sm group-hover:shadow-md {{ $job_listing->is_boosted ? 'border-l-2 rounded-l-none border-l-blue-500 bg-sky-50' : 'border-gray-200' }}">
                         <div class="relative flex items-center justify-between p-4 sm:p-6">
 

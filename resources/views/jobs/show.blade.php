@@ -3,8 +3,17 @@
 @endsection
 
 @section('content')
-    <div class="container max-w-full px-4 pb-6 mx-auto sm:px-6 sm:pb-10 sm:max-w-7xl">
-        <div class="flex flex-wrap gap-8 py-20">
+    <div class="container max-w-full px-4 py-20 pb-6 mx-auto sm:px-6 sm:pb-10 sm:max-w-7xl">
+        <div class="mt-4">
+            <div class="mt-4">
+                <a href="{{ route('jobs.index') . '?' . request()->getQueryString() }}"
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <x-heroicon-s-arrow-left class="w-5 h-5 mr-2 -ml-1 text-gray-500" />
+                    All Jobs
+                </a>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-8">
             <!-- Overview -->
             <div class="flex flex-col flex-1 gap-5">
                 <div class="flex flex-col w-full py-8 space-y-4 sm:py-8">
@@ -87,8 +96,6 @@
             </div>
         </div>
     </div>
-
-    @include('partials.business-success-bar')
 @endsection
 
 @section('scripts')
