@@ -136,11 +136,7 @@
             "@type": "Country",
             "name": "United States"
         },
-        "industry": [
-            @foreach($job_listing->categories as $category)
-            "{{ $category->name }}"@if(!$loop->last),@endif
-            @endforeach
-        ]
+        "industry": "{{ $job_listing->category->name }}"
     }
     </script>
 @endsection
