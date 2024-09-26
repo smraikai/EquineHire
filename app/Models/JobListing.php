@@ -5,6 +5,7 @@ namespace App\Models;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 
 class JobListing extends Model
 {
@@ -61,8 +62,37 @@ class JobListing extends Model
         return $this->belongsTo(User::class);
     }
 
+    ////////////////////////////////////////////////
+    // Subscription Posting Limits
+    ////////////////////////////////////////////////
+
+    /**
+     * Check if the user can create a new job listing based on their subscription plan.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public static function canCreateJobListing(User $user)
+    {
+        $subscriptionType = $user->subscription('default')->stripe_plan;
+
+        $limits = [
+            'basic_plan' => 5,
+            'pro_plan' => 20,
+            'premium_plan' => 999,
+        ];
+
+        $currentCount = self::where('user_id', $user->id)->count();
+
+        // Log the subscription type and current count
+        Log::info('Subscription Type: ' . $subscriptionType);
+        Log::info('Current Job Listings Count: ' . $currentCount);
+
+        return $currentCount < ($limits[$subscriptionType] ?? 0);
+    }
+
     ///////////////////////////////////////////////////////////////
-    // Algolia Settings
+    // Search / Algolia Settings
     ///////////////////////////////////////////////////////////////
     public function searchableAs()
     {

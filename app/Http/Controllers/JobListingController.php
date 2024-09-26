@@ -7,7 +7,7 @@ use Algolia\AlgoliaSearch\SearchIndex;
 // Models
 use App\Models\JobListingCategory;
 use App\Models\JobListing;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Employer;
 use Illuminate\Support\Str;
 
 // Illumination
@@ -145,15 +145,44 @@ class JobListingController extends Controller
     }
 
     ////////////////////////////////////////////////////////////////
-    // Dashboard – Job Listing: Views
+    // Employer Dashboard – Job Listing: Views
     ////////////////////////////////////////////////////////////////
-    public function dashboardIndex()
+    public function employerJobListings()
     {
+
+        // Define User
+        $user = auth()->user();
+
+        // Check if User has Employer Profile
+        if (!Employer::employerProfileCheck($user)) {
+            return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
+        }
+
         $jobListings = auth()->user()->jobListings()->paginate(10);
         return view('dashboard.job-listings.index', compact('jobListings'));
     }
 
-    public function dashboardEdit(JobListing $jobListing)
+    public function employerCreateJobListing()
+    {
+        $user = auth()->user();
+        $employer = $user->employer;
+
+        // Check if user has employer profile
+        if (!Employer::employerProfileCheck($user)) {
+            return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
+        }
+
+        // Check if user is at job posting limit for their subscription
+        if (!JobListing::canCreateJobListing($user)) {
+            return redirect()->back()->with('error', 'You have reached your job listing limit for your current subscription plan.');
+        }
+
+        $categories = JobListingCategory::all();
+        $states = $this->getStates();
+        return view('dashboard.job-listings.create', compact('categories', 'states'));
+    }
+
+    public function employerEditJobListing(JobListing $jobListing)
     {
         $this->authorize('update', $jobListing);
         $categories = JobListingCategory::all();
@@ -166,21 +195,7 @@ class JobListingController extends Controller
     // Dashboard – Job Listing: Logic
     ////////////////////////////////////////////////////////////////
 
-    public function dashboardCreate()
-    {
-
-        $user = auth()->user();
-        $employer = $user->employer;
-        if (!$user || !$user->employer) {
-            return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
-        }
-
-        $categories = JobListingCategory::all();
-        $states = $this->getStates();
-        return view('dashboard.job-listings.create', compact('categories', 'states'));
-    }
-
-    public function dashboardStore(Request $request)
+    public function employerStoreJobListing(Request $request)
     {
         $validatedData = $request->validate([
             'title' => 'required|max:255',
@@ -206,10 +221,6 @@ class JobListingController extends Controller
         $user = auth()->user();
         $employer = $user->employer;
 
-        if (!$employer) {
-            return redirect()->back()->with('error', 'You must have an employer profile to create job listings.');
-        }
-
         $validatedData['employer_id'] = $employer->id;
         $validatedData['user_id'] = $user->id;
 
@@ -222,7 +233,7 @@ class JobListingController extends Controller
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
     }
 
-    public function dashboardUpdate(Request $request, JobListing $jobListing)
+    public function employerUpdateJobListing(Request $request, JobListing $jobListing)
     {
         $this->authorize('update', $jobListing);
 
@@ -251,7 +262,7 @@ class JobListingController extends Controller
         return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
     }
 
-    public function dashboardDestroy(JobListing $jobListing)
+    public function employerDestroyJobListing(JobListing $jobListing)
     {
         $this->authorize('delete', $jobListing);
 

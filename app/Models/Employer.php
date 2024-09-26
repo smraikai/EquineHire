@@ -77,4 +77,12 @@ class Employer extends Model
     {
         return $this->logo ? Storage::url($this->logo) : null;
     }
+
+    //////////////////////////////////////////////////////
+    // Helpers
+    //////////////////////////////////////////////////////
+    public static function employerProfileCheck($user)
+    {
+        return $user && $user->employer;
+    }
 }

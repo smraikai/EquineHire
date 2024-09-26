@@ -162,12 +162,12 @@ Route::get('/check-processing-status/{business}', [EmployerController::class, 'c
 // Job Listing Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard/job-listings')->name('dashboard.job-listings.')->group(function () {
-        Route::get('/', [JobListingController::class, 'dashboardIndex'])->name('index');
-        Route::get('/create', [JobListingController::class, 'dashboardCreate'])->name('create');
-        Route::post('/', [JobListingController::class, 'dashboardStore'])->name('store');
-        Route::get('/{jobListing}/edit', [JobListingController::class, 'dashboardEdit'])->name('edit');
-        Route::put('/{jobListing}', [JobListingController::class, 'dashboardUpdate'])->name('update');
-        Route::delete('/{jobListing}', [JobListingController::class, 'dashboardDestroy'])->name('destroy');
+        Route::get('/', [JobListingController::class, 'employerJobListings'])->name('index');
+        Route::get('/create', [JobListingController::class, 'employerCreateJobListing'])->name('create');
+        Route::post('/', [JobListingController::class, 'employerStoreJobListing'])->name('store');
+        Route::get('/{jobListing}/edit', [JobListingController::class, 'employerEditJobListing'])->name('edit');
+        Route::put('/{jobListing}', [JobListingController::class, 'employerUpdateJobListing'])->name('update');
+        Route::delete('/{jobListing}', [JobListingController::class, 'employerDestroyJobListing'])->name('destroy');
     });
 });
 
