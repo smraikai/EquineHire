@@ -30,7 +30,6 @@ return new class extends Migration {
             $table->string('email_link')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_boosted')->default(false);
-            $table->boolean('is_sticky')->default(false);
             $table->timestamps();
         });
     }

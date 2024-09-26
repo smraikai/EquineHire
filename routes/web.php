@@ -58,13 +58,14 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 ////////////////////////////////////////////////////////////////////
-// Business Directory (Public) Routes
+// Business & Employer (Public) Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
 Route::get('/{job_slug}-{id}', [JobListingController::class, 'show'])
     ->name('jobs.show')
     ->where('job_slug', '[a-z0-9\-]+')
     ->middleware('track.pageviews');
+Route::get('/employers/{employer}', [EmployerController::class, 'show'])->name('employers.show');
 
 ////////////////////////////////////////////////////////////////////
 // Authentication Routes

@@ -9,7 +9,6 @@
     <div class="container py-12 mx-auto sm:py-24">
 
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <h1 class="mb-6 text-xl font-semibold text-gray-900">Let's Build Your Job Posting</h1>
 
             <form action="{{ route('dashboard.job-listings.store') }}" method="POST" class="p-6 bg-white rounded-lg shadow-sm"
                 enctype="multipart/form-data">
@@ -58,7 +57,7 @@
                     <label for="description" class="block text-sm font-medium text-gray-700">Description <span
                             class="text-red-500">*</span></label>
                     <div id="quill_editor"
-                        class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('description') border-red-500 @enderror"
+                        class="block w-full mt-1 border-gray-300 rounded-md rounded-t-none shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('description') border-red-500 @enderror"
                         style="height: 200px;"></div>
                     <input type="hidden" name="description" id="description" value="{{ old('description') }}" required>
                     @error('description')

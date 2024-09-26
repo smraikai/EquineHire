@@ -67,7 +67,8 @@
                                 <span class="sr-only">Open user menu</span>
                                 @if (Auth::user()->employer && Auth::user()->employer->logo)
                                     <img class="w-8 h-8 rounded-full bg-gray-50"
-                                        src="{{ Auth::user()->employer->logo }}" alt="{{ Auth::user()->name }}">
+                                        src="{{ Storage::url(Auth::user()->employer->logo) }}"
+                                        alt="{{ Auth::user()->name }}">
                                 @else
                                     <div
                                         class="flex items-center justify-center w-8 h-8 text-sm font-semibold text-white bg-indigo-600 rounded-full">

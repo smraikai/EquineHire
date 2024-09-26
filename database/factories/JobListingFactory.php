@@ -38,7 +38,6 @@ class JobListingFactory extends Factory
             'email_link' => $this->faker->email,
             'is_active' => $this->faker->boolean(80),
             'is_boosted' => $this->faker->boolean(20),
-            'is_sticky' => $this->faker->boolean(10),
         ];
     }
 
@@ -70,12 +69,4 @@ class JobListingFactory extends Factory
         });
     }
 
-    public function sticky()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'is_sticky' => true,
-            ];
-        });
-    }
 }

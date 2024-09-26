@@ -138,11 +138,14 @@ class JobListingController extends Controller
 
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
 
-        return view('jobs.show', compact('job_listing', 'isOwner', 'metaTitle', 'metaDescription'));
+        // Pass the employer to the view
+        $employer = $job_listing->employer;
+
+        return view('jobs.show', compact('job_listing', 'isOwner', 'metaTitle', 'metaDescription', 'employer'));
     }
 
     ////////////////////////////////////////////////////////////////
-    // Employer Job Listing: Views
+    // Dashboard – Job Listing: Views
     ////////////////////////////////////////////////////////////////
     public function dashboardIndex()
     {
@@ -160,7 +163,7 @@ class JobListingController extends Controller
 
 
     ////////////////////////////////////////////////////////////////
-    // Employer Job Listing: Logic
+    // Dashboard – Job Listing: Logic
     ////////////////////////////////////////////////////////////////
 
     public function dashboardCreate()

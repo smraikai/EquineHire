@@ -32,14 +32,12 @@ class JobListing extends Model
         'email_link',
         'is_active',
         'is_boosted',
-        'is_sticky',
     ];
 
     protected $casts = [
         'remote_position' => 'boolean',
         'is_active' => 'boolean',
         'is_boosted' => 'boolean',
-        'is_sticky' => 'boolean',
         'hourly_rate_min' => 'decimal:2',
         'hourly_rate_max' => 'decimal:2',
         'salary_range_min' => 'decimal:2',
@@ -88,7 +86,7 @@ class JobListing extends Model
             ];
         }
 
-        $array['sticky_rank'] = $this->is_sticky ? 1 : 0;
+        $array['boosted_rank'] = $this->is_boosted ? 9001 : 0;
 
         // Add new facets
         $array['category_ids'] = [$this->category_id];

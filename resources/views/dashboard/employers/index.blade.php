@@ -68,12 +68,12 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block mb-2 text-sm font-medium text-gray-700">Additional Photos</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Cover Image</label>
                     @if ($employer->featured_image)
                         <img src="{{ Storage::url($employer->featured_image) }}" alt="Featured image"
                             class="object-cover w-64 h-32 rounded-md">
                     @else
-                        <p class="text-sm text-gray-600">No featured image uploaded.</p>
+                        <p class="text-sm text-gray-600">No cover image uploaded.</p>
                     @endif
                 </div>
 

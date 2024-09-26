@@ -20,8 +20,10 @@ return new class extends Migration {
             $table->string('state')->nullable();
             $table->string('logo')->nullable();
             $table->string('featured_image')->nullable();
-            $table->timestamps();
+            $table->string('company_size')->nullable();
+            $table->year('founded_year')->nullable();
 
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
