@@ -23,15 +23,6 @@
                             </h1>
                         </div>
                     </div>
-                    <!-- Edit Button if Owner is Viewing Listing -->
-                    @if ($isOwner)
-                        <div class="flex justify-center sm:justify-start">
-                            <a href="{{ route('employer.edit', $job_listing->id) }}"
-                                class="px-4 py-2 font-bold bg-gray-200 rounded hover:bg-gray-300">
-                                Edit My Listing
-                            </a>
-                        </div>
-                    @endif
                 </div>
                 <h2 class="font-bold text-gray-800 text-md">Job Overview</h2>
                 <div class="text-gray-800 listing-description">{!! $job_listing->description !!}</div>

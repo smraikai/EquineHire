@@ -8,7 +8,7 @@
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             @if (auth()->user()->subscription('default')->active())
                                 <span
-                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
+                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
                                     Active
                                 </span>
                             @elseif(auth()->user()->subscription('default')->onGracePeriod())

@@ -64,24 +64,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
-                    @if ($jobListings->isNotEmpty())
-                        <form action="{{ route('employer.destroy', $jobListings->first()->id) }}" method="POST">
-                        @else
-                            <form action="#" method="POST">
-                    @endif
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                        class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                        Delete
-                    </button>
-                    </form>
-                    <button type="button" onclick="closeModal()"
-                        class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Cancel
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -90,18 +72,7 @@
 @endsection
 
 @section('scripts')
-    <!-- Delete Confirmation Modal -->
-    <script>
-        function confirmDelete() {
-            document.getElementById('confirmModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('confirmModal').classList.add('hidden');
-        }
-    </script>
-
-    <!-- Conversion Tracking for Subscriptions -->
+    <!-- Conversion Tracking for Employer Subscription -->
     @if (request()->query('subscription_completed'))
         <script>
             // Initialize the data layer if it doesn't exist

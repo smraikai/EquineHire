@@ -44,7 +44,7 @@ class EmployerController extends Controller
             return view('dashboard.employers.index', compact('user', 'employer', 'jobListings', 'subscription', 'amount'));
         }
 
-        return view('dashboard.employers.index', compact('user', 'employer', 'jobListings'));
+        return view('dashboard.index', compact('user', 'employer', 'jobListings'));
     }
 
     //////////////////////////////////////////////////////////
