@@ -66,6 +66,7 @@
                             <form action="{{ route('subscription.store-plan') }}" method="POST" class="mt-8">
                                 @csrf
                                 <input type="hidden" value="{{ $plan['id'] }}" name="plan">
+                                <input type="hidden" value="{{ $plan['name'] }}" name="planName">
                                 <button type="submit"
                                     class="w-full rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
                     {{ $index === 1

@@ -61,7 +61,7 @@
                     <a href="{{ route('profile.edit') }}"
                         class="flex p-2 -mx-2 text-sm font-semibold leading-6 text-gray-700 rounded-md group gap-x-3 hover:bg-gray-50 hover:text-blue-600">
                         <x-heroicon-o-cog-6-tooth class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
-                        Settings
+                        Account Settings
                     </a>
                 </li>
             </ul>

@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
+    ////////////////////////////////////////////
+    // Views
+    ////////////////////////////////////////////
     public function showPlans()
     {
         // Fetch subscription plans from Stripe or define them in your code
@@ -15,23 +18,30 @@ class SubscriptionController extends Controller
         return view('subscription.plans', compact('plans'));
     }
 
+    ////////////////////////////////////////////
+    // Checkout
+    ////////////////////////////////////////////
     public function initiateCheckout(Request $request)
     {
         if (Auth::check()) {
             $user = $request->user();
             $planId = $request->session()->get('selected_plan');
+            $planName = $request->session()->get('plan_name');
+
+            $cancelUrl = $request->headers->get('referer') ?? route('subscription.plans');
+
+            $checkoutBuilder = $user->newSubscription($planName, $planId)
+                ->allowPromotionCodes();
 
             if (!$planId) {
                 return redirect()->route('subscription.plans')->with('error', 'Please select a plan first.');
             }
 
             try {
-                $checkout = $user->newSubscription('default', $planId)
-                    ->allowPromotionCodes()
-                    ->checkout([
-                        'success_url' => route('dashboard.employers.index', ['subscription_completed' => true]), // True for Stripe GA4 tracking
-                        'cancel_url' => route('subscription.plans'),
-                    ]);
+                $checkout = $checkoutBuilder->checkout([
+                    'success_url' => route('dashboard.employers.index', ['session_id' => '{CHECKOUT_SESSION_ID}', 'plan' => $planId, 'subscription_completed' => true]),
+                    'cancel_url' => $cancelUrl,
+                ]);
 
                 $request->session()->forget('selected_plan');
 
@@ -45,9 +55,26 @@ class SubscriptionController extends Controller
 
     }
 
+    public function handleIncompletePayment(Request $request)
+    {
+        return view('subscription.incomplete_payment');
+
+    }
+
+    ////////////////////////////////////////////
+    // Helpers
+    ////////////////////////////////////////////
+
     public function storePlan(Request $request)
     {
+        // make plan name lowercase
+        $planName = strtolower(str_replace(' ', '_', $request->input('planName')));
+
+        // pull info from session
         $request->session()->put('selected_plan', $request->input('plan'));
+        $request->session()->put('plan_name', $planName);
+
+        // if user has a login, proceed to checkout, otherwise register for an account
         if (Auth::check()) {
             return redirect()->route('subscription.checkout');
         } else {
@@ -55,74 +82,5 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function handleIncompletePayment(Request $request)
-    {
-        return view('subscription.incomplete_payment');
 
-    }
-    //////////////////////////////////////////////////////////////////
-    // Trial Registration
-    //////////////////////////////////////////////////////////////////
-    public function trialSignup(Request $request)
-    {
-        if (Auth::check()) {
-            return $this->initiateTrialCheckout($request);
-        }
-
-        $request->session()->put('trial', 'true');
-        return redirect()->route('register');
-    }
-
-    private function initiateTrialCheckout(Request $request)
-    {
-        $user = $request->user();
-        $planId = config('subscriptions.plans.yearly_plan_id.' . (app()->environment('local') ? 'local' : 'production'));
-
-        $checkout = $user->newSubscription('default', $planId)
-            ->trialDays(101)
-            ->checkout([
-                'success_url' => route('dashboard.employers.index'),
-                'cancel_url' => route('subscription.plans'),
-                'subscription_data' => [
-                    'trial_settings' => [
-                        'end_behavior' => [
-                            'missing_payment_method' => 'cancel'
-                        ]
-                    ]
-                ],
-                'payment_method_collection' => 'if_required'
-            ]);
-
-        return redirect($checkout->url);
-    }
-
-    //////////////////////////////////////////////////////////////////
-    // Annual Discount Checkout
-    //////////////////////////////////////////////////////////////////
-    public function checkoutAnnualDiscount(Request $request)
-    {
-        if (Auth::check()) {
-            $user = $request->user();
-            $planId = config('subscriptions.plans.yearly_plan_id.' . (app()->environment('local') ? 'local' : 'production'));
-            $couponId = env('EQUINEHIRE_ANNUAL_DISCOUNT_ID');
-
-            try {
-                $checkout = $user->newSubscription('default', $planId)
-                    ->withCoupon($couponId)
-                    ->checkout([
-                        'success_url' => route('dashboard.employers.index', ['subscription_completed' => true]),
-                        'cancel_url' => route('subscription.plans'),
-                    ]);
-
-                // Forget the annual_discount session variable
-                $request->session()->forget('annual_discount');
-
-                return redirect($checkout->url);
-            } catch (IncompletePayment $exception) {
-                return redirect()->route('subscription.incomplete');
-            }
-        } else {
-            return redirect()->route('login')->with('error', 'Please log in to subscribe.');
-        }
-    }
 }

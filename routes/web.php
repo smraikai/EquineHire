@@ -120,6 +120,11 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
 
 
+    //////////////////////////////////////
+    // Candidates
+    //////////////////////////////////////
+
+
 });
 
 
