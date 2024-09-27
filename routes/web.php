@@ -65,7 +65,7 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     //////////////////////////////////////
     // Job Listings
     //////////////////////////////////////
-    Route::prefix('dashboard/job-listings')->name('dashboard.job-listings.')->group(function () {
+    Route::prefix('employers/job-listings')->name('employers.job-listings.')->group(function () {
         Route::get('/', [JobListingController::class, 'employerJobListings'])->name('index');
         Route::get('/create', [JobListingController::class, 'employerCreateJobListing'])->name('create');
         Route::post('/', [JobListingController::class, 'employerStoreJobListing'])->name('store');

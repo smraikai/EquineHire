@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -54,4 +55,34 @@ class User extends Authenticatable
     {
         return $this->hasOne(Employer::class);
     }
+
+    ////////////////////////////////////////////////
+    // Check if user can post job based on limits
+    ////////////////////////////////////////////////
+    public function canCreateJobListing()
+    {
+
+        // Define subscription
+        $subscription = $this->subscriptions()
+            ->where('stripe_status', 'active')
+            ->latest()
+            ->first();
+
+        $subscriptionType = $subscription ? $subscription->type : null;
+        // Set limits
+        $limits = [
+            'basic_plan' => 1,
+            'pro_plan' => 5,
+            'premium_plan' => 999,
+        ];
+
+        $currentCount = $this->jobListings()->count();
+
+        // Log the subscription type and current count
+        Log::info('Subscription Type: ' . $subscriptionType);
+        Log::info('Current Job Listings Count: ' . $currentCount);
+
+        return $currentCount < ($limits[$subscriptionType] ?? 0);
+    }
+
 }

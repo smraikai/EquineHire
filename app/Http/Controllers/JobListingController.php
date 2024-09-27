@@ -172,8 +172,8 @@ class JobListingController extends Controller
         }
 
         // Check if user is at job posting limit for their subscription
-        if (!JobListing::canCreateJobListing($user)) {
-            return redirect()->back()->with('error', 'You have reached your job listing limit for your current subscription plan.');
+        if (!$user->canCreateJobListing()) {
+            return redirect()->route('employers.job-listings.index')->with('error', 'You have reached the job listing limit for your current subscription plan.');
         }
 
         $categories = JobListingCategory::all();
@@ -229,7 +229,7 @@ class JobListingController extends Controller
             return redirect()->back()->with('error', 'An error occurred while creating the job listing. Please try again.');
         }
 
-        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing created successfully.');
+        return redirect()->route('employers.job-listings.index')->with('success', 'Job listing created successfully.');
     }
 
     public function employerUpdateJobListing(Request $request, JobListing $jobListing)
@@ -258,7 +258,7 @@ class JobListingController extends Controller
 
         $jobListing->update($validatedData);
 
-        return redirect()->route('dashboard.job-listings.index')->with('success', 'Job listing updated successfully.');
+        return redirect()->route('employers.job-listings.index')->with('success', 'Job listing updated successfully.');
     }
 
     public function employerDestroyJobListing(JobListing $jobListing)
@@ -267,7 +267,7 @@ class JobListingController extends Controller
 
         $jobListing->delete();
 
-        return redirect()->route('dashboard.job-listings.index')
+        return redirect()->route('employers.job-listings.index')
             ->with('success', 'Job listing deleted successfully.');
     }
 

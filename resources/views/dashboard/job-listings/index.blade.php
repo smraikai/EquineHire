@@ -49,9 +49,9 @@
                                         <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <a href="{{ route('jobs.show', ['job_slug' => Str::slug($jobListing->title), 'id' => $jobListing->id]) }}"
                                                 class="mr-2 text-indigo-600 hover:text-indigo-900">View</a>
-                                            <a href="{{ route('dashboard.job-listings.edit', $jobListing->id) }}"
+                                            <a href="{{ route('employers.job-listings.edit', $jobListing->id) }}"
                                                 class="mr-2 text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            <form action="{{ route('dashboard.job-listings.destroy', $jobListing->id) }}"
+                                            <form action="{{ route('employers.job-listings.destroy', $jobListing->id) }}"
                                                 method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -70,7 +70,7 @@
                 @else
                     <div class="flex flex-col items-center p-6 bg-white border rounded-md">
                         <p class="text-sm text-gray-600">You haven't created any job listings yet.</p>
-                        <a href="{{ route('dashboard.job-listings.create') }}"
+                        <a href="{{ route('employers.job-listings.create') }}"
                             class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
                             <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create Job Listing
                         </a>
