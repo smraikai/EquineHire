@@ -61,15 +61,14 @@ class User extends Authenticatable
     ////////////////////////////////////////////////
     public function canCreateJobListing()
     {
-
-        // Define subscription
         $subscription = $this->subscriptions()
             ->where('stripe_status', 'active')
             ->latest()
             ->first();
 
+        // Use $subscription->type instead of $subscription->name
         $subscriptionType = $subscription ? $subscription->type : null;
-        // Set limits
+
         $limits = [
             'basic_plan' => 1,
             'pro_plan' => 5,
@@ -78,11 +77,15 @@ class User extends Authenticatable
 
         $currentCount = $this->jobListings()->count();
 
-        // Log the subscription type and current count
-        Log::info('Subscription Type: ' . $subscriptionType);
-        Log::info('Current Job Listings Count: ' . $currentCount);
+        Log::info('User ID: ' . $this->id);
+        Log::info('Subscription: ', ['type' => $subscriptionType, 'status' => $subscription ? $subscription->stripe_status : 'None']);
+        Log::info('Job Listings: ', ['count' => $currentCount, 'raw' => $this->jobListings()->pluck('id')->toArray()]);
+        Log::info('Limit: ' . ($limits[$subscriptionType] ?? 0));
 
-        return $currentCount < ($limits[$subscriptionType] ?? 0);
+        // Add a default limit for users with active subscriptions but unknown plan
+        $limit = $limits[$subscriptionType] ?? ($subscription ? 1 : 0);
+
+        return $currentCount < $limit;
     }
 
 }

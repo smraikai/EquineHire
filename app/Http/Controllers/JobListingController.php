@@ -178,6 +178,7 @@ class JobListingController extends Controller
 
         $categories = JobListingCategory::all();
         $states = $this->getStates();
+        $jobListing = new JobListing();
         return view('dashboard.job-listings.create', compact('categories', 'states'));
     }
 

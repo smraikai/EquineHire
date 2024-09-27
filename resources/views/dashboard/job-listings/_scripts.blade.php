@@ -6,39 +6,6 @@
     @include('partials.scripts._quill_editor', [
         'placeholder' => 'Describe the job role, responsibilities, qualifications, and any other relevant details',
     ])
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            FilePond.registerPlugin(FilePondPluginFileValidateType);
-            FilePond.registerPlugin(FilePondPluginImagePreview);
-
-            const inputElement = document.querySelector('input[type="file"]');
-            const pond = FilePond.create(inputElement, {
-                acceptedFileTypes: ['image/*'],
-                allowMultiple: true,
-                maxFiles: 5,
-                server: {
-                    process: {
-                        url: '/upload',
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    },
-                    revert: '/delete-additional-photo',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                }
-            });
-
-            // Add form submission logging
-            const form = document.querySelector('form');
-            form.addEventListener('submit', function(event) {
-                console.log('Form submitted');
-            });
-        });
-    </script>
-
     <!-- Scripts for Job Listing Forms -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -148,6 +115,5 @@
             toggleLocationFields();
         });
     </script>
-
     <!-- End Scripts for Job Listing -->
 @endsection

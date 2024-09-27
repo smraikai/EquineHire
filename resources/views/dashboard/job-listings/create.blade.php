@@ -6,6 +6,7 @@
 @endphp
 
 @section('content')
+    @include('dashboard.job-listings._listing-strength')
     <div class="container py-12 mx-auto sm:py-24">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <form action="{{ route('employers.job-listings.store') }}" method="POST" enctype="multipart/form-data"

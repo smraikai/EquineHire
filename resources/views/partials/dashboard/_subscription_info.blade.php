@@ -55,6 +55,7 @@
             ->map(function ($sub) {
                 return [
                     'name' => $sub->name,
+                    'type' => $sub->type,
                     'stripe_status' => $sub->stripe_status,
                     'stripe_id' => $sub->stripe_id,
                 ];
@@ -62,6 +63,7 @@
         'active_subscription' => $activeSubscription
             ? [
                 'name' => $activeSubscription->name,
+                'type' => $activeSubscription->type,
                 'stripe_status' => $activeSubscription->stripe_status,
                 'stripe_id' => $activeSubscription->stripe_id,
             ]
