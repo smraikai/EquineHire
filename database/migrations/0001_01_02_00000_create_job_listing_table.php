@@ -20,12 +20,12 @@ return new class extends Migration {
             $table->string('state')->nullable();
             $table->string('job_type');
             $table->string('experience_required');
-            $table->string('salary_type');
+            $table->string('salary_type')->nullable();
             $table->decimal('hourly_rate_min', 10, 2)->nullable();
             $table->decimal('hourly_rate_max', 10, 2)->nullable();
             $table->decimal('salary_range_min', 12, 2)->nullable();
             $table->decimal('salary_range_max', 12, 2)->nullable();
-            $table->string('application_type');
+            $table->string('application_type')->nullable();
             $table->string('application_link')->nullable();
             $table->string('email_link')->nullable();
             $table->boolean('is_active')->default(true);

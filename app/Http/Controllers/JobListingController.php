@@ -206,7 +206,7 @@ class JobListingController extends Controller
             'state' => 'nullable|required_if:remote_position,0|string|size:2|in:' . implode(',', array_keys($this->getStates())),
             'job_type' => 'required|in:full-time,part-time,contract,temporary',
             'experience_required' => 'required|in:0-1 Years,1-2 Years,2-5 Years,5+ Years',
-            'salary_type' => 'required|in:hourly,annual',
+            'salary_type' => 'nullable|in:hourly,annual',
             'hourly_rate_min' => 'required_if:salary_type,hourly|nullable|numeric|min:10|max:100',
             'hourly_rate_max' => 'required_if:salary_type,hourly|nullable|numeric|min:15|max:200|gt:hourly_rate_min',
             'salary_range_min' => 'required_if:salary_type,annual|nullable|numeric|min:10000|max:100000',

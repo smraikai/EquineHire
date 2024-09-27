@@ -104,6 +104,7 @@ class JobListing extends Model
     {
         return [
             'attributesForFaceting' => [
+                'searchable(city)',
                 'searchable(state)',
                 'job_type',
                 'experience_required',

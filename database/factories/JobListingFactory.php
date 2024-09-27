@@ -28,7 +28,7 @@ class JobListingFactory extends Factory
             'state' => $this->faker->state,
             'job_type' => $this->faker->randomElement(['Full-time', 'Part-time', 'Contract', 'Temporary']),
             'experience_required' => $this->faker->randomElement(['Entry', 'Intermediate', 'Senior', 'Executive']),
-            'salary_type' => $this->faker->randomElement(['Hourly', 'Annual']),
+            'salary_type' => $this->faker->randomElement(['Hourly', 'Salary']),
             'hourly_rate_min' => $this->faker->randomFloat(2, 10, 100),
             'hourly_rate_max' => $this->faker->randomFloat(2, 100, 200),
             'salary_range_min' => $this->faker->numberBetween(20000, 50000),

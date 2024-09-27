@@ -29,7 +29,7 @@
                     hourlyRateMaxInput.required = true;
                     salaryRangeMinInput.required = false;
                     salaryRangeMaxInput.required = false;
-                } else if (selectedSalaryType === 'annual') {
+                } else if (selectedSalaryType === 'salary') {
                     hourlyRateFields.style.display = 'none';
                     annualSalaryFields.style.display = 'grid';
                     hourlyRateMinInput.required = false;

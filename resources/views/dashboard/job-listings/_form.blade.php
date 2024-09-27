@@ -163,8 +163,8 @@
             <option value="">Select Salary Type</option>
             <option value="hourly"
                 {{ old('salary_type', $jobListing->salary_type ?? '') == 'hourly' ? 'selected' : '' }}>Hourly</option>
-            <option value="annual"
-                {{ old('salary_type', $jobListing->salary_type ?? '') == 'annual' ? 'selected' : '' }}>Annual</option>
+            <option value="salary"
+                {{ old('salary_type', $jobListing->salary_type ?? '') == 'salary' ? 'selected' : '' }}>Salary</option>
         </select>
         @error('salary_type')
             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
