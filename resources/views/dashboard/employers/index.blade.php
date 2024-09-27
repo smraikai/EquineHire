@@ -45,8 +45,8 @@
                         <label class="block text-sm font-medium text-gray-700">Website</label>
                         @if ($employer->website)
                             <div class="block w-full mt-1 bg-gray-100 border rounded-md">
-                                <p class="px-3 py-2 text-blue-500">
-                                    <a href="{{ $employer->website }}">{{ $employer->website }}</a>
+                                <p class="px-3 py-2">
+                                    {{ $employer->website }}
                                 </p>
                             @else
                                 <div class="block w-full mt-1">
@@ -77,8 +77,12 @@
                     @endif
                 </div>
 
-                <!-- Edit Button -->
-                <div class="flex justify-end">
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-4">
+                    <a href="{{ route('employers.show', $employer->id) }}"
+                        class="inline-flex items-center px-4 py-2 text-sm font-bold text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        View Profile
+                    </a>
                     <a href="{{ route('employers.edit', $employer->id) }}"
                         class="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Edit Profile

@@ -48,7 +48,7 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
 
     // Employer Routes
-    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
+    Route::get('/employers', [EmployerController::class, 'employerProfileIndex'])->name('employers.index');
     Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
     Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
 

@@ -62,7 +62,7 @@ class EmployerController extends Controller
     //////////////////////////////////////////////////////////
     // Employer Profile: Views
     //////////////////////////////////////////////////////////
-    public function profileIndex()
+    public function employerProfileIndex()
     {
         $user = auth()->user();
         $employer = $user->employer;
