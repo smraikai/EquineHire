@@ -125,6 +125,7 @@ Route::middleware('auth')->group(function () {
 ////////////////////////////////////////////////////////////////////
 Route::get('/subscription', [SubscriptionController::class, 'showPlans'])->name('subscription.plans');
 Route::post('/subscription/store-plan', [SubscriptionController::class, 'storePlan'])->name('subscription.store-plan');
+Route::get('/subscription/success', [SubscriptionController::class, 'handleSuccessfulSubscription'])->name('subscription.success');
 Route::middleware('auth')->group(function () {
     Route::get('/subscription/select', [SubscriptionController::class, 'showSubscriptionSelection'])->name('subscription.select');
     Route::match(['get', 'post'], '/subscription/checkout', [SubscriptionController::class, 'initiateCheckout'])->name('subscription.checkout');

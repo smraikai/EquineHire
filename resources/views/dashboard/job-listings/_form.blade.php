@@ -15,7 +15,7 @@
             class="text-red-500">*</span></label>
     <input type="text" name="title" id="title"
         class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('title') border-red-500 @enderror"
-        value="{{ old('title', $jobListing->title ?? '') }}" required>
+        value="{{ old('title', $jobListing->title ?? '') }}" placeholder="Enter job title" required>
     @error('title')
         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
     @enderror

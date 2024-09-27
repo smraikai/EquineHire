@@ -78,21 +78,35 @@
             // Initialize the data layer if it doesn't exist
             window.dataLayer = window.dataLayer || [];
 
-            // Push data to the data layer
-            window.dataLayer.push({
+            // Prepare the data object
+            let purchaseData = {
                 'event': 'purchase',
-                'transaction_id': '{{ $subscription->id }}',
-                'value': {{ $amount }},
-                'currency': 'USD',
-                'items': [{
+                'currency': 'USD'
+            };
+
+            @if (isset($subscription))
+                purchaseData.transaction_id = '{{ $subscription->id }}';
+                purchaseData.subscription_id = '{{ $subscription->id }}';
+                purchaseData.items = [{
                     'item_name': '{{ $subscription->name }}',
                     'item_category': 'Subscription',
-                    'quantity': 1,
-                    'price': {{ $amount }}
-                }],
-                'subscription_id': '{{ $subscription->id }}',
-                'user_id': '{{ Auth::id() }}'
-            });
+                    'quantity': 1
+                }];
+            @endif
+
+            @if (isset($amount))
+                purchaseData.value = {{ $amount }};
+                if (purchaseData.items && purchaseData.items[0]) {
+                    purchaseData.items[0].price = {{ $amount }};
+                }
+            @endif
+
+            @if (Auth::check())
+                purchaseData.user_id = '{{ Auth::id() }}';
+            @endif
+
+            // Push data to the data layer
+            window.dataLayer.push(purchaseData);
         </script>
     @endif
 

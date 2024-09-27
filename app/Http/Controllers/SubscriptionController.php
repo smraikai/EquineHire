@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionController extends Controller
 {
@@ -30,16 +31,16 @@ class SubscriptionController extends Controller
 
             $cancelUrl = $request->headers->get('referer') ?? route('subscription.plans');
 
-            $checkoutBuilder = $user->newSubscription($planName, $planId)
-                ->allowPromotionCodes();
-
             if (!$planId) {
                 return redirect()->route('subscription.plans')->with('error', 'Please select a plan first.');
             }
 
+            $checkoutBuilder = $user->newSubscription($planName, $planId)
+                ->allowPromotionCodes();
+
             try {
                 $checkout = $checkoutBuilder->checkout([
-                    'success_url' => route('dashboard.employers.index', ['session_id' => '{CHECKOUT_SESSION_ID}', 'plan' => $planId, 'subscription_completed' => true]),
+                    'success_url' => route('subscription.success', ['session_id' => '{CHECKOUT_SESSION_ID}', 'plan' => $planId]),
                     'cancel_url' => $cancelUrl,
                 ]);
 
@@ -52,7 +53,45 @@ class SubscriptionController extends Controller
         } else {
             return redirect()->route('login')->with('error', 'Please log in to subscribe.');
         }
+    }
 
+    public function handleSuccessfulSubscription(Request $request)
+    {
+        $user = $request->user();
+        $newPlanId = $request->input('plan');
+
+        // Retrieve the new subscription
+        $newSubscription = $user->subscriptions()->where('stripe_price', $newPlanId)->latest()->first();
+
+        if (!$newSubscription) {
+            Log::error('New subscription not found', [
+                'user_id' => $user->id,
+                'plan_id' => $newPlanId,
+            ]);
+            return redirect()->route('dashboard.employers.index')->with('error', 'Subscription update failed. Please contact support.');
+        }
+
+        // Cancel any other active subscriptions
+        foreach ($user->subscriptions as $subscription) {
+            if ($subscription->id !== $newSubscription->id && $subscription->active()) {
+                try {
+                    $subscription->cancelNow();
+                    Log::info('Cancelled additional subscription', [
+                        'user_id' => $user->id,
+                        'old_subscription_id' => $subscription->id,
+                        'new_subscription_id' => $newSubscription->id,
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to cancel subscription', [
+                        'user_id' => $user->id,
+                        'subscription_id' => $subscription->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('dashboard.employers.index', ['subscription_completed' => true]);
     }
 
     public function handleIncompletePayment(Request $request)

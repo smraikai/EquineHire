@@ -25,7 +25,7 @@ class SubscriptionCheck
     private function hasActiveSubscription($user): bool
     {
         $hasActiveSubscription = $user->subscriptions()
-            ->whereIn('stripe_status', ['active', 'trialing'])
+            ->whereIn('stripe_status', ['active'])
             ->exists();
 
         return $hasActiveSubscription;
