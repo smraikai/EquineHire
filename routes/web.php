@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 // Middleware
 use App\Http\Middleware\SubscriptionCheck;
-use App\Http\Middleware\ClearDraftsMiddleware;
-// Models
-use App\Models\BusinessDiscipline;
+
 
 ////////////////////////////////////////////////////////////////////
 // Main Public Pages
@@ -38,18 +36,59 @@ Route::get('/terms-of-service', function () {
     return view('terms_of_service');
 })->name('terms-of-service');
 
-////////////////////////////////////////////////////////////////////
-// Annual Discount
-////////////////////////////////////////////////////////////////////
-Route::get('/eh-offer', function (Request $request) {
-    if (Auth::check()) {
-        return app(RegisteredUserController::class)->handleLoggedInDiscount($request);
-    }
-    return app(RegisteredUserController::class)->createWithDiscount();
-})->name('eh.offer');
 
-Route::get('/eh-checkout', [SubscriptionController::class, 'checkoutAnnualDiscount'])
-    ->name('eh.checkout');
+////////////////////////////////////////////////////////////////////
+// Subscriber-Only Routes
+////////////////////////////////////////////////////////////////////
+Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
+
+    //////////////////////////////////////
+    // Employers
+    //////////////////////////////////////
+    Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
+
+    // Employer Routes
+    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
+    Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
+    Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
+
+    // More specific employer routes
+    Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])->name('employers.edit');
+    Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
+    Route::delete('/employers/{employer}', [EmployerController::class, 'destroy'])->name('employers.destroy');
+
+    // Image Handling for Employers
+    Route::post('/upload/delete', [UploadController::class, 'deleteFile'])->name('upload.delete');
+    Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
+    Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
+
+    //////////////////////////////////////
+    // Job Listings
+    //////////////////////////////////////
+    Route::prefix('dashboard/job-listings')->name('dashboard.job-listings.')->group(function () {
+        Route::get('/', [JobListingController::class, 'employerJobListings'])->name('index');
+        Route::get('/create', [JobListingController::class, 'employerCreateJobListing'])->name('create');
+        Route::post('/', [JobListingController::class, 'employerStoreJobListing'])->name('store');
+        Route::get('/{jobListing}/edit', [JobListingController::class, 'employerEditJobListing'])->name('edit');
+        Route::put('/{jobListing}', [JobListingController::class, 'employerUpdateJobListing'])->name('update');
+        Route::delete('/{jobListing}', [JobListingController::class, 'employerDestroyJobListing'])->name('destroy');
+    });
+
+
+    //////////////////////////////////////
+    // Candidates
+    //////////////////////////////////////
+
+
+    //////////////////////////////////////
+    /// Business Analytics Route
+    //////////////////////////////////////
+    Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
+        ->name('business.analytics')
+        ->middleware('auth');
+
+
+});
 
 ////////////////////////////////////////////////////////////////////
 // Blog Pages
@@ -95,38 +134,6 @@ Route::middleware('auth')->group(function () {
     })->name('billing');
 });
 
-////////////////////////////////////////////////////////////////////
-// Subscriber-Only Routes
-////////////////////////////////////////////////////////////////////
-Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
-
-    //////////////////////////////////////
-    // Employers
-    //////////////////////////////////////
-
-    Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
-
-    // Employer Routes
-    Route::get('/employers', [EmployerController::class, 'profileIndex'])->name('employers.index');
-    Route::get('/employers/create', [EmployerController::class, 'create'])->name('employers.create');
-    Route::post('/employers', [EmployerController::class, 'store'])->name('employers.store');
-    Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])->name('employers.edit');
-    Route::put('/employers/{employer}', [EmployerController::class, 'update'])->name('employers.update');
-    Route::delete('/employers/{employer}', [EmployerController::class, 'destroy'])->name('employers.destroy');
-
-    // Image Handling for Employers
-    Route::post('/upload/delete', [UploadController::class, 'deleteFile'])->name('upload.delete');
-    Route::post('/upload/featured-image', [UploadController::class, 'uploadFeaturedImage'])->name('upload.featured_image');
-    Route::post('/upload/logo', [UploadController::class, 'uploadLogo'])->name('upload.logo');
-
-
-    //////////////////////////////////////
-    // Candidates
-    //////////////////////////////////////
-
-
-});
-
 
 ////////////////////////////////////////////////////////////////////
 // API Routes for Searchable Categories and Disciplines
@@ -138,45 +145,6 @@ Route::get('/categories', function () {
 });
 
 ////////////////////////////////////////////////////////////////////
-// Trial Signup
-////////////////////////////////////////////////////////////////////
-Route::get('/trial', [SubscriptionController::class, 'trialSignup'])->name('trial.signup');
-
-////////////////////////////////////////////////////////////////////
 // Stripe
 ////////////////////////////////////////////////////////////////////
 Route::post('stripe/webhook', '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook');
-
-////////////////////////////////////////////////////////////////////
-/// Business Analytics Route
-////////////////////////////////////////////////////////////////////
-Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
-    ->name('business.analytics')
-    ->middleware('auth');
-
-////////////////////////////////////////////////////////////////////
-// Check Processing Status for Business Updates
-////////////////////////////////////////////////////////////////////
-Route::get('/check-processing-status/{business}', [EmployerController::class, 'checkProcessingStatus'])->name('business.check-status');
-
-// Job Listing Dashboard Routes
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::prefix('dashboard/job-listings')->name('dashboard.job-listings.')->group(function () {
-        Route::get('/', [JobListingController::class, 'employerJobListings'])->name('index');
-        Route::get('/create', [JobListingController::class, 'employerCreateJobListing'])->name('create');
-        Route::post('/', [JobListingController::class, 'employerStoreJobListing'])->name('store');
-        Route::get('/{jobListing}/edit', [JobListingController::class, 'employerEditJobListing'])->name('edit');
-        Route::put('/{jobListing}', [JobListingController::class, 'employerUpdateJobListing'])->name('update');
-        Route::delete('/{jobListing}', [JobListingController::class, 'employerDestroyJobListing'])->name('destroy');
-    });
-});
-
-//////////////////////////////////////////////////////////
-// Employer Routes
-//////////////////////////////////////////////////////////
-Route::middleware(['auth'])->group(function () {
-
-
-
-
-});

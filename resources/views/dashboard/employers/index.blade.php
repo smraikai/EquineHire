@@ -84,16 +84,15 @@
                         Edit Profile
                     </a>
                 </div>
+            @else
+                <div class="flex flex-col items-center p-6 bg-white border rounded-md">
+                    <p class="text-sm text-gray-600">You don't have an employer profile yet.</p>
+                    <a href="{{ route('employers.create') }}"
+                        class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
+                        <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create Employer Profile
+                    </a>
+                </div>
+            @endif
         </div>
-    @else
-        <div class="flex flex-col items-center p-6 bg-white border rounded-md">
-            <p class="text-sm text-gray-600">You don't have an employer profile yet.</p>
-            <a href="{{ route('employers.create') }}"
-                class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
-                <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create Employer Profile
-            </a>
-        </div>
-        @endif
-    </div>
     </div>
 @endsection

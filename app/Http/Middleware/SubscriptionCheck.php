@@ -13,16 +13,21 @@ class SubscriptionCheck
         $user = $request->user();
 
         if (!$user) {
-            \Log::warning('SubscriptionCheck: No authenticated user');
             return redirect()->route('login');
         }
-
-        if (!$user->subscribed('default')) {
-            \Log::info("User {$user->id} is not subscribed, redirecting to subscription page");
+        if (!$this->hasActiveSubscription($user)) {
             return redirect()->route('subscription.plans');
         }
 
-        \Log::info("User {$user->id} passed subscription check");
         return $next($request);
+    }
+
+    private function hasActiveSubscription($user): bool
+    {
+        $hasActiveSubscription = $user->subscriptions()
+            ->whereIn('stripe_status', ['active', 'trialing'])
+            ->exists();
+
+        return $hasActiveSubscription;
     }
 }

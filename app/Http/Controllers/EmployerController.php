@@ -58,7 +58,6 @@ class EmployerController extends Controller
     //////////////////////////////////////////////////////////
     // Employer Profile: Views
     //////////////////////////////////////////////////////////
-
     public function profileIndex()
     {
         $user = auth()->user();
@@ -67,22 +66,14 @@ class EmployerController extends Controller
         return view('dashboard.employers.index', compact('employer'));
     }
 
-    public function create(Request $request)
+    public function create()
     {
+
         $this->authorize('create', Employer::class);
 
-        $employer = Employer::create([
-            'user_id' => auth()->id(),
-            'name' => '',
-            'description' => '',
-            'website' => '',
-            'city' => '',
-            'state' => '',
-            'logo' => '',
-        ]);
-
-        return redirect()->route('employers.edit', $employer)
-            ->with('info', 'New employer profile created. Please complete the details.');
+        $employer = new Employer(); // Initialize an empty Employer model
+        $states = $this->getStates();
+        return view('dashboard.employers.create', compact('employer', 'states'));
     }
 
     public function edit(Request $request, Employer $employer)
@@ -92,43 +83,51 @@ class EmployerController extends Controller
         $states = $this->getStates();
         return view('dashboard.employers.edit', compact('employer', 'states'));
     }
+
     //////////////////////////////////////////////////////////
     // Emplower Profile: Edit, Update, Destroy
     //////////////////////////////////////////////////////////
     public function store(Request $request)
     {
+        $this->authorize('create', Employer::class);
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'website' => 'nullable|url',
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'logo' => 'nullable|image|max:2048',
+            'state' => 'required|string|max:2',
+            'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
+            'logo_path' => 'nullable|string',
+            'featured_image_path' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $employer = new Employer($validatedData);
+            $employer = new Employer();
             $employer->user_id = auth()->id();
 
-            if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('employer_logos', 'public');
-                $employer->logo = $path;
+            if ($request->filled('logo_path')) {
+                $employer->logo = $validatedData['logo_path'];
             }
 
+            if ($request->filled('featured_image_path')) {
+                $employer->featured_image = $validatedData['featured_image_path'];
+            }
+
+            $employer->fill($validatedData);
             $employer->save();
 
-            $this->handlePhotos($request, $employer);
-
             DB::commit();
-            return redirect()->route('employers.show', $employer)->with('success', 'Employer profile created successfully.');
+            return redirect()->route('employers.index', $employer)
+                ->with('success', 'New employer profile created successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Error creating employer profile: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while creating the employer profile.');
         }
     }
-
     public function update(Request $request, Employer $employer)
     {
         $this->authorize('update', $employer);

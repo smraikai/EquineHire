@@ -145,11 +145,10 @@ class JobListingController extends Controller
     }
 
     ////////////////////////////////////////////////////////////////
-    // Employer Dashboard – Job Listing: Views
+    // Employer – Job Listing: Views
     ////////////////////////////////////////////////////////////////
     public function employerJobListings()
     {
-
         // Define User
         $user = auth()->user();
 
