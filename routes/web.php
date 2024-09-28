@@ -6,7 +6,6 @@ use App\Http\Controllers\JobListingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\NewsletterController;
 
