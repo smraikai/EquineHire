@@ -4,7 +4,7 @@
             <div class="grid grid-cols-1 gap-5 sm:gap-20 lg:grid-cols-2">
                 <div class="flex flex-col justify-center">
                     <div class="space-y-4">
-                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Get Job Notifications
+                        <h2 class="text-3xl tracking-tight text-gray-900 fancy-title sm:text-5xl">Get Job Notifications
                         </h2>
                         <x-divider class="" />
                         <p class="max-w-lg text-lg leading-8 text-gray-600">Discover new job openings in the equestrian
