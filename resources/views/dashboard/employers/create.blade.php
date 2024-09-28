@@ -11,7 +11,7 @@
     <div class="container relative py-12 mx-auto sm:py-24">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <form action="{{ route('employers.store') }}" method="POST" enctype="multipart/form-data"
-                class="p-6 bg-white rounded-lg shadow-sm">
+                class="p-6 m-4 bg-white rounded-lg shadow-sm sm:m-0">
                 @csrf
                 @include('dashboard.employers._form')
             </form>

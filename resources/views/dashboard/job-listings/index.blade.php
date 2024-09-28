@@ -10,8 +10,8 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             @if (auth()->user()->employer)
                 @if ($jobListings->isNotEmpty())
-                    <div class="px-4 sm:px-6 lg:px-8">
-                        <div class="sm:flex sm:items-center sm:justify-between">
+                    <div class="flex flex-col gap-5 px-4 sm:px-6 lg:px-8">
+                        <div class="order-2 sm:order-1 sm:flex sm:items-center sm:justify-between">
                             <div class="flex justify-end">
                                 <a href="{{ route('employers.job-listings.create') }}"
                                     class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -24,8 +24,8 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="flow-root mt-8">
-                            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="order-1 flow-root sm:order-2">
+                            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                                         <table class="min-w-full divide-y divide-gray-300">
@@ -91,7 +91,7 @@
                                                                 </span>
                                                             @else
                                                                 <button onclick="openBoostModal({{ $jobListing->id }})"
-                                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 transition-colors duration-200 ease-in-out">
+                                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 transition-colors duration-200 ease-in-out min-w-[150px]">
                                                                     <x-heroicon-o-rocket-launch class="w-4 h-4 mr-1.5" />
                                                                     Boost My Listing
                                                                 </button>

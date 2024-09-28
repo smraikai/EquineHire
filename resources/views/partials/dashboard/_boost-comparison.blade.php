@@ -15,13 +15,13 @@
                         </div>
                         <div class="flex-grow min-w-0">
                             <div class="flex items-center">
-                                <h3 class="text-base font-semibold text-gray-900 truncate">Senior Developer</h3>
+                                <h3 class="text-base font-semibold text-gray-900 truncate">Head Trainer</h3>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
                                     Featured
                                 </span>
                             </div>
-                            <p class="text-sm text-gray-500 truncate">XYZ Tech | Full-time</p>
+                            <p class="text-sm text-gray-500 truncate">XYZ Farm | Full-time</p>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                             <span class="text-base font-semibold sm:text-lg">AB</span>
                         </div>
                         <div class="flex-grow min-w-0">
-                            <h3 class="text-base font-semibold text-gray-900 truncate">Software Engineer</h3>
+                            <h3 class="text-base font-semibold text-gray-900 truncate">Barn Manager</h3>
                             <p class="text-sm text-gray-500 truncate">ABC Company | Full-time</p>
                         </div>
                     </div>

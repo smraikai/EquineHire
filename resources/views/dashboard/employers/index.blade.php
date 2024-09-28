@@ -10,7 +10,7 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
             @if ($employer)
-                <div class="p-6 bg-white rounded-lg shadow-sm">
+                <div class="p-6 m-4 bg-white rounded-lg shadow-sm sm:m-0">
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700">Employer Name</label>
                         <div class="block w-full mt-1 bg-gray-100 border rounded-md">
