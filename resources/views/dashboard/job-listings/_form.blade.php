@@ -123,8 +123,21 @@
                 {{ old('job_type', $jobListing->job_type ?? '') == 'part-time' ? 'selected' : '' }}>Part Time</option>
             <option value="contract"
                 {{ old('job_type', $jobListing->job_type ?? '') == 'contract' ? 'selected' : '' }}>Contract</option>
-            <option value="temporary"
-                {{ old('job_type', $jobListing->job_type ?? '') == 'temporary' ? 'selected' : '' }}>Temporary</option>
+            <option value="temp" {{ old('job_type', $jobListing->job_type ?? '') == 'temp' ? 'selected' : '' }}>
+                Temporary</option>
+            <option value="freelance"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'freelance' ? 'selected' : '' }}>Freelance</option>
+            <option value="internship"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'internship' ? 'selected' : '' }}>Internship
+            </option>
+            <option value="externship"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'externship' ? 'selected' : '' }}>Externship
+            </option>
+            <option value="seasonal"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'seasonal' ? 'selected' : '' }}>Seasonal</option>
+            <option value="working-student"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'working-student' ? 'selected' : '' }}>Working
+                Student</option>
         </select>
         @error('job_type')
             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

@@ -8,6 +8,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\JobListingBoostController;
 
 // Classes
 use App\Models\JobListingCategory;
@@ -73,6 +74,13 @@ Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
         Route::put('/{jobListing}', [JobListingController::class, 'employerUpdateJobListing'])->name('update');
         Route::delete('/{jobListing}', [JobListingController::class, 'employerDestroyJobListing'])->name('destroy');
     });
+
+    // Job Boosts
+    Route::post('/job-listings/{jobListing}/boost', [JobListingBoostController::class, 'boost'])
+        ->middleware(['auth'])
+        ->name('job-listings.boost');
+    Route::get('/job-listing/{jobListing}/boost/success', [JobListingBoostController::class, 'handleSuccessfulBoost'])
+        ->name('job-listing.boost.success');
 
 
     //////////////////////////////////////
