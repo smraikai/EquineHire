@@ -40,6 +40,10 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
+    'emailoctopus' => [
+        'list_id' => env('EMAILOCTOPUS_LIST_ID'),
+        'api_key' => env('EMAILOCTOPUS_API_KEY'),
+    ],
     's3' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),

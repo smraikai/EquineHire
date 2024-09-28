@@ -88,5 +88,5 @@
         </div>
     </section>
 
-    @include('partials.footer_cta')
+    @include('partials.cta.job-alerts')
 @endsection

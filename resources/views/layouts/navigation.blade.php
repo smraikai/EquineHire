@@ -14,30 +14,6 @@
             </div>
             <!-- Navigation Links -->
             <div class="items-center hidden space-x-6 lg:flex">
-                <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open"
-                        class="inline-flex items-center px-2 py-2 {{ Route::currentRouteName() === 'home' ? 'text-white hover:text-gray-300' : 'text-gray-700 hover:text-gray-500' }} bg-transparent focus:outline-none">
-                        About
-                        <svg class="w-5 h-5 ml-2 -mr-1 transition-transform duration-200"
-                            :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                            fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    <div x-show="open" x-cloak @click.away="open = false"
-                        x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="transform opacity-0 scale-95"
-                        x-transition:enter-end="transform opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-75"
-                        x-transition:leave-start="transform opacity-100 scale-100"
-                        x-transition:leave-end="transform opacity-0 scale-95"
-                        class="absolute z-10 w-48 py-1 mt-2 bg-white rounded-md shadow-lg">
-                        <a href="/our-story" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Our
-                            Story</a>
-                    </div>
-                </div>
 
                 <a href="{{ route('jobs.index') }}"
                     class="inline-flex items-center px-2 py-2 {{ Route::currentRouteName() === 'home' ? 'text-white hover:text-gray-300' : 'text-gray-700 hover:text-gray-500' }} bg-transparent  focus:outline-none focus:text-gray-500">
@@ -133,22 +109,6 @@
                     Find Jobs
                 </a>
 
-                <div x-data="{ open: false }">
-                    <button @click="open = !open"
-                        class="flex items-center w-full text-2xl text-gray-700 hover:text-gray-900">
-                        About
-                        <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': open }"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    <div x-show="open" class="mt-2 space-y-2">
-                        <a href="/our-story" class="block text-xl text-gray-600 hover:text-gray-900">Our Story</a>
-                    </div>
-                </div>
-
                 <a href="{{ route('blog.index') }}" class="block text-2xl text-gray-700 hover:text-gray-900">
                     Blog
                 </a>
@@ -181,9 +141,8 @@
 
     <!-- Mobile Search Overlay -->
     <div x-show="searchOpen" x-cloak x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform scale-95"
-        x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100"
         x-transition:leave-end="opacity-0 transform scale-95"
         class="absolute left-0 right-0 z-50 mx-4 bg-white rounded-lg shadow-lg top-20">
         <div class="w-full p-4 border rounded-lg">

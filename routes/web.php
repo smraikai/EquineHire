@@ -8,6 +8,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\NewsletterController;
 
 // Classes
 use App\Models\JobListingCategory;
@@ -137,13 +138,15 @@ Route::middleware('auth')->group(function () {
 
 
 ////////////////////////////////////////////////////////////////////
-// API Routes for Searchable Categories and Disciplines
+// API Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/categories', function () {
     return Cache::remember('categories', 60 * 60, function () {
         return JobListingCategory::all();
     });
 });
+
+Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
 
 ////////////////////////////////////////////////////////////////////
 // Stripe

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.site')
 @php
     $metaTitle = ($post->get('metaTitle') ?? $post->get('title')) . ' | EquineHire';
     $metaDescription =
@@ -11,8 +11,7 @@
     <section class="pt-10 pb-10">
         <div class="px-4 mx-auto max-w-7xl lg:px-8">
             <div class="blog-post">
-                <a href="{{ route('blog.index') }}"
-                    class="text-sm font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                <a href="{{ route('blog.index') }}" class="text-sm font-semibold leading-6 text-blue-600 hover:text-blue-500">
                     <span aria-hidden="true">&larr;</span> Back to Blog
                 </a>
                 <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ $post->get('title') }}</h1>
@@ -27,11 +26,11 @@
         </div>
     </section>
 
-    @include('partials.footer_cta')
+    @include('partials.cta.job-alerts')
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "BlogPosting",
+            "@type": "Article",
             "headline": "{{ $post->get('title') }}",
             "image": "{{ $post->has('featuredImage') ? $post->get('featuredImage')->getFile()->getUrl() : '' }}",
             "author": {

@@ -96,153 +96,97 @@
                 @endforeach
             </div>
             <div class="mt-10 text-center">
-                <a href="{{ route('jobs.index') }}"
-                    class="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    View All Jobs
-                </a>
+                <x-buttons.primary href="{{ route('jobs.index') }}" text="View All Jobs" />
             </div>
         </div>
     </section>
 
-    <section class="relative px-4 py-8 bg-blue-50/35 md:py-12 lg:py-24 rounded-3xl z-1 md:px-0">
+    <section class="relative px-4 bg-blue-50 md:px-0">
         <div class="flex flex-col items-center justify-between max-w-screen-xl mx-auto md:gap-10 md:flex-row">
+            <div class="w-full mb-8 md:w-1/2 md:mb-0">
+                <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-a.webp" loading="lazy"
+                    alt="Equine veterinarian with a horse out in a field." class="w-full h-auto rounded-lg">
+            </div>
             <div class="flex flex-col justify-center w-full gap-5 md:w-1/2">
-                <h2 class="text-3xl md:text-5xl fancy-title">Saddle Up for Success</h2>
-                <p class="text-lg md:text-xl">Discover exciting equine jobs on EquineHire, ranging from training and riding
-                    to healthcare and breeding.
+                <h2 class="text-3xl md:text-5xl fancy-title">Find A Fullfilling Career</h2>
+                <x-divider class="self-start" />
+                <p class="text-lg md:text-xl">Find amazing career opportunities in the equine industry with EquineHire,
+                    ranging from training and
+                    riding to healthcare and breeding.
                 </p>
 
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <div class="flex items-start">
-                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <div class="flex-shrink-0 w-8 h-8 mr-4 text-blue-500">
+                            <x-heroicon-o-briefcase class="w-full h-full" />
+                        </div>
                         <div>
-                            <h3 class="text-lg font-semibold">Explore Jobs in the Horse Industry</h3>
+                            <h3 class="text-xl font-bold">Explore Jobs in the Horse Industry</h3>
                             <p class="text-gray-600">Browse exciting equine job opportunities.</p>
                         </div>
                     </div>
 
                     <div class="flex items-start">
-                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <div class="flex-shrink-0 w-8 h-8 mr-4 text-blue-500">
+                            <x-heroicon-o-magnifying-glass class="w-full h-full" />
+                        </div>
                         <div>
-                            <h3 class="text-lg font-semibold">Discover Your Perfect Fit</h3>
+                            <h3 class="text-xl font-bold">Discover Your Perfect Fit</h3>
                             <p class="text-gray-600">Use our search filters to find the exact job you are looking for.</p>
                         </div>
                     </div>
 
                     <div class="flex items-start">
-                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <div class="flex-shrink-0 w-8 h-8 mr-4 text-blue-500">
+                            <x-heroicon-o-rocket-launch class="w-full h-full" />
+                        </div>
                         <div>
-                            <h3 class="text-lg font-semibold">Get Noticed</h3>
+                            <h3 class="text-xl font-bold">Get Noticed</h3>
                             <p class="text-gray-600">Boost your application power with free career resources.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="w-full mb-8 md:w-1/2 md:mb-0">
-                <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-a.webp" loading="lazy"
-                    alt="Equine veterinarian with a horse out in a field." class="w-full h-auto rounded-lg">
-            </div>
-        </div>
-    </section>
-    <section class="px-4 py-24 bg-gray-50 md:px-8">
-        <div class="container mx-auto max-w-7xl">
-            <div class="flex flex-col gap-5">
-                <x-divider class="mx-auto" />
-                <h2 class="text-3xl text-center text-gray-800 md:text-5xl fancy-title">Explore a Variety of Equine Services
-                </h2>
-                <p class="max-w-4xl mx-auto text-lg text-center md:text-xl">Discover a comprehensive range of professional
-                    equine
-                    services, from veterinary care and farrier services to training programs and boarding facilities, all on
-                    one convenient platform.</p>
-                <div class="grid grid-cols-2 gap-4 mt-8 sm:gap-6 lg:grid-cols-4">
-                    <a href="{{ route('jobs.index', ['categories[]' => 5]) }}"
-                        class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_farrier.svg" alt="Farriers"
-                            loading="lazy" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
-                        <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
-                            Farriers
-                        </div>
-                    </a>
-                    <a href="{{ route('jobs.index', ['categories[]' => 14]) }}"
-                        class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_trainers.svg" alt="Trainers"
-                            loading="lazy" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
-                        <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
-                            Trainers
-                        </div>
-                    </a>
-                    <a href="{{ route('jobs.index', ['categories[]' => 1]) }}"
-                        class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_boarding_facilities.svg"
-                            loading="lazy" alt="Boarding Facilities" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
-                        <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
-                            Boarding Facilities
-                        </div>
-                    </a>
-                    <a href="{{ route('jobs.index', ['categories[]' => 6]) }}"
-                        class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg"
-                            loading="lazy" alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
-                        <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
-                            Riding Lessons
-                        </div>
-                    </a>
-                </div>
-
-                <div class="flex justify-center mt-8">
-                    <x-eqpf-btn-primary href="/explore" text="View All Jobs" />
-                </div>
 
             </div>
         </div>
     </section>
 
-    <section class="relative flex flex-col gap-10 px-4 py-24 mx-auto md:flex-row max-w-7xl md:py-16">
+
+    <section class="relative flex flex-col gap-10 px-4 mx-auto md:flex-row max-w-7xl">
         <div class="w-full mb-8 md:w-1/2 md:mb-0 md:order-2">
-            <img src="https://EquineHire-static-assets.s3.amazonaws.com/EquineHire_section_3.jpg" loading="lazy"
+            <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-c.webp" loading="lazy"
                 alt="Woman petting a horse's head." class="object-cover w-full h-64 md:h-full rounded-xl">
         </div>
         <div class="flex flex-col justify-center w-full gap-5 text-left md:w-1/2 md:order-1">
-            <x-divider class="self-start" />
+
             <h2 class="text-3xl md:text-5xl fancy-title">What is EquineHire?</h2>
-            <p class="text-lg font-bold text-gray-800 md:text-xl">Think of EquineHire as your one-stop resource for
-                all
-                your horse's needs.</p>
-            <p class="text-base text-gray-600 md:text-xl">Our extensive listings ensure you can find the most suitable
-                service
-                provider, regardless of your horse's specific requirements.</p>
-            <p class="text-base text-gray-600 md:text-xl">Whether you're seeking expert services or aiming to expand your
-                equine
-                business reach, EquineHire bridges the gap.</p>
-            <div class="flex flex-col mt-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <x-eqpf-btn-alt href="{{ route('subscription.plans') }}" text="Post a Job" />
-                <x-eqpf-btn-alt href="{{ route('jobs.index') }}" text="Search Jobs" />
+            <x-divider class="self-start" />
+            <p class="text-lg text-gray-800 md:text-xl">EquineHire is passionate about connecting passionate
+                equestrians with <strong>incredible equine jobs.</strong></p>
+            <p class="text-base text-gray-600 md:text-xl">Our mission is to create a <strong>seamless, user-friendly
+                    online platform</strong> where equine businesses can showcase their job openings, and job seekers can
+                <strong>effortlessly discover and engage with these opportunities.</strong>
+            </p>
+            <p class="text-base text-gray-600 md:text-xl">Whether you're looking to grow your team or find your dream job
+                in the equine world, EquineHire is your go-to platform for connecting talent with opportunity.</p>
+            <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                    <x-buttons.primary-outline href="{{ route('subscription.plans') }}" text="Post a Job" />
+                    <x-buttons.secondary-outline href="{{ route('jobs.index') }}" text="Find a Job" />
+                </div>
             </div>
         </div>
     </section>
 
-    {{-- 
-    <section class="py-24 bg-gray-50">
+    <section class="py-24">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex flex-col gap-5 text-center">
-                <x-divider class="mx-auto" />
                 <h2 class="text-3xl md:text-4xl fancy-title">
-                    Latest Blog Posts
+                    Top Articles for Equestrian Job Seekers
                 </h2>
+                <x-divider class="mx-auto" />
                 <p class="max-w-2xl mx-auto text-xl text-gray-500">
-                    Stay up to date with the latest news and insights from our blog.
+                    Discover expert tips on resume writing, interviewing, and salary negotiation for equestrians.
                 </p>
             </div>
             <div class="grid grid-cols-1 gap-8 mt-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -271,48 +215,6 @@
             </div>
         </div>
     </section>
---}}
 
-    <section class="px-4 py-24 bg-blue-50 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-7xl">
-            <div class="max-w-5xl mx-auto text-center">
-                <h2 class="mb-6 text-xl text-blue-900 sm:text-2xl md:text-2xl">
-                    "EquineHire is a game-changer for the equine industry. As a horse trainer, I'm thrilled about its
-                    potential to connect me with new clients and grow my business. The platform makes it incredibly easy for
-                    horse enthusiasts to find professionals like me. I highly recommend it to any equine professional
-                    looking to expand their client base!"
-                </h2>
-                <div class="mt-6">
-                    <img class="inline-block w-20 h-20 rounded-full sm:w-24 sm:h-24"
-                        src="https://EquineHire-static-assets.s3.amazonaws.com/dynamic-drassage-llc-min.jpg"
-                        alt="Dynamic Drassage owner riding a horse." />
-                    <p class="mt-4 text-base font-medium text-gray-900 sm:text-lg">Rebekah Mingari-Stought</p>
-                    <p class="text-sm text-gray-600 sm:text-base">Dynamic Dressage LLC</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section
-        class="relative flex flex-col md:flex-row max-h-full md:max-h-[675px] max-w-7xl mx-auto gap-10 px-4 py-24 md:py-16">
-        <div class="w-full mb-8 md:w-1/2 md:mb-0 md:order-2">
-            <img src="https://EquineHire-static-assets.s3.amazonaws.com/EquineHire_section_4.jpg" loading="lazy"
-                alt="Woman walking with a horse." class="object-cover w-full h-64 md:h-full rounded-xl aspect-square">
-        </div>
-        <div class="flex flex-col justify-center w-full gap-5 md:w-1/2 md:order-1">
-            <x-divider />
-            <div>
-                <span class="text-sm md:text-md fancy-subtitle">Attract New Clients</span>
-                <h2 class="mt-2 text-4xl md:text-6xl fancy-title">Join the EquineHire Network</h2>
-            </div>
-
-            <p class="text-lg text-gray-800 md:text-xl"><strong>Reach a network of dedicated horse owners actively seeking
-                    qualified
-                    professionals like you!</strong> Equine Finder Pro connects horse enthusiasts with the very best in
-                equine care.</p>
-            <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <x-eqpf-btn-primary href="{{ route('subscription.plans') }}" text="Post a Job" />
-                <x-eqpf-btn-outline href="{{ route('our.story') }}" text="Our Story" />
-            </div>
-        </div>
-    </section>
+    @include('partials.cta.job-alerts')
 @endsection
