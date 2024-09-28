@@ -9,9 +9,8 @@ return [
                 'price' => 50,
                 'interval' => 'month',
                 'features' => [
-                    '1 Job Post',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    '1 Concurrent Job Post',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
@@ -25,8 +24,7 @@ return [
                 'interval' => '3 months',
                 'features' => [
                     'Up to 5 Concurrent Job Posts',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
@@ -40,8 +38,7 @@ return [
                 'interval' => 'year',
                 'features' => [
                     'Unlimited Job Posts',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
