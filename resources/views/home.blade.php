@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 
-{{-- @php
+@php
     // Meta Tags
     $metaTitle = 'Find Equine Services Near You | EquineHire';
     $metaDescription =
@@ -17,18 +17,18 @@
     $latestPosts = $client->getEntries($query);
 
 @endphp
---}}
 
 @section('content')
-    <section class="relative min-h-[500px] md:min-h-[750px] flex">
+    <section class="relative min-h-[500px] md:min-h-[900px] flex">
         <!-- Image Hero Section -->
         <div class="absolute inset-0 z-0">
             <div class="relative w-full h-full">
-                <img src="{{ asset('images/home_hero.webp') }}" alt="Equine Hero Image" class="object-cover w-full h-full">
+                <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-vet.webp" alt="Equine Hero Image"
+                    class="object-cover w-full h-full">
             </div>
 
-            <div class="absolute inset-0 opacity-50 bg-gradient-to-b from-black to-transparent"></div>
-            <div class="absolute inset-0 opacity-70 bg-gradient-to-r from-black to-transparent"></div>
+            <div class="absolute inset-0 opacity-65 bg-gradient-to-b from-black to-transparent"></div>
+            <div class="absolute inset-0 opacity-65 bg-gradient-to-r from-black to-transparent"></div>
         </div>
 
         <div class="container relative flex items-center max-w-screen-xl px-4 mx-auto">
@@ -44,24 +44,115 @@
                 </div>
             </div>
         </div>
+        <!-- divider -->
+        <svg class="absolute bottom-0 w-full h-16 text-white md:h-24" preserveAspectRatio="none" viewBox="0 0 100 100">
+            <path d="M0,0 C50,100 80,100 100,0 L100,100 L0,100 Z" fill="currentColor"></path>
+        </svg>
+        <!-- /divider -->
     </section>
-    <section class="relative px-4 py-8 -mt-10 bg-white md:py-12 lg:py-24 rounded-3xl z-1 md:px-0">
 
-        <div class="flex flex-col items-center justify-between max-w-screen-xl mx-auto md:gap-10 md:flex-row">
-            <div class="w-full mb-8 md:w-1/2 md:mb-0">
-                <img src="https://EquineHire-static-assets.s3.amazonaws.com/equine_professionals.jpg" loading="lazy"
-                    alt="Equine veterinarian with a horse out in a field." class="w-full h-auto rounded-lg">
+    <section class="py-10 bg-white">
+        <div class="px-4 py-2 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <h3 class="mb-8 font-black tracking-widest text-center text-gray-600 uppercase text-md">Trusted By</h3>
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
+                <div class="flex justify-center col-span-1 md:col-span-2 lg:col-span-1">
+                    <img class="object-contain h-16 opacity-65 sm:h-20 md:h-24 filter grayscale"
+                        src="https://equinehire-static-assets.s3.amazonaws.com/cornell-vet.jpg" alt="Cornell Vet">
+                </div>
+                <div class="flex justify-center col-span-1 md:col-span-2 lg:col-span-1">
+                    <img class="object-contain h-16 opacity-65 sm:h-20 md:h-24 filter grayscale"
+                        src="https://equinehire.s3.amazonaws.com/eqh-old/WEC-Logo-no-background.gif" alt="WEC">
+                </div>
+                <div class="flex justify-center col-span-2 md:col-span-3 lg:col-span-1">
+                    <img class="object-contain h-16 opacity-65 sm:h-20 md:h-24 filter grayscale"
+                        src="https://equinehire-static-assets.s3.amazonaws.com/allison-springer-logo.jpg"
+                        alt="Allison Springer Logo">
+                </div>
+                <div class="flex justify-center col-span-1 md:col-span-3 lg:col-span-1">
+                    <img class="object-contain h-16 opacity-65 sm:h-20 md:h-24 filter grayscale"
+                        src="https://equinehire.s3.amazonaws.com/eqh-old/unnamed-2.png" alt="American Summer Camps">
+                </div>
+                <div class="flex justify-center col-span-1 md:col-span-2 lg:col-span-1">
+                    <img class="object-contain h-16 opacity-65 sm:h-20 md:h-24 filter grayscale"
+                        src="https://equinehire-static-assets.s3.amazonaws.com/penn-vet.png" alt="Penn Vet">
+                </div>
             </div>
-            <div class="flex flex-col justify-center w-full gap-5 md:w-1/2">
-                <x-divider />
-                <h2 class="text-3xl md:text-5xl fancy-title">Easily Connect with Equine Professionals Near You</h2>
-                <p class="text-lg md:text-xl"><strong>Finding the right equine professional is now simple and
-                        convenient.</strong> Our
-                    platform connects you with farriers, veterinarians, trainers, and other experts in your area.
+        </div>
+    </section>
+
+    <section>
+        <div class="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Latest Job Opportunities
+                </h2>
+                <p class="max-w-2xl mx-auto mt-3 text-xl text-gray-500 sm:mt-4">
+                    Explore the most recent job listings in the equine industry
                 </p>
-                <p class="text-lg md:text-xl">Just enter your location
-                    and browse through detailed profiles, complete with qualifications and expertise. Make informed
-                    decisions with ease and ensure your horses get the best care from trusted professionals nearby.</p>
+            </div>
+            <div class="mt-12 space-y-4">
+                @foreach (\App\Models\JobListing::latest()->take(10)->get() as $job_listing)
+                    @include('partials.jobs.list', ['job_listing' => $job_listing])
+                @endforeach
+            </div>
+            <div class="mt-10 text-center">
+                <a href="{{ route('jobs.index') }}"
+                    class="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    View All Jobs
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative px-4 py-8 bg-blue-50/35 md:py-12 lg:py-24 rounded-3xl z-1 md:px-0">
+        <div class="flex flex-col items-center justify-between max-w-screen-xl mx-auto md:gap-10 md:flex-row">
+            <div class="flex flex-col justify-center w-full gap-5 md:w-1/2">
+                <h2 class="text-3xl md:text-5xl fancy-title">Saddle Up for Success</h2>
+                <p class="text-lg md:text-xl">Discover exciting equine jobs on EquineHire, ranging from training and riding
+                    to healthcare and breeding.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold">Explore Jobs in the Horse Industry</h3>
+                            <p class="text-gray-600">Browse exciting equine job opportunities.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold">Discover Your Perfect Fit</h3>
+                            <p class="text-gray-600">Use our search filters to find the exact job you are looking for.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 mr-2 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-semibold">Get Noticed</h3>
+                            <p class="text-gray-600">Boost your application power with free career resources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full mb-8 md:w-1/2 md:mb-0">
+                <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-a.webp" loading="lazy"
+                    alt="Equine veterinarian with a horse out in a field." class="w-full h-auto rounded-lg">
             </div>
         </div>
     </section>
@@ -102,8 +193,8 @@
                     </a>
                     <a href="{{ route('jobs.index', ['categories[]' => 6]) }}"
                         class="flex flex-col items-center justify-center p-4 transition duration-300 ease-in-out border border-gray-200 rounded-lg sm:p-6 bg-gray-50 aspect-square hover:bg-white hover:shadow-lg group hover:-translate-y-2">
-                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg" loading="lazy"
-                            alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
+                        <img src="https://EquineHire-static-assets.s3.amazonaws.com/icon_riding_lessons.svg"
+                            loading="lazy" alt="Riding Lessons" class="w-8 h-8 mb-2 sm:w-10 sm:h-10 sm:mb-4">
                         <div class="text-base font-bold text-center text-gray-900 sm:text-xl">
                             Riding Lessons
                         </div>
