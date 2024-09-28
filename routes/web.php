@@ -101,7 +101,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 // Business & Employer (Public) Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
-Route::get('/{job_slug}-{id}', [JobListingController::class, 'show'])
+Route::get('/jobs/{job_slug}-{id}', [JobListingController::class, 'show'])
     ->name('jobs.show')
     ->where('job_slug', '[a-z0-9\-]+')
     ->middleware('track.pageviews');
