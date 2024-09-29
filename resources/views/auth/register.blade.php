@@ -71,8 +71,8 @@
 
         <!-- Right side: Full-size image (hidden on mobile) -->
         <div class="relative hidden w-1/2 md:block">
-            <img src="https://EquineHire-static-assets.s3.amazonaws.com/equine_pro_finder_register.jpg"
-                alt="Registration Image" class="object-cover w-full h-full max-h-screen">
+            <img src="https://equinehire-static-assets.s3.amazonaws.com/horse-barn-bw-min.jpg" alt="Registration Image"
+                class="object-cover w-full h-full max-h-screen">
             <div class="absolute inset-0 bg-gradient-to-br from-black/70 to-transparent"></div>
         </div>
     </div>
