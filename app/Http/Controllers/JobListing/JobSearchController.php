@@ -8,9 +8,13 @@ use App\Models\JobListingCategory;
 use Algolia\AlgoliaSearch\SearchIndex;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Traits\HasStates;
 
 class JobSearchController extends Controller
 {
+
+    use HasStates;
+
     public function search(Request $request)
     {
         Log::info('Incoming search request:', $request->all());

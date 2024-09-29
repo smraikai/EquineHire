@@ -129,4 +129,5 @@ class EmployerJobListingController extends Controller
 
         return $slug;
     }
+
 }

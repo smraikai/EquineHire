@@ -25,7 +25,7 @@ Route::get('/terms-of-service', function () {
 
 
 ////////////////////////////////////////////////////////////////////
-// Business & Employer (Public) Routes
+// Job Listings & Employer (Public) Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/jobs', [JobSearchController::class, 'search'])->name('jobs.index');
 Route::get('/jobs/{job_slug}-{id}', [JobListingController::class, 'show'])
