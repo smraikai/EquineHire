@@ -3,8 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\TrackPageViews;
-
+use App\Http\Middleware\JobListingViewCounter;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'stripe/*',
         ]);
         $middleware->alias([
-            'track.pageviews' => TrackPageViews::class,
+            'job.view.counter' => JobListingViewCounter::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

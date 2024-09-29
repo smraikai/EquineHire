@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\PageView;
-use App\Models\JobListing;
 use Closure;
+use Illuminate\Http\Request;
+use App\Models\JobListing;
+use App\Models\PageView;
 use Illuminate\Support\Facades\Auth;
 
-class TrackPageViews
+class JobListingViewCounter
 {
     private function isHumanUserAgent($userAgent)
     {
@@ -29,28 +30,30 @@ class TrackPageViews
         return false;
     }
 
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
-        if ($request->route()->getName() === 'jobs.index.show') {
-            $job_listingId = $request->route('id');
-            $job_listing = JobListing::find($job_listingId);
+        if ($request->route()->getName() === 'jobs.show') {
+            $jobListingId = $request->route('id');
+            $jobListing = JobListing::find($jobListingId);
 
             if (
-                $job_listing &&
-                (!Auth::check() || Auth::id() !== $job_listing->user_id) &&
+                $jobListing &&
+                (!Auth::check() || Auth::id() !== $jobListing->user_id) &&
                 $this->isHumanUserAgent($request->header('User-Agent'))
             ) {
                 $pageView = PageView::firstOrNew([
-                    'job_listing_id' => $job_listing->id,
+                    'job_listing_id' => $jobListing->id,
                     'date' => now()->toDateString()
                 ]);
                 $pageView->view_count = ($pageView->view_count ?? 0) + 1;
                 $pageView->save();
+
+                // Increment the total views on the job listing
+                $jobListing->increment('views');
             }
         }
-
         return $response;
     }
 }

@@ -359,4 +359,20 @@ class JobListingController extends Controller
 
         return null;
     }
+
+
+    public function getJobListingsViews()
+    {
+        $jobListings = JobListing::where('user_id', auth()->id())
+            ->select('title', 'views')
+            ->orderBy('views', 'desc')
+            ->get();
+
+        $data = [
+            'labels' => $jobListings->pluck('title')->toArray(),
+            'views' => $jobListings->pluck('views')->toArray(),
+        ];
+
+        return response()->json($data);
+    }
 }
