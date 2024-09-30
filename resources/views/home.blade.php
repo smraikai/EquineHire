@@ -1,12 +1,6 @@
 @extends('layouts.site')
 
-
 @php
-    // Meta Tags
-    $metaTitle = 'Find Equine Services Near You | EquineHire';
-    $metaDescription =
-        'Discover local boarding facilities, farriers, veterinarians, trainers, and more equine services. Connect with top professionals in your area.';
-
     // Contentful Setup for Home Page
     use Contentful\Delivery\Client as ContentfulClient;
     use Contentful\Delivery\Query;

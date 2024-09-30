@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\JobListingController;
+use App\Http\Controllers\Joblisting\JobListingController;
 
 //////////////////////////////////////
 /// Business Analytics Route

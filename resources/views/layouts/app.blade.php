@@ -9,7 +9,7 @@
     <title>{{ $metaTitle ?? 'EquineHire' }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @yield('scripts_css')
+    @yield('css')
 
     <!-- Favicon and Logo -->
     <link rel="icon" href="https://equinehire-static-assets.s3.amazonaws.com/favicon.jpg" type="image/jpeg">

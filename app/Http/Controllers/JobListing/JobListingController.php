@@ -1,15 +1,22 @@
 <?php
 
 namespace App\Http\Controllers\JobListing;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\SEOController;
 use App\Models\JobListing;
-use App\Services\SeoService;
 use Illuminate\Http\Request;
 
 class JobListingController extends Controller
 {
-    public function show(Request $request, $job_slug, $id, SeoService $seoService)
+    protected $seoController;
+
+    public function __construct(SEOController $seoController)
+    {
+        $this->seoController = $seoController;
+    }
+
+    public function show(Request $request, $job_slug, $id)
     {
         $job_listing = JobListing::with('employer')->findOrFail($id);
 
@@ -21,13 +28,11 @@ class JobListingController extends Controller
             abort(404);
         }
 
-        $location = $job_listing->remote_position ? null : "{$job_listing->city}, {$job_listing->state}";
-        $metaTitle = $seoService->generateMetaTitle($job_listing->title, $job_listing->employer->name, $location);
-        $metaDescription = $seoService->generateMetaDescription($job_listing->description);
-
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
-        $employer = $job_listing->employer;
 
-        return view('jobs.show', compact('job_listing', 'isOwner', 'metaTitle', 'metaDescription', 'employer'));
+        // Set SEO metadata
+        $this->seoController->setJobListingSEO($job_listing);
+
+        return view('jobs.show', compact('job_listing', 'isOwner'));
     }
 }

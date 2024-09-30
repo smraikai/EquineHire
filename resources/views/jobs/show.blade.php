@@ -1,5 +1,5 @@
 @extends('layouts.site')
-@section('scripts_css')
+@section('css')
 @endsection
 
 @section('content')
@@ -109,51 +109,4 @@
 @endsection
 
 @section('scripts')
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "JobPosting",
-        "title": "{{ $job_listing->title }}",
-        "description": "{{ $job_listing->description }}",
-        "datePosted": "{{ $job_listing->created_at->toIso8601String() }}",
-        "validThrough": "{{ $job_listing->created_at->addDays(30)->toIso8601String() }}",
-        "employmentType": "{{ $job_listing->job_type }}",
-        "hiringOrganization": {
-            "@type": "Organization",
-            "name": "{{ $job_listing->employer->name }}"
-        },
-        "jobLocation": {
-            "@type": "Place",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "{{ $job_listing->city }}",
-                "addressRegion": "{{ $job_listing->state }}",
-                "addressCountry": "US"
-            }
-        },
-        "baseSalary": {
-            "@type": "MonetaryAmount",
-            "currency": "USD",
-            "value": {
-                "@type": "QuantitativeValue",
-                @if($job_listing->salary_type === 'hourly')
-                "minValue": {{ $job_listing->hourly_rate_min }},
-                "maxValue": {{ $job_listing->hourly_rate_max }},
-                "unitText": "HOUR"
-                @else
-                "minValue": {{ $job_listing->salary_range_min }},
-                "maxValue": {{ $job_listing->salary_range_max }},
-                "unitText": "YEAR"
-                @endif
-            }
-        },
-        "experienceRequirements": "{{ $job_listing->experience_required }}",
-        "jobLocationType": "{{ $job_listing->remote_position ? 'TELECOMMUTE' : 'ONSITE' }}",
-        "applicantLocationRequirements": {
-            "@type": "Country",
-            "name": "United States"
-        },
-        "industry": "{{ $job_listing->category->name }}"
-    }
-    </script>
 @endsection

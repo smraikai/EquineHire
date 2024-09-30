@@ -1,12 +1,4 @@
 @extends('layouts.site')
-@php
-    $metaTitle = ($post->get('metaTitle') ?? $post->get('title')) . ' | EquineHire';
-    $metaDescription =
-        $post->get('metaDescription') ?? Str::limit(strip_tags($renderer->render($post->get('body'))), 160);
-    use Contentful\RichText\Renderer;
-    $renderer = new Renderer();
-@endphp
-
 @section('content')
     <section class="pt-10 pb-10">
         <div class="px-4 mx-auto max-w-7xl lg:px-8">
@@ -27,25 +19,4 @@
     </section>
 
     @include('partials.cta.job-alerts')
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": "{{ $post->get('title') }}",
-            "image": "{{ $post->has('featuredImage') ? $post->get('featuredImage')->getFile()->getUrl() : '' }}",
-            "author": {
-                "@type": "Organization",
-                "name": "EquineHire"
-            },
-            "publisher": {
-                "@type": "Organization",
-                "name": "EquineHire",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "https://EquineHire.com/logo.png"
-                }
-            },
-            "description": "{{ $metaDescription }}"
-        }
-    </script>
 @endsection

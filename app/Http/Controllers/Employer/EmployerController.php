@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employer;
 use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\SEOController;
 use App\Models\Employer;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,21 @@ class EmployerController extends Controller
 {
 
     /////////////////////////////////////////////////////////////
+    // Set SEO controller
+    /////////////////////////////////////////////////////////////
+    protected $seoController;
+
+    public function __construct(SEOController $seoController)
+    {
+        $this->seoController = $seoController;
+    }
+
+    /////////////////////////////////////////////////////////////
     // Employer Public Page
     /////////////////////////////////////////////////////////////
     public function show(Employer $employer)
     {
+        $this->seoController->setEmployerSEO($employer);
         return view('employers.show', compact('employer'));
     }
 

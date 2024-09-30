@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Contentful\Delivery\Client as ContentfulClient;
 use Contentful\Delivery\Query;
+use App\Http\Controllers\SEOController;
+use Contentful\RichText\Renderer;
 
 
 class BlogController extends Controller
@@ -25,17 +27,19 @@ class BlogController extends Controller
             ->where('fields.slug', $slug);
         $entries = $client->getEntries($query);
 
+        $renderer = new Renderer();
+
         if ($entries->count() === 0) {
             abort(404);
         }
 
-        $entry = $entries->getItems()[0];
-        return view('blog.show', [
-            'post' => $entry,
-            'metaTitle' => $entry->get('metaTitle'),
-            'metaDescription' => $entry->get('metaDescription'),
-        ]);
-    }
+        $post = $entries->getItems()[0];
 
+        // Set SEO for the blog post
+        $seoController = new SEOController();
+        $seoController->setBlogPostSEO($post);
+
+        return view('blog.show', compact('post', 'renderer'));
+    }
 
 }

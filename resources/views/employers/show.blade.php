@@ -9,7 +9,12 @@
                 <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
             </div>
         @else
-            <div class="h-[200px] sm:h-[300px] md:h-[450px] w-full bg-gray-100"></div>
+            <div class="h-[200px] sm:h-[300px] md:h-[450px] w-full overflow-hidden">
+                <img class="object-cover w-full h-full"
+                    src="https://equinehire-static-assets.s3.amazonaws.com/placeholder.jpg"
+                    alt="{{ $employer->name }} placeholder image">
+                <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
+            </div>
         @endif
     </div>
     <div
@@ -75,19 +80,4 @@
 @endsection
 
 @section('scripts')
-    <script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "Organization",
-        "name": "{{ $employer->name }}",
-        "url": "{{ $employer->website }}",
-        "logo": "{{ $employer->logo_url }}",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "{{ $employer->city }}",
-            "addressRegion": "{{ $employer->state }}",
-            "addressCountry": "US"
-        }
-    }
-    </script>
 @endsection

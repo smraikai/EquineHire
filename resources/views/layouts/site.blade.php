@@ -6,42 +6,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ $metaTitle ?? 'EquineHire' }}</title>
-    <meta name="description" content="{{ $metaDescription ?? 'Find equine services near you with EquineHire' }}">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $metaTitle ?? 'EquineHire' }}">
-    <meta property="og:description" content="{{ $metaDescription ?? 'Find equine services near you with EquineHire' }}">
-    <meta property="og:image" content="https://EquineHire-static-assets.s3.amazonaws.com/socialshare.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ $metaTitle ?? 'EquineHire' }}">
-    <meta property="twitter:description"
-        content="{{ $metaDescription ?? 'Find equine services near you with EquineHire' }}">
-    <meta property="twitter:image" content="https://equinehire-static-assets.s3.amazonaws.com/socialshare.jpg">
-
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @yield('scripts_css')
-
-    <!-- Favicon and Logo -->
     <link rel="icon" href="https://equinehire-static-assets.s3.amazonaws.com/favicon.jpg" type="image/jpeg">
-    <script type="application/ld+json">
-        {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "url": "https://equinehire.com",
-        "logo": "https://equinehire-static-assets.s3.amazonaws.com/favico.jpg"
-        }
-    </script>
+
+    <!-- SEO -->
+    {!! SEO::generate() !!}
+
+    <!-- CSS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('css')
 
     <!-- Fonts -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
