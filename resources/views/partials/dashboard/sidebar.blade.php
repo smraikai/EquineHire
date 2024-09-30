@@ -17,7 +17,7 @@
         <div class="relative flex flex-col w-full max-w-xs overflow-y-auto bg-white shadow-xl"
             @click.away="isOpen = false">
             <div class="flex items-center justify-between px-4 pt-5 pb-2">
-                <a href="{{ route('home') }}" class="text-2xl text-gray-900 font-heading">
+                <a href="{{ route('home') }}" class="text-3xl text-gray-900 font-logo">
                     EquineHire
                 </a>
                 <button x-on:click="isOpen = false" type="button"
@@ -111,7 +111,7 @@
     <!-- Sidebar component -->
     <div class="flex flex-col px-6 pb-4 overflow-y-auto bg-white grow gap-y-5">
         <div class="flex items-center h-16 shrink-0">
-            <a href="{{ route('home') }}" class="text-3xl text-gray-900 font-heading">
+            <a href="{{ route('home') }}" class="text-3xl text-gray-900 font-logo">
                 EquineHire
             </a>
         </div>

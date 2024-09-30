@@ -30,7 +30,7 @@
     @yield('scripts_css')
 
     <!-- Favicon and Logo -->
-    <link rel="icon" href="https://EquineHire-static-assets.s3.amazonaws.com/favico.jpg" type="image/jpeg">
+    <link rel="icon" href="https://equinehire-static-assets.s3.amazonaws.com/favicon.jpg" type="image/jpeg">
     <script type="application/ld+json">
         {
         "@context": "https://schema.org",
