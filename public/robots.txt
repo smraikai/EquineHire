@@ -1,5 +1,4 @@
 User-agent: *
 Disallow:
-Sitemap: https://EquineHire.com/sitemap-static.xml
-Sitemap: https://EquineHire.com/sitemap-businesses.xml
-Sitemap: https://EquineHire.com/sitemap-blog.xml
+
+Sitemap: https://equineHire.com/sitemap.xml

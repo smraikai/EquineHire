@@ -14,18 +14,16 @@
                 </div>
             </div>
             <div class="w-full px-0 mb-8 lg:w-1/4 lg:mb-0">
-                <h5 class="mb-2 font-bold text-gray-900">Explore Services</h5>
+                <h5 class="mb-2 font-bold text-gray-900">Explore Jobs</h5>
                 <ul class="space-y-3 list-none footer-links">
-                    <li><a href="{{ route('jobs.index', ['categories[]' => 5]) }}"
-                            class="text-gray-600 hover:text-gray-900">Farriers</a></li>
-                    <li><a href="{{ route('jobs.index', ['categories[]' => 14]) }}"
-                            class="text-gray-600 hover:text-gray-900">Trainers</a></li>
-                    <li><a href="{{ route('jobs.index', ['categories[]' => 1]) }}"
-                            class="text-gray-600 hover:text-gray-900">Boarding Facilities</a></li>
-                    <li><a href="{{ route('jobs.index', ['categories[]' => 6]) }}"
-                            class="text-gray-600 hover:text-gray-900">Riding Lessons</a></li>
-                    <li><a href="{{ route('jobs.index') }}" class="text-gray-600 hover:text-gray-900">View All
-                            Services</a></li>
+                    @foreach (\App\Models\JobListingCategory::all() as $category)
+                        <li>
+                            <a href="{{ route('jobs.index', ['categories[]' => $category->id]) }}"
+                                class="text-gray-600 hover:text-gray-900">
+                                {{ $category->name }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
             <div class="w-full px-0 lg:w-1/4">

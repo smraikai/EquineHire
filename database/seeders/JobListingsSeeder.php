@@ -38,6 +38,11 @@ class JobListingsSeeder extends Seeder
             $categories = JobListingCategory::pluck('id', 'name')->toArray();
             $adminUser = $this->getAdminUser();
 
+            $uniqueCategories = [];
+            foreach ($records as $record) {
+                $uniqueCategories[$record['Job Categories']] = true;
+            }
+
             $cutoffDate = Carbon::create(2024, 3, 1);
 
             foreach ($records as $offset => $record) {
@@ -215,23 +220,55 @@ class JobListingsSeeder extends Seeder
 
     private function getCategoryId($categoryName, $categories)
     {
-        // Trim the category name and convert to lowercase for comparison
-        $categoryName = trim(strtolower($categoryName));
+        // Trim the category name and decode HTML entities
+        $categoryName = trim(html_entity_decode($categoryName, ENT_QUOTES | ENT_HTML5));
 
-        // Check if the exact category name exists
-        if (isset($categories[$categoryName])) {
-            return $categories[$categoryName];
+        // Direct mapping of category names to their expected IDs
+        $categoryMapping = [
+            'Groom Jobs' => 1,
+            'Health & Veterinary Jobs' => 2,
+            'Manager Jobs' => 3,
+            'Office Jobs' => 4,
+            'Rider Jobs' => 5,
+            'Trainer Jobs' => 6,
+            'Other Jobs' => 7,
+        ];
+
+        // Check if the category name exists in our mapping
+        if (isset($categoryMapping[$categoryName])) {
+            return $categoryMapping[$categoryName];
         }
 
-        // If not, try to find a partial match
-        foreach ($categories as $name => $id) {
-            if (strpos(strtolower($name), $categoryName) !== false) {
+        // If no exact match, try to find a partial match
+        foreach ($categoryMapping as $key => $id) {
+            if (stripos($categoryName, $key) !== false) {
+                Log::info("Partial match found for category: '$categoryName'. Assigned to '$key'.");
                 return $id;
             }
         }
 
-        // If no match is found, return the ID of 'Other Jobs' category
-        return $categories['Other Jobs'] ?? null;
+        // If still no match, check for specific keywords
+        $keywordMapping = [
+            'groom' => 1,
+            'health' => 2,
+            'veterinary' => 2,
+            'vet' => 2,
+            'manager' => 3,
+            'office' => 4,
+            'rider' => 5,
+            'trainer' => 6,
+        ];
+
+        foreach ($keywordMapping as $keyword => $id) {
+            if (stripos($categoryName, $keyword) !== false) {
+                Log::info("Keyword match found for category: '$categoryName'. Assigned to ID $id.");
+                return $id;
+            }
+        }
+
+        // If no match is found, log a warning and return the ID of 'Other Jobs' category
+        Log::warning("Unrecognized job category: '$categoryName'. Assigning to 'Other Jobs'.");
+        return 7; // ID for 'Other Jobs'
     }
 
     private function parseBoolean($value)

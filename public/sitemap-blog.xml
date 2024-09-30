@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
     <url>
-        <loc>http://EquineHire.test/blog/how-much-does-a-horse-vet-visit-cost</loc>
-    
+        <loc>https://equinehire.test/blog/the-ultimate-equine-career-list</loc>
+        <lastmod>2024-09-28T15:05:21+00:00</lastmod>
+
             </url>
     <url>
-        <loc>http://EquineHire.test/blog/what-do-horse-trainers-do</loc>
-    
+        <loc>https://equinehire.test/blog/crafting-impactful-equine-resume-tips</loc>
+        <lastmod>2024-09-28T15:02:12+00:00</lastmod>
+
             </url>
     <url>
-        <loc>http://EquineHire.test/blog/cost-of-horse-ownership</loc>
-    
-            </url>
-    <url>
-        <loc>http://EquineHire.test/blog/horse-boarding-costs</loc>
-    
+        <loc>https://equinehire.test/blog/cover-letter-template-for-equestrians</loc>
+        <lastmod>2024-09-28T14:58:48+00:00</lastmod>
+
             </url>
 </urlset>

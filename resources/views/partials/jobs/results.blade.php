@@ -15,13 +15,13 @@
             </div>
         @endforelse
     </div>
-    <div class="flex items-center justify-between mt-8">
-        <p class="text-sm text-gray-700">
+    <div class="flex flex-col items-center justify-between mt-8 space-y-3 sm:flex-row sm:space-y-0">
+        <p class="text-xs text-gray-700 sm:text-sm">
             Showing <span class="font-medium">{{ $results->firstItem() }}</span> to <span
                 class="font-medium">{{ $results->lastItem() }}</span> of <span
                 class="font-medium">{{ $results->total() }}</span> results
         </p>
-        <div class="flex justify-end flex-1">
+        <div class="w-full sm:w-auto">
             {{ $results->links() }}
         </div>
     </div>
