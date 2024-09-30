@@ -13,7 +13,7 @@ export default {
         extend: {
             fontFamily: {
                 'body': ['DM Sans', 'sans-serif'],
-                'heading': ['DM Serif Text', 'serif'],
+                'heading': ['Poppins', 'sans-serif'],
                 'sans': ['DM Sans', ...defaultTheme.fontFamily.sans],
             },
         },

@@ -14,7 +14,7 @@ class EmployerProfileController extends Controller
 
     use HasStates;
 
-    public function employerProfileIndex()
+    public function index()
     {
         $user = auth()->user();
         $employer = $user->employer;

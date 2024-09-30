@@ -9,7 +9,7 @@ use App\Http\Controllers\Employer\EmployerProfileController;
 Route::get('/dashboard', [EmployerController::class, 'index'])->name('dashboard.employers.index');
 
 // Employer Routes
-Route::get('/employers', [EmployerProfileController::class, 'employerProfileIndex'])->name('employers.index');
+Route::get('/employers', [EmployerProfileController::class, 'index'])->name('employers.index');
 Route::get('/employers/create', [EmployerProfileController::class, 'create'])->name('employers.create');
 Route::post('/employers', [EmployerProfileController::class, 'store'])->name('employers.store');
 

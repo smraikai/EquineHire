@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\JobSearchController;
 use App\Http\Controllers\JobListingController;
-use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\Employer\EmployerController;
 use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 

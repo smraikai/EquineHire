@@ -35,20 +35,26 @@ input::placeholder {
 }
 
 /* Global */
+.font-logo {
+    font-family: "Poppins", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
 .fancy-title {
-    font-family: "DM Sans", serif;
-    font-weight: 900;
+    font-family: "Poppins", serif;
+    font-weight: 700;
     font-style: normal;
 }
 
 .fancy-subtitle {
-    font-family: "DM Sans", sans-serif;
+    font-family: "Poppins", sans-serif;
     text-transform: uppercase;
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
     letter-spacing: .25em;
-    @apply text-blue-700;
+    @apply text-blue-600;
 }
 
 

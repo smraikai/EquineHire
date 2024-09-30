@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\EmployerJobListingController;
+use App\Http\Controllers\JobListing\EmployerJobListingController;
 use App\Http\Controllers\JobListingBoostController;
 
 //////////////////////////////////////

@@ -49,7 +49,10 @@ class JobListing extends Model
 
     public function employer()
     {
-        return $this->belongsTo(Employer::class);
+        return $this->belongsTo(Employer::class)->withDefault([
+            'name' => 'Unknown Employer',
+            'logo' => null,
+        ]);
     }
 
     public function category()
@@ -115,6 +118,7 @@ class JobListing extends Model
             ],
         ];
     }
+
 
     /**
      * Determine if the model should be searchable.
