@@ -20,6 +20,9 @@ class JobListingController extends Controller
     {
         $job_listing = JobListing::with('employer')->findOrFail($id);
 
+        // Set SEO metadata
+        $this->seoController->setJobListingSEO($job_listing);
+
         if ($job_listing->slug !== $job_slug) {
             return redirect()->route('jobs.show', [$job_listing->slug, $job_listing->id], 301);
         }

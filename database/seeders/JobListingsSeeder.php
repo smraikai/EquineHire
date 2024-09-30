@@ -135,9 +135,9 @@ class JobListingsSeeder extends Seeder
             return null; // Return null if salary type is not set
         }
 
-        $salaryType = ucfirst(strtolower(trim($salaryType)));
+        $salaryType = strtolower(trim($salaryType));
 
-        if ($salaryType === 'Hourly' || $salaryType === 'Salary') {
+        if ($salaryType === 'hourly' || $salaryType === 'salary') {
             return $salaryType;
         }
 

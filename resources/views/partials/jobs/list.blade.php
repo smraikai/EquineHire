@@ -11,7 +11,7 @@
                              alt="{{ $job_listing->employer->name }} logo">
                      @else
                          <div
-                             class="flex items-center justify-center w-12 h-12 mr-3 text-white bg-blue-500 rounded-full sm:w-16 sm:h-16 sm:mr-4">
+                             class="flex items-center justify-center flex-shrink-0 w-12 h-12 mr-3 text-white bg-blue-500 rounded-full sm:w-16 sm:h-16 sm:mr-4">
                              <span class="text-lg font-semibold sm:text-xl">
                                  {{ Str::upper(Str::substr($job_listing->employer->name, 0, 2)) }}
                              </span>
