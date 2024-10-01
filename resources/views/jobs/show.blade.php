@@ -57,7 +57,7 @@ Best regards,
                 </div>
 
                 <!-- Apply Now Button (Full Width) -->
-                <a href="{{ $applyLink ?? '#' }}"
+                <a id="apply_now" href="{{ $applyLink ?? '#' }}"
                     class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
                     {{ !$applyLink ? 'disabled' : '' }}>
                     Apply Now
@@ -124,7 +124,7 @@ Best regards,
                     </div>
 
                     <!-- Apply Now Button -->
-                    <a href="{{ $applyLink ?? '#' }}"
+                    <a id="apply_now" href="{{ $applyLink ?? '#' }}"
                         class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
                         {{ !$applyLink ? 'disabled' : '' }}>
                         Apply Now
