@@ -1,6 +1,33 @@
 @extends('layouts.site')
-@section('css')
-@endsection
+
+@php
+    $applyLink = $job_listing->application_link;
+    if (!$applyLink && $job_listing->email_link) {
+        $subject = rawurlencode("Application for {$job_listing->title} from EquineHire");
+        $body = rawurlencode("Dear Hiring Manager,
+
+I'm excited to apply for the {$job_listing->title} position I found on EquineHire! With my background in [relevant field], I believe I'd be a great fit for your team.
+
+I've attached my resume for your review. I look forward to discussing how my skills align with your needs!
+
+Thank you for your consideration.
+
+Best regards,
+[Your Name]");
+        $applyLink = "mailto:{$job_listing->email_link}?subject={$subject}&body={$body}";
+    }
+
+    // Add UTM parameters to the apply link
+    if ($applyLink) {
+        $utmParams = http_build_query([
+            'utm_source' => 'equinehire',
+            'utm_medium' => 'job_listing',
+            'utm_campaign' => 'job_application',
+        ]);
+
+        $applyLink .= (parse_url($applyLink, PHP_URL_QUERY) ? '&' : '?') . $utmParams;
+    }
+@endphp
 
 @section('content')
     <div class="container max-w-full px-4 py-2 pb-6 mx-auto sm:px-6 sm:pb-10 sm:max-w-6xl">
@@ -30,8 +57,9 @@
                 </div>
 
                 <!-- Apply Now Button (Full Width) -->
-                <a href="{{ $job_listing->application_link ?? '#' }}"
-                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                <a href="{{ $applyLink ?? '#' }}"
+                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
+                    {{ !$applyLink ? 'disabled' : '' }}>
                     Apply Now
                 </a>
 
@@ -94,11 +122,14 @@
                             <span>Posted on {{ $job_listing->created_at->format('M d, Y') }}</span>
                         </div>
                     </div>
+
                     <!-- Apply Now Button -->
-                    <a href="{{ $job_listing->application_link ?? '#' }}"
-                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                    <a href="{{ $applyLink ?? '#' }}"
+                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
+                        {{ !$applyLink ? 'disabled' : '' }}>
                         Apply Now
                     </a>
+
                 </div>
 
             </div>
@@ -106,7 +137,4 @@
 
         </div>
     </div>
-@endsection
-
-@section('scripts')
 @endsection
