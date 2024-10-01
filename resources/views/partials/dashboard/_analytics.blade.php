@@ -1,14 +1,20 @@
-<div class="overflow-hidden bg-white border sm:rounded-lg">
-    <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">Job Listing Views</h3>
-        <p class="max-w-2xl mt-1 text-sm text-gray-500">Total views for your job listings.</p>
-    </div>
-    <hr class="max-w-[95%] mx-auto">
-    <div class="p-4 border-gray-200 sm:px-6">
-        <div id="noDataMessage" class="text-left text-gray-500">
-            Loading chart data...
+<div class="overflow-hidden bg-white rounded-lg shadow">
+    <div class="px-4 py-5 sm:p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Job Listing Views</h3>
+            </div>
+            <div class="flex items-center">
+                <span id="totalViews" class="text-2xl font-semibold text-gray-900">-</span>
+                <span class="ml-2 text-sm font-medium text-gray-500">total views</span>
+            </div>
         </div>
-        <canvas id="jobListingsChart" width="400" height="100" style="display: none;"></canvas>
+        <div class="mt-4">
+            <div id="noDataMessage" class="py-8 text-center text-gray-500">
+                Loading chart data...
+            </div>
+            <canvas id="jobListingsChart" class="w-full h-64" style="display: none;"></canvas>
+        </div>
     </div>
 </div>
 
@@ -32,20 +38,22 @@
                     document.getElementById('noDataMessage').style.display = 'none';
                     document.getElementById('jobListingsChart').style.display = 'block';
 
+                    const totalViews = data.views.reduce((a, b) => a + b, 0);
+                    document.getElementById('totalViews').textContent = totalViews;
+
                     new Chart(document.getElementById('jobListingsChart'), {
                         type: 'bar',
                         data: {
                             labels: data.labels,
                             datasets: [{
-                                label: 'Views',
+                                label: 'Page Views',
                                 data: data.views,
-                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
+                                backgroundColor: 'rgba(59, 130, 246, 0.8)', // blue-500 with opacity
                             }]
                         },
                         options: {
                             responsive: true,
+                            maintainAspectRatio: false,
                             scales: {
                                 y: {
                                     beginAtZero: true,
@@ -56,9 +64,14 @@
                                 },
                                 x: {
                                     title: {
-                                        display: true,
+                                        display: false,
                                         text: 'Job Listings'
                                     }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
                                 }
                             }
                         }

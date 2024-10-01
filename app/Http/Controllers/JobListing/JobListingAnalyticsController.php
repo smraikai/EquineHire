@@ -12,8 +12,8 @@ class JobListingAnalyticsController extends Controller
     {
         try {
             $jobListings = JobListing::where('user_id', auth()->id())
-                ->select('title', 'views')
-                ->orderBy('views', 'desc')
+                ->select('title', 'views', 'created_at')
+                ->orderBy('created_at', 'asc')
                 ->get();
 
             if ($jobListings->isEmpty()) {
