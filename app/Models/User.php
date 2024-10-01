@@ -72,7 +72,7 @@ class User extends Authenticatable
         $limits = [
             'basic_plan' => 1,
             'pro_plan' => 5,
-            'premium_plan' => 999,
+            'unlimited_plan' => 999,
         ];
 
         $currentCount = $this->jobListings()->count();

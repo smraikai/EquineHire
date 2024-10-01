@@ -33,7 +33,7 @@ return [
             ],
             [
                 'id' => 'price_1Q1VtkJ1n13AUOzGGouum0z4',
-                'name' => 'Premium Plan',
+                'name' => 'Unlimited Plan',
                 'price' => 400,
                 'interval' => 'year',
                 'features' => [
@@ -48,14 +48,13 @@ return [
         ],
         'production' => [
             [
-                'id' => 'price_1Plw4tIwRn69BYdQrNrVHTyb',
+                'id' => 'price_1Q4tNUJ1n13AUOzGuRB5WZ27',
                 'name' => 'Basic Plan',
                 'price' => 50,
                 'interval' => 'month',
                 'features' => [
-                    '1 Job Post',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    '1 Concurrent Job Post',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
@@ -63,14 +62,13 @@ return [
                 ],
             ],
             [
-                'id' => 'price_1Plw4rIwRn69BYdQwTkNz6LH',
+                'id' => 'price_1Q4tNSJ1n13AUOzGmjvb0Bps',
                 'name' => 'Pro Plan',
                 'price' => 120,
                 'interval' => '3 months',
                 'features' => [
                     'Up to 5 Concurrent Job Posts',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
@@ -78,14 +76,13 @@ return [
                 ],
             ],
             [
-                'id' => 'price_to_be_updated',
-                'name' => 'Premium Plan',
-                'price' => 300,
+                'id' => 'price_1Q4tNRJ1n13AUOzGjSUIaim4',
+                'name' => 'Unlimited Plan',
+                'price' => 400,
                 'interval' => 'year',
                 'features' => [
                     'Unlimited Job Posts',
-                    'Display your employer logo',
-                    'Display Images For Your Job',
+                    'Employer Profile with Images',
                     'Dedicated support',
                     'Featured in our newsletter',
                     'Shared on social media',
