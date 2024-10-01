@@ -104,11 +104,13 @@ class GenerateSitemap extends Command
 
     private function generateIndexSitemap()
     {
+        $baseUrl = config('app.url');
+
         $indexSitemap = Sitemap::create()
-            ->add('/sitemap-static.xml')
-            ->add('/sitemap-jobs.xml')
-            ->add('/sitemap-employers.xml')
-            ->add('/sitemap-blog.xml');
+            ->add(Url::create($baseUrl . '/sitemap-static.xml'))
+            ->add(Url::create($baseUrl . '/sitemap-jobs.xml'))
+            ->add(Url::create($baseUrl . '/sitemap-employers.xml'))
+            ->add(Url::create($baseUrl . '/sitemap-blog.xml'));
 
         $indexSitemap->writeToFile(public_path('sitemap.xml'));
     }
