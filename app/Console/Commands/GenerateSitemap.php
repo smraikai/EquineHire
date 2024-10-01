@@ -32,7 +32,6 @@ class GenerateSitemap extends Command
 
         $staticRoutes = [
             '/' => ['priority' => 1.0, 'frequency' => Url::CHANGE_FREQUENCY_WEEKLY],
-            '/our-story' => ['priority' => 0.8, 'frequency' => Url::CHANGE_FREQUENCY_MONTHLY],
             '/privacy-policy' => ['priority' => 0.5, 'frequency' => Url::CHANGE_FREQUENCY_YEARLY],
             '/terms-of-service' => ['priority' => 0.5, 'frequency' => Url::CHANGE_FREQUENCY_YEARLY],
             '/blog' => ['priority' => 0.9, 'frequency' => Url::CHANGE_FREQUENCY_DAILY],

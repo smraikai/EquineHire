@@ -24,16 +24,6 @@ Route::get('/', function () {
     return view('home', compact('metaTitle', 'metaDescription'));
 })->name('home');
 
-Route::get('/our-story', function () {
-    SEOMeta::setTitle('Our Story');
-    SEOMeta::setDescription('Learn about our company\'s journey');
-    OpenGraph::setTitle('Our Story');
-    OpenGraph::setDescription('Learn about our company\'s journey');
-    OpenGraph::setUrl(url('/our-story'));
-
-    return view('our_story');
-})->name('our.story');
-
 Route::get('/privacy-policy', function () {
     SEOMeta::setTitle('Privacy Policy');
     SEOMeta::setDescription('Read our privacy policy');

@@ -29,12 +29,11 @@
             <div class="w-full px-0 lg:w-1/4">
                 <h5 class="mb-2 font-bold text-gray-900">Employer</h5>
                 <ul class="space-y-3 list-none footer-links">
-                    <li><a href="/our-story" class="text-gray-600 hover:text-gray-900">Our Story</a></li>
                     <li>
                         <script language="JavaScript">
                             <!--
                             var name = "help";
-                            var domain = "EquineHire.com";
+                            var domain = "equinehire.com";
                             document.write('<a href=\"mailto:' + name + '@' + domain + '\" class="text-gray-600 hover:text-gray-900">');
                             document.write('Contact</a>');
                             // 
