@@ -16,8 +16,8 @@ class SubscriptionCheck
             return redirect()->route('login');
         }
 
-        // Bypass check for admin@equinhire.com
-        if ($user->email === 'admin@equinhire.com') {
+        // Bypass check for admin@equinehire.com
+        if ($user->email === 'admin@equinehire.com') {
             return $next($request);
         }
 
