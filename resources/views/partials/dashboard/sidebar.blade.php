@@ -82,7 +82,7 @@
                             <div class="text-xs font-semibold leading-6 text-gray-400">Billing</div>
                             <ul role="list" class="mt-2 space-y-1">
                                 <li>
-                                    <a href="{{ route('billing') }}"
+                                    <a href="{{ route('billing') }}" target="_blank"
                                         class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
                                         <x-heroicon-o-credit-card
                                             class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
@@ -163,7 +163,7 @@
                     <div class="text-xs font-semibold leading-6 text-gray-400">Billing</div>
                     <ul role="list" class="mt-2 -mx-2 space-y-1">
                         <li>
-                            <a href="{{ route('billing') }}"
+                            <a href="{{ route('billing') }}" target="_blank"
                                 class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
                                 <x-heroicon-o-credit-card
                                     class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />

@@ -45,32 +45,43 @@
     $activeSubscription = $user->subscriptions()->where('stripe_status', 'active')->first();
     $hasActiveSubscription = $activeSubscription !== null;
 
-    // Enhanced debug information
-    $debug = [
-        'user_id' => $user->id,
-        'subscription_count' => $user->subscriptions()->count(),
-        'all_subscriptions' => $user
-            ->subscriptions()
-            ->get()
-            ->map(function ($sub) {
-                return [
-                    'name' => $sub->name,
-                    'type' => $sub->type,
-                    'stripe_status' => $sub->stripe_status,
-                    'stripe_id' => $sub->stripe_id,
-                ];
-            }),
-        'active_subscription' => $activeSubscription
-            ? [
-                'name' => $activeSubscription->name,
-                'type' => $activeSubscription->type,
-                'stripe_status' => $activeSubscription->stripe_status,
-                'stripe_id' => $activeSubscription->stripe_id,
-            ]
-            : 'No active subscription',
-        'has_active_subscription' => $hasActiveSubscription,
-    ];
+    ////////////////////////////////////////////
+    // Debug for Subscription Info
+    ////////////////////////////////////////////
+    // $debug = [
+    //     'user_id' => $user->id,
+    //     'subscription_count' => $user->subscriptions()->count(),
+    //     'all_subscriptions' => $user
+    //         ->subscriptions()
+    //         ->get()
+    //         ->map(function ($sub) {
+    //             return [
+    //                 'name' => $sub->name,
+    //                 'type' => $sub->type,
+    //                 'stripe_status' => $sub->stripe_status,
+    //                 'stripe_id' => $sub->stripe_id,
+    //             ];
+    //         }),
+    //     'active_subscription' => $activeSubscription
+    //         ? [
+    //             'name' => $activeSubscription->name,
+    //             'type' => $activeSubscription->type,
+    //             'stripe_status' => $activeSubscription->stripe_status,
+    //             'stripe_id' => $activeSubscription->stripe_id,
+    //         ]
+    //         : 'No active subscription',
+    //     'has_active_subscription' => $hasActiveSubscription,
+    // ];
+    //
+    //           <!-- Debug information (remove in production) -->
+    //           <div class="py-4 sm:py-5">
+    //              <pre>{{ json_encode($debug, JSON_PRETTY_PRINT) }}</pre>
+    //           </div>
+    //
+
 @endphp
+
+
 
 @if ($hasActiveSubscription)
     <div class="mb-6 overflow-hidden bg-white border sm:rounded-lg">
@@ -96,10 +107,7 @@
                     </dd>
                 </div>
 
-                <!-- Debug information (remove in production) -->
-                <div class="py-4 sm:py-5">
-                    <pre>{{ json_encode($debug, JSON_PRETTY_PRINT) }}</pre>
-                </div>
+
             </dl>
         </div>
     </div>

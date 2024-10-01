@@ -20,7 +20,7 @@
                     @if (auth()->user()->hasStripeId() &&
                             auth()->user()->subscription('default') &&
                             auth()->user()->subscription('default')->active())
-                        <a href="{{ route('billing') }}" class="block w-full text-center btn white">
+                        <a href="{{ route('billing') }}" target="_blank" class="block w-full text-center btn white">
                             Manage Billing
                         </a>
                     @endif

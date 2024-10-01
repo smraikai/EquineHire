@@ -80,8 +80,6 @@
         </div>
     </section>
 
-
-
     <section class="py-24 bg-white sm:py-32">
         <div class="px-6 mx-auto max-w-7xl lg:px-8">
             <div class="max-w-2xl mx-auto lg:text-center">
@@ -102,10 +100,11 @@
                                         d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                                 </svg>
                             </div>
-                            Optimized for Google
+                            Optimized for Search Engines
                         </dt>
-                        <dd class="mt-2 text-base leading-7 text-gray-600">Our job listings rank well on search engines
-                            (such as Google) for job searches in your area, ensuring maximum exposure for your job openings.
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Our job listings are optimized for search engines like Google. When people search for jobs in
+                            your area, your listing on EquineHire will appear in results, maximizing visibility.
                         </dd>
                     </div>
                     <div class="relative pl-16">
@@ -185,9 +184,9 @@
                             <p class="text-base text-gray-500">
                                 We offer three subscription plans to suit your needs. The Basic Plan ($50/month) includes 1
                                 job post. Our Pro Plan ($120/3 months) allows up to 5 concurrent job posts. For unlimited
-                                job posts, choose our Premium Plan ($400/year). All plans feature employer logo display, job
-                                images, dedicated support, newsletter features, and social media sharing. You can cancel
-                                your subscription at any time.
+                                job posts, choose our Premium Plan ($400/year). All plans feature the option to add images
+                                to your employer profile, dedicated support, newsletter features, and social media sharing.
+                                You can cancel your subscription at any time.
                             </p>
                         </dd>
                     </div>
