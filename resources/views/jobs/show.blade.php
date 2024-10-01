@@ -110,10 +110,11 @@ Best regards,
                             <x-heroicon-o-credit-card class="flex-none w-5 h-5 text-gray-600" />
                             <span>
                                 @if ($job_listing->salary_type === 'hourly')
-                                    ${{ $job_listing->hourly_rate_min }} - ${{ $job_listing->hourly_rate_max }} / hour
+                                    ${{ number_format($job_listing->hourly_rate_min, 0) }} -
+                                    ${{ number_format($job_listing->hourly_rate_max, 0) }} / hour
                                 @else
-                                    ${{ number_format($job_listing->salary_range_min) }} -
-                                    ${{ number_format($job_listing->salary_range_max) }} / year
+                                    ${{ number_format($job_listing->salary_range_min, 0) }} -
+                                    ${{ number_format($job_listing->salary_range_max, 0) }} / year
                                 @endif
                             </span>
                         </div>
