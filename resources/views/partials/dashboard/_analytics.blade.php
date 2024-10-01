@@ -15,9 +15,20 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         fetch('/api/job-listings-views')
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 204) {
+                    throw new Error('No job listings found');
+                }
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.labels.length > 0) {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                if (data.labels && data.labels.length > 0) {
                     document.getElementById('noDataMessage').style.display = 'none';
                     document.getElementById('jobListingsChart').style.display = 'block';
 
@@ -59,8 +70,13 @@
             })
             .catch(error => {
                 console.error('Error fetching chart data:', error);
-                document.getElementById('noDataMessage').textContent =
-                    'Error loading chart data. Please try again later.';
+                if (error.message === 'No job listings found') {
+                    document.getElementById('noDataMessage').textContent =
+                        'You haven\'t created any job listings yet. Create one to start seeing analytics!';
+                } else {
+                    document.getElementById('noDataMessage').textContent =
+                        'Error loading chart data: ' + error.message;
+                }
             });
     });
 </script>

@@ -1,4 +1,5 @@
-<div id="profile-strength-card" class="fixed z-50 hidden p-4 bg-white border rounded-lg shadow-md sm:block top-4 right-4">
+<div id="profile-strength-card"
+    class="fixed z-50 hidden p-4 bg-white border rounded-lg shadow-md sm:block mt-[75px] top-4 right-4">
     <div class="flex items-center justify-between">
         <div>
             <h3 class="text-lg font-semibold text-gray-700">Profile Strength</h3>

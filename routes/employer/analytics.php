@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Joblisting\JobListingController;
+use App\Http\Controllers\JobListing\JobListingAnalyticsController;
 
 //////////////////////////////////////
 /// Business Analytics Route
 //////////////////////////////////////
-Route::get('/business/analytics', [JobListingController::class, 'getAnalytics'])
-    ->name('business.analytics')
+Route::get('/api/job-listings-views', [JobListingAnalyticsController::class, 'getJobListingsViews'])
+    ->name('api.job-listings-views')
     ->middleware('auth');

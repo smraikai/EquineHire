@@ -1,5 +1,5 @@
 <div id="listing-strength-card"
-    class="z-50 w-full p-4 mb-4 bg-white border rounded-lg shadow-md md:fixed md:top-4 md:right-4 md:w-64 md:mb-0">
+    class="z-50 w-full p-4 mb-4 bg-white border rounded-lg shadow-md md:fixed sm:!mt-[75px] md:top-4 md:right-4 md:w-64 md:mb-0">
     <div class="flex items-center justify-between">
         <div>
             <h3 class="text-lg font-semibold text-gray-700">Listing Strength</h3>

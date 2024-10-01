@@ -4,21 +4,31 @@ namespace App\Http\Controllers\JobListing;
 use App\Http\Controllers\Controller;
 
 use App\Models\JobListing;
+use Illuminate\Support\Facades\Log;
 
 class JobListingAnalyticsController extends Controller
 {
     public function getJobListingsViews()
     {
-        $jobListings = JobListing::where('user_id', auth()->id())
-            ->select('title', 'views')
-            ->orderBy('views', 'desc')
-            ->get();
+        try {
+            $jobListings = JobListing::where('user_id', auth()->id())
+                ->select('title', 'views')
+                ->orderBy('views', 'desc')
+                ->get();
 
-        $data = [
-            'labels' => $jobListings->pluck('title')->toArray(),
-            'views' => $jobListings->pluck('views')->toArray(),
-        ];
+            if ($jobListings->isEmpty()) {
+                return response()->json(['message' => 'No job listings found'], 204);
+            }
 
-        return response()->json($data);
+            $data = [
+                'labels' => $jobListings->pluck('title')->toArray(),
+                'views' => $jobListings->pluck('views')->toArray(),
+            ];
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error in getJobListingsViews: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while fetching data'], 500);
+        }
     }
 }
