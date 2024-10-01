@@ -46,9 +46,11 @@
             <div class="mt-4 text-center sm:mt-0 sm:text-right">
                 <a href="#job-openings"
                     class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 whitespace-nowrap">
-                    <span
-                        class="mr-2 text-sm font-bold">{{ $employer->jobListings()->where('is_active', true)->count() }}</span>
-                    <span>Job Opening(s)</span>
+                    @php
+                        $jobCount = $employer->jobListings()->where('is_active', true)->count();
+                    @endphp
+                    <span class="mr-2 text-sm font-bold">{{ $jobCount }}</span>
+                    <span>Job {{ $jobCount === 1 ? 'Opening' : 'Openings' }}</span>
                 </a>
             </div>
         </div>
