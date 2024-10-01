@@ -5,8 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\JobListing;
-use App\Models\PageView;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class JobListingViewCounter
 {
@@ -32,28 +32,40 @@ class JobListingViewCounter
 
     public function handle(Request $request, Closure $next)
     {
+
         $response = $next($request);
 
         if ($request->route()->getName() === 'jobs.show') {
-            $jobListingId = $request->route('id');
-            $jobListing = JobListing::find($jobListingId);
+            $jobListing = JobListing::find($request->route('id'));
 
             if (
                 $jobListing &&
                 (!Auth::check() || Auth::id() !== $jobListing->user_id) &&
                 $this->isHumanUserAgent($request->header('User-Agent'))
             ) {
-                $pageView = PageView::firstOrNew([
-                    'job_listing_id' => $jobListing->id,
-                    'date' => now()->toDateString()
-                ]);
-                $pageView->view_count = ($pageView->view_count ?? 0) + 1;
-                $pageView->save();
-
-                // Increment the total views on the job listing
                 $jobListing->increment('views');
+            } else {
+                Log::info('JobListingViewCounter: View not counted', [
+                    'job_id' => $jobListing ? $jobListing->id : 'null',
+                    'reason' => $this->getReasonForNotCounting($jobListing, $request),
+                ]);
             }
         }
+
         return $response;
+    }
+
+    private function getReasonForNotCounting($jobListing, $request)
+    {
+        if (!$jobListing) {
+            return 'Job listing not found';
+        }
+        if (Auth::check() && Auth::id() === $jobListing->user_id) {
+            return 'User is the owner of the job listing';
+        }
+        if (!$this->isHumanUserAgent($request->header('User-Agent'))) {
+            return 'Non-human user agent';
+        }
+        return 'Unknown reason';
     }
 }

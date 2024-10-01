@@ -9,6 +9,7 @@
 @section('content')
     <div class="container py-12 mx-auto">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <!-- Quick Actions Column -->
                 <div>
@@ -24,12 +25,11 @@
                 <div>
                     <h2 class="mb-4 text-lg font-medium leading-6 text-gray-900 sm:text-xl">Subscription Information</h2>
                     @include('partials.dashboard._subscription_info')
-
-                    <!-- Start: Page Views Analytics -->
-                    @include('partials.dashboard._analytics')
-                    <!-- End: Page Views Analytics -->
-
                 </div>
+            </div>
+
+            <div class="my-8">
+                @include('partials.dashboard._analytics')
             </div>
         </div>
     </div>
@@ -76,52 +76,4 @@
 
     <!-- Chart.js for Page Views -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        fetch('/business/analytics')
-            .then(response => response.json())
-            .then(data => {
-                if (data.data.length > 0) {
-                    document.getElementById('noDataMessage').style.display = 'none';
-                    document.getElementById('pageViewsChart').style.display = 'block';
-                    const ctx = document.getElementById('pageViewsChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                label: 'Page Views',
-                                data: data.data,
-                                borderColor: 'rgb(16, 185, 129)',
-                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                tension: 0.1,
-                                fill: true
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    labels: {
-                                        boxWidth: 0,
-                                        font: {
-                                            size: 12
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                    });
-                } else {
-                    document.getElementById('noDataMessage').style.display = 'block';
-                    document.getElementById('pageViewsChart').style.display = 'none';
-                }
-            });
-    </script>
 @endsection

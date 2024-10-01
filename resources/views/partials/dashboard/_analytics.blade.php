@@ -1,14 +1,14 @@
 <div class="overflow-hidden bg-white border sm:rounded-lg">
     <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">Job Listings Views</h3>
-        <p class="max-w-2xl mt-1 text-sm text-gray-500">Total views for your job listings</p>
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Job Listing Views</h3>
+        <p class="max-w-2xl mt-1 text-sm text-gray-500">Total views for your job listings.</p>
     </div>
     <hr class="max-w-[95%] mx-auto">
     <div class="p-4 border-gray-200 sm:px-6">
         <div id="noDataMessage" class="text-left text-gray-500">
             Loading chart data...
         </div>
-        <canvas id="jobListingsChart" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="jobListingsChart" width="400" height="100" style="display: none;"></canvas>
     </div>
 </div>
 
