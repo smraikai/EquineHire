@@ -110,6 +110,9 @@
                 </div>
             </main>
         </div>
+
+        @include('partials.dashboard._subscription_modal')
+
     </div>
     @yield('scripts')
 

@@ -3,15 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
-// Models
+use App\Http\ViewComposers\PlansComposer;
 use App\Models\Employer;
-
-// Observers
 use App\Observers\EmployerObserver;
-
-// Policies
 use App\Policies\EmployerPolicy;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Employer::observe(EmployerObserver::class);
         $this->registerPolicies();
+        View::composer('*', PlansComposer::class);
 
         // Additional gates or policy registrations can be added here
     }
