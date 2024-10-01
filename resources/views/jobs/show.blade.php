@@ -113,7 +113,7 @@ Best regards,
                                     @if ($job_listing->salary_type === 'hourly')
                                         ${{ number_format($job_listing->hourly_rate_min, 0) }} -
                                         ${{ number_format($job_listing->hourly_rate_max, 0) }} / hour
-                                    @elseif ($job_listing->salary_type === 'yearly')
+                                    @elseif ($job_listing->salary_type === 'salary')
                                         ${{ number_format($job_listing->salary_range_min, 0) }} -
                                         ${{ number_format($job_listing->salary_range_max, 0) }} / year
                                     @endif
