@@ -11,7 +11,7 @@ class RedirectMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $redirects = config('redirects');
-        $currentPath = $request->path();
+        $currentPath = '/' . ltrim($request->path(), '/');
 
         if (isset($redirects[$currentPath])) {
             return redirect($redirects[$currentPath], 301);
