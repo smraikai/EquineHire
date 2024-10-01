@@ -152,16 +152,16 @@ class SEOController extends Controller
         TwitterCard::setDescription($description);
         TwitterCard::setUrl(route('blog.show', $post->get('slug')));
 
-        JsonLd::setType('Article');
-        JsonLd::setTitle($post->get('title'));
-        JsonLd::setDescription($description);
-        JsonLd::addValue('datePublished', $post->getSystemProperties()->getCreatedAt()->format('c'));
-        JsonLd::addValue('dateModified', $post->getSystemProperties()->getUpdatedAt()->format('c'));
-        JsonLd::addValue('author', [
+        JsonLdMulti::setType('Article');
+        JsonLdMulti::setTitle($post->get('title'));
+        JsonLdMulti::setDescription($description);
+        JsonLdMulti::addValue('datePublished', $post->getSystemProperties()->getCreatedAt()->format('c'));
+        JsonLdMulti::addValue('dateModified', $post->getSystemProperties()->getUpdatedAt()->format('c'));
+        JsonLdMulti::addValue('author', [
             '@type' => 'Organization',
             'name' => 'EquineHire',
         ]);
-        JsonLd::addValue('publisher', [
+        JsonLdMulti::addValue('publisher', [
             '@type' => 'Organization',
             'name' => 'EquineHire',
             'logo' => [
@@ -171,7 +171,7 @@ class SEOController extends Controller
         ]);
 
         if ($post->has('featuredImage')) {
-            JsonLd::addValue('image', $post->get('featuredImage')->getFile()->getUrl());
+            JsonLdMulti::addValue('image', $post->get('featuredImage')->getFile()->getUrl());
         }
     }
 
