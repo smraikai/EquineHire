@@ -44,7 +44,6 @@
         </main>
     </div>
     @include('partials.footer')
-    @include('partials.scripts._google-maps-locations')
     @yield('scripts')
 </body>
 

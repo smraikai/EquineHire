@@ -111,7 +111,6 @@
             </main>
         </div>
     </div>
-    @include('partials.scripts._google-maps-locations')
     @yield('scripts')
 
 </body>

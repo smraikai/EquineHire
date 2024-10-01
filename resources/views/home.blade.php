@@ -21,8 +21,14 @@
                     class="object-cover w-full h-full">
             </div>
 
-            <div class="absolute inset-0 opacity-65 bg-gradient-to-b from-black to-transparent"></div>
-            <div class="absolute inset-0 opacity-65 bg-gradient-to-r from-black to-transparent"></div>
+            <!-- Dark overlay for mobile, gradient for larger screens -->
+            <div
+                class="absolute inset-0 bg-black bg-opacity-70 md:bg-opacity-0 md:bg-gradient-to-b md:from-black md:to-transparent md:opacity-65">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black via-black/50 md:hidden to-transparent opacity-70"></div>
+
+            <div class="absolute inset-0 md:bg-gradient-to-r md:from-black md:to-transparent md:opacity-65"></div>
+
         </div>
 
         <div class="container relative flex items-center max-w-screen-xl px-4 mx-auto">
