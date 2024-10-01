@@ -106,18 +106,20 @@ Best regards,
                             <x-heroicon-o-clock class="flex-none w-5 h-5 text-gray-600" />
                             <span>{{ Str::title($job_listing->job_type) }}</span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <x-heroicon-o-credit-card class="flex-none w-5 h-5 text-gray-600" />
-                            <span>
-                                @if ($job_listing->salary_type === 'hourly')
-                                    ${{ number_format($job_listing->hourly_rate_min, 0) }} -
-                                    ${{ number_format($job_listing->hourly_rate_max, 0) }} / hour
-                                @else
-                                    ${{ number_format($job_listing->salary_range_min, 0) }} -
-                                    ${{ number_format($job_listing->salary_range_max, 0) }} / year
-                                @endif
-                            </span>
-                        </div>
+                        @if ($job_listing->salary_type)
+                            <div class="flex items-center gap-3">
+                                <x-heroicon-o-credit-card class="flex-none w-5 h-5 text-gray-600" />
+                                <span>
+                                    @if ($job_listing->salary_type === 'hourly')
+                                        ${{ number_format($job_listing->hourly_rate_min, 0) }} -
+                                        ${{ number_format($job_listing->hourly_rate_max, 0) }} / hour
+                                    @elseif ($job_listing->salary_type === 'yearly')
+                                        ${{ number_format($job_listing->salary_range_min, 0) }} -
+                                        ${{ number_format($job_listing->salary_range_max, 0) }} / year
+                                    @endif
+                                </span>
+                            </div>
+                        @endif
                         <div class="flex items-center gap-3">
                             <x-heroicon-o-calendar class="flex-none w-5 h-5 text-gray-600" />
                             <span>Posted on {{ $job_listing->created_at->format('M d, Y') }}</span>

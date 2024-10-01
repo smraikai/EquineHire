@@ -127,6 +127,9 @@
                 Temporary</option>
             <option value="freelance"
                 {{ old('job_type', $jobListing->job_type ?? '') == 'freelance' ? 'selected' : '' }}>Freelance</option>
+            <option value="working-student"
+                {{ old('job_type', $jobListing->job_type ?? '') == 'working-student' ? 'selected' : '' }}>Working
+                Student</option>
             <option value="internship"
                 {{ old('job_type', $jobListing->job_type ?? '') == 'internship' ? 'selected' : '' }}>Internship
             </option>
@@ -135,9 +138,6 @@
             </option>
             <option value="seasonal"
                 {{ old('job_type', $jobListing->job_type ?? '') == 'seasonal' ? 'selected' : '' }}>Seasonal</option>
-            <option value="working-student"
-                {{ old('job_type', $jobListing->job_type ?? '') == 'working-student' ? 'selected' : '' }}>Working
-                Student</option>
         </select>
         @error('job_type')
             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -170,7 +170,7 @@
     </div>
 
     <div>
-        <label for="salary_type" class="block text-sm font-medium text-gray-700">Salary Type</label>
+        <label for="salary_type" class="block text-sm font-medium text-gray-700">Salary Type (Optional)</label>
         <select name="salary_type" id="salary_type"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('salary_type') border-red-500 @enderror">
             <option value="">Select Salary Type</option>
