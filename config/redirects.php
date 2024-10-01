@@ -1,7 +1,7 @@
 <?php
 
 return [
-    '/the-ultimate-equine-career-list/' => '/blog/the-ultimate-equine-career-list',
+    '/the-ultimate-equine-career-list' => '/blog/the-ultimate-equine-career-list',
     '/jobs/stable-hand-2' => '/jobs/stable-hand-1',
     '/jobs/groom-support-staff' => '/jobs/groomsupport-staff-2',
     '/jobs/part-time-or-full-time-horse-feeder-mansfield-ga' => '/jobs/part-time-or-full-time-horse-feeder-mansfield-ga-3',
