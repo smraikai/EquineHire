@@ -11,11 +11,12 @@
                 </div>
                 <div class="mt-3 text-center">
                     <h3 class="text-xl font-semibold leading-6 text-gray-900 sm:text-xl" id="modal-title">
-                        Supercharge Your Listing for Just ${{ number_format(config('job_boost.price') / 100, 0) }}
+                        Boost Your Job Post: 30 Days for Just ${{ number_format(config('job_boost.price') / 100, 0) }}
+
                     </h3>
                     <div class="mt-2">
                         <p class="text-sm text-gray-500">
-                            Boost your job listing to get more visibility and attract talent faster.
+                            Increase your job listings visibility and attract talent faster.
                         </p>
                     </div>
                 </div>

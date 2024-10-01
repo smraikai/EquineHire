@@ -33,6 +33,7 @@ class JobListing extends Model
         'email_link',
         'is_active',
         'is_boosted',
+        'boost_expires_at',
         'views',
     ];
 
