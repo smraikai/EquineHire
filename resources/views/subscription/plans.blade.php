@@ -68,10 +68,7 @@
                                 <input type="hidden" value="{{ $plan['id'] }}" name="plan">
                                 <input type="hidden" value="{{ $plan['name'] }}" name="planName">
                                 <button type="submit"
-                                    class="w-full rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-                    {{ $index === 1
-                        ? 'bg-blue-600 text-white shadow-sm hover:bg-blue-600 focus-visible:outline-blue-600'
-                        : 'bg-blue-50 text-blue-700 shadow-sm hover:bg-blue-100 focus-visible:outline-blue-600' }}">
+                                    class="w-full px-3 py-2 text-sm font-semibold leading-6 text-center text-white bg-blue-600 rounded-md shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-blue-700 focus-visible:outline-blue-600">
                                     Choose Plan
                                 </button>
                             </form>
