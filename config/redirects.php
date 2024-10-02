@@ -1,6 +1,7 @@
 <?php
 
 return [
+    '/free' => '/subscription',
     '/the-ultimate-equine-career-list' => '/blog/the-ultimate-equine-career-list',
     '/jobs/stable-hand-2' => '/jobs/stable-hand-1',
     '/jobs/groom-support-staff' => '/jobs/groomsupport-staff-2',
