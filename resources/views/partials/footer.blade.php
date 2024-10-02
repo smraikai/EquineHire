@@ -18,7 +18,7 @@
                 <ul class="space-y-3 list-none footer-links">
                     @foreach (\App\Models\JobListingCategory::all() as $category)
                         <li>
-                            <a href="{{ route('jobs.index', ['categories[]' => $category->id]) }}"
+                            <a href="{{ route('jobs.category', $category->slug) }}"
                                 class="text-gray-600 hover:text-gray-900">
                                 {{ $category->name }}
                             </a>

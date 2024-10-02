@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Traits\HasStates;
 
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+
 class JobSearchController extends Controller
 {
 
@@ -107,4 +110,63 @@ class JobSearchController extends Controller
             ],
         ]);
     }
+
+
+
+    public function category(Request $request, JobListingCategory $category)
+    {
+
+        \Log::info('Category ID: ' . $category->id);
+        \Log::info('Category Slug: ' . $category->slug);
+
+        $validatedData = $request->validate([
+            'keyword' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+        ]);
+
+        $keyword = $request->input('keyword', '');
+        $state = $validatedData['state'] ?? null;
+
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($category, $state) {
+            $facetFilters = ["category_ids:{$category->id}"];
+            if ($state) {
+                $facetFilters[] = "state:{$state}";
+            }
+
+            $options['facetFilters'] = $facetFilters;
+
+            Log::info('Algolia category search query:', [
+                'query' => $query,
+                'options' => $options
+            ]);
+
+            return $algolia->search($query, $options);
+        });
+
+        $results = $algoliaResults->paginate(15);
+
+        Log::info('Category search parameters:', [
+            'category' => $category->name,
+            'keyword' => $keyword,
+            'state' => $state,
+            'resultsCount' => $results->count(),
+            'resultsTotal' => $results->total(),
+        ]);
+
+        // Set SEO metadata
+        $metaTitle = "{$category->name} Jobs | Find Equine Services Near You";
+        $metaDescription = "Discover {$category->name} job opportunities in the equine industry. Connect with top employers and find your dream job in the horse world.";
+
+        SEOMeta::setTitle($metaTitle);
+        SEOMeta::setDescription($metaDescription);
+        OpenGraph::setTitle($metaTitle);
+        OpenGraph::setDescription($metaDescription);
+        OpenGraph::setUrl(url("/jobs/{$category->slug}"));
+
+        return view('jobs.category', [
+            'category' => $category,
+            'results' => $results,
+        ]);
+    }
+
 }
