@@ -33,7 +33,7 @@ class SEOController extends Controller
         OpenGraph::addProperty('site_name', config('app.name'));
 
         if ($job_listing->employer->logo) {
-            OpenGraph::addImage(asset('storage/' . $job_listing->employer->logo));
+            OpenGraph::addImage($this->getS3Url($job_listing->employer->logo));
         }
 
         $this->setJobListingSchema($job_listing);
@@ -57,7 +57,7 @@ class SEOController extends Controller
         OpenGraph::addProperty('site_name', config('app.name'));
 
         if ($employer->logo) {
-            OpenGraph::addImage(asset('storage/' . $employer->logo));
+            OpenGraph::addImage($this->getS3Url($employer->logo));
         }
 
         TwitterCard::setTitle($title);
@@ -115,7 +115,7 @@ class SEOController extends Controller
                 '@type' => 'Organization',
                 'name' => $job_listing->employer->name,
                 'sameAs' => $job_listing->employer->website,
-                'logo' => $job_listing->employer->logo ? asset('storage/' . $job_listing->employer->logo) : null,
+                'logo' => $job_listing->employer->logo ? $this->getS3Url($job_listing->employer->logo) : null,
             ],
             'jobLocation' => [
                 '@type' => 'Place',
@@ -178,7 +178,7 @@ class SEOController extends Controller
             'name' => $employer->name,
             'description' => substr(strip_tags($employer->description), 0, 160),
             'url' => $employer->website,
-            'logo' => $employer->logo ? asset('storage/' . $employer->logo) : null,
+            'logo' => $employer->logo ? $this->getS3Url($employer->logo) : null,
             'location' => [
                 '@type' => 'Place',
                 'address' => [
@@ -251,5 +251,11 @@ class SEOController extends Controller
         ];
 
         return $mapping[strtolower($jobType)] ?? $jobType;
+    }
+    private function getS3Url($path)
+    {
+        $baseUrl = rtrim(config('filesystems.disks.s3.url'), '/');
+        $path = ltrim($path, '/');
+        return $baseUrl . '/' . $path;
     }
 }
