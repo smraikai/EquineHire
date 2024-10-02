@@ -38,7 +38,7 @@ class SEOController extends Controller
         }
 
         JsonLdMulti::setType('JobPosting');
-        JsonLdMulti::setTitle($title);
+        JsonLdMulti::setTitle($job_listing->title); // Fix: Use only the job title
         JsonLdMulti::setDescription($description);
         JsonLdMulti::addValue('datePosted', $job_listing->created_at->toW3CString());
         JsonLdMulti::addValue('validThrough', $job_listing->created_at->addDays(30)->toW3CString());
@@ -58,17 +58,23 @@ class SEOController extends Controller
             ],
         ]);
         JsonLdMulti::addValue('employmentType', $this->mapJobType($job_listing->job_type));
-        JsonLdMulti::addValue('jobLocationType', $job_listing->remote_position ? 'TELECOMMUTE' : 'ONSITE');
+        JsonLdMulti::addValue('jobLocationType', $job_listing->remote_position ? 'REMOTE' : 'ONSITE'); // Fix: Use correct enum values
         JsonLdMulti::addValue('experienceRequirements', $job_listing->experience_required);
 
+        // Fix: Add applicantLocationRequirements
+        JsonLdMulti::addValue('applicantLocationRequirements', [
+            '@type' => 'Country',
+            'name' => 'United States', // Adjust this if necessary
+        ]);
+
+        // Fix: Always include baseSalary
         if ($job_listing->salary_type === 'hourly') {
             JsonLdMulti::addValue('baseSalary', [
                 '@type' => 'MonetaryAmount',
                 'currency' => 'USD',
                 'value' => [
                     '@type' => 'QuantitativeValue',
-                    'minValue' => $job_listing->hourly_rate_min,
-                    'maxValue' => $job_listing->hourly_rate_max,
+                    'value' => $job_listing->hourly_rate_min,
                     'unitText' => 'HOUR',
                 ],
             ]);
@@ -78,8 +84,18 @@ class SEOController extends Controller
                 'currency' => 'USD',
                 'value' => [
                     '@type' => 'QuantitativeValue',
-                    'minValue' => $job_listing->salary_range_min,
-                    'maxValue' => $job_listing->salary_range_max,
+                    'value' => $job_listing->salary_range_min,
+                    'unitText' => 'YEAR',
+                ],
+            ]);
+        } else {
+            // If no salary information is available, provide a default value
+            JsonLdMulti::addValue('baseSalary', [
+                '@type' => 'MonetaryAmount',
+                'currency' => 'USD',
+                'value' => [
+                    '@type' => 'QuantitativeValue',
+                    'value' => 0,
                     'unitText' => 'YEAR',
                 ],
             ]);
