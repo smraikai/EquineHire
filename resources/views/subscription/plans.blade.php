@@ -15,24 +15,11 @@
         </x-slot>
     </x-custom.hero-light>
 
-    <section class="!pt-0 max-w-7xl mx-auto -my-16">
-        <div class="py-12 bg-white shadow-xl sm:py-24 rounded-3xl">
-            <div class="px-6 mx-auto max-w-7xl lg:px-8">
-                <div class="max-w-4xl mx-auto sm:text-center">
-                    <x-custom.kicker-text text="Flexible Pricing Options" />
-                    <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Choose the Right Plan for
-                        Your Business</p>
-                </div>
-                <p class="max-w-2xl mx-auto mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                    With EquineHire, you can post job opportunities, connect with qualified candidates, and find the perfect
-                    equine pro for your business.
-                </p>
-
-                @include('subscription._plans-component')
-
-            </div>
-        </div>
+    <section class="!pt-0 max-w-7xl sm:mx-auto sm:-my-28 -my-12 mx-4">
+        @include('subscription._plans-component')
     </section>
+
+    @include('partials.sections.trust')
 
     <section class="py-24 bg-white sm:py-32">
         <div class="px-6 mx-auto max-w-7xl lg:px-8">

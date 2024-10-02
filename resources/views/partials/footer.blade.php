@@ -27,8 +27,11 @@
                 </ul>
             </div>
             <div class="w-full px-0 lg:w-1/4">
-                <h5 class="mb-2 font-bold text-gray-900">Employer</h5>
+                <h5 class="mb-2 font-bold text-gray-900">Company</h5>
                 <ul class="space-y-3 list-none footer-links">
+
+                    <li><a href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
+                    <li><a href="/terms-of-service" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
                     <li>
                         <script language="JavaScript">
                             <!--
@@ -40,8 +43,6 @@
                             -->
                         </script>
                     </li>
-                    <li><a href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
-                    <li><a href="/terms-of-service" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
                 </ul>
             </div>
         </div>

@@ -88,5 +88,5 @@
         </div>
     </section>
 
-    @include('partials.cta.job-alerts')
+    @include('partials.sections.job-alerts')
 @endsection
