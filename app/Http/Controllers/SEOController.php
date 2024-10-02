@@ -7,7 +7,6 @@ use App\Models\JobListing;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
-use Artesaos\SEOTools\Facades\JsonLdMulti;
 use Contentful\Delivery\Resource\Entry;
 use Contentful\RichText\Renderer;
 
@@ -37,69 +36,7 @@ class SEOController extends Controller
             OpenGraph::addImage(asset('storage/' . $job_listing->employer->logo));
         }
 
-        JsonLdMulti::setType('JobPosting');
-        JsonLdMulti::setTitle($job_listing->title); // Fix: Use only the job title
-        JsonLdMulti::setDescription($description);
-        JsonLdMulti::addValue('datePosted', $job_listing->created_at->toW3CString());
-        JsonLdMulti::addValue('validThrough', $job_listing->created_at->addDays(30)->toW3CString());
-        JsonLdMulti::addValue('hiringOrganization', [
-            '@type' => 'Organization',
-            'name' => $job_listing->employer->name,
-            'sameAs' => $job_listing->employer->website,
-            'logo' => $job_listing->employer->logo ? asset('storage/' . $job_listing->employer->logo) : null,
-        ]);
-        JsonLdMulti::addValue('jobLocation', [
-            '@type' => 'Place',
-            'address' => [
-                '@type' => 'PostalAddress',
-                'addressLocality' => $job_listing->city,
-                'addressRegion' => $job_listing->state,
-                'addressCountry' => 'US',
-            ],
-        ]);
-        JsonLdMulti::addValue('employmentType', $this->mapJobType($job_listing->job_type));
-        JsonLdMulti::addValue('jobLocationType', $job_listing->remote_position ? 'REMOTE' : 'ONSITE'); // Fix: Use correct enum values
-        JsonLdMulti::addValue('experienceRequirements', $job_listing->experience_required);
-
-        // Fix: Add applicantLocationRequirements
-        JsonLdMulti::addValue('applicantLocationRequirements', [
-            '@type' => 'Country',
-            'name' => 'United States', // Adjust this if necessary
-        ]);
-
-        // Fix: Always include baseSalary
-        if ($job_listing->salary_type === 'hourly') {
-            JsonLdMulti::addValue('baseSalary', [
-                '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
-                'value' => [
-                    '@type' => 'QuantitativeValue',
-                    'value' => $job_listing->hourly_rate_min,
-                    'unitText' => 'HOUR',
-                ],
-            ]);
-        } elseif ($job_listing->salary_type === 'salary') {
-            JsonLdMulti::addValue('baseSalary', [
-                '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
-                'value' => [
-                    '@type' => 'QuantitativeValue',
-                    'value' => $job_listing->salary_range_min,
-                    'unitText' => 'YEAR',
-                ],
-            ]);
-        } else {
-            // If no salary information is available, provide a default value
-            JsonLdMulti::addValue('baseSalary', [
-                '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
-                'value' => [
-                    '@type' => 'QuantitativeValue',
-                    'value' => 0,
-                    'unitText' => 'YEAR',
-                ],
-            ]);
-        }
+        $this->setJobListingSchema($job_listing);
     }
 
     public function setEmployerSEO(Employer $employer)
@@ -127,19 +64,8 @@ class SEOController extends Controller
         TwitterCard::setDescription($description);
         TwitterCard::setUrl(route('employers.show', $employer));
 
-        JsonLdMulti::setType('Organization');
-        JsonLdMulti::setTitle($employer->name);
-        JsonLdMulti::setDescription($description);
-        JsonLdMulti::addValue('url', $employer->website);
-        JsonLdMulti::addValue('logo', asset('storage/' . $employer->logo));
-        JsonLdMulti::addValue('location', [
-            '@type' => 'Place',
-            'address' => [
-                '@type' => 'PostalAddress',
-                'addressLocality' => $employer->city,
-                'addressRegion' => $employer->state,
-            ],
-        ]);
+        $this->setEmployerSchema($employer);
+
     }
 
     public function setBlogPostSEO(Entry $post)
@@ -168,45 +94,162 @@ class SEOController extends Controller
         TwitterCard::setDescription($description);
         TwitterCard::setUrl(route('blog.show', $post->get('slug')));
 
-        JsonLdMulti::setType('Article');
-        JsonLdMulti::setTitle($post->get('title'));
-        JsonLdMulti::setDescription($description);
-        JsonLdMulti::addValue('datePublished', $post->getSystemProperties()->getCreatedAt()->format('c'));
-        JsonLdMulti::addValue('dateModified', $post->getSystemProperties()->getUpdatedAt()->format('c'));
-        JsonLdMulti::addValue('author', [
-            '@type' => 'Organization',
-            'name' => 'EquineHire',
-        ]);
-        JsonLdMulti::addValue('publisher', [
-            '@type' => 'Organization',
-            'name' => 'EquineHire',
-            'logo' => [
-                '@type' => 'ImageObject',
-                'url' => 'https://equinehire-static-assets.s3.amazonaws.com/favicon.jpg',
-            ],
-        ]);
+        $this->setBlogPostSchema($post);
 
-        if ($post->has('featuredImage')) {
-            JsonLdMulti::addValue('image', $post->get('featuredImage')->getFile()->getUrl());
-        }
     }
 
     ////////////////////////////////////////////////////////
-    // Helpers for Job Listings
+    // Schema
     ////////////////////////////////////////////////////////
+
+    private function setJobListingSchema(JobListing $job_listing)
+    {
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'JobPosting',
+            'title' => "{$job_listing->title} at {$job_listing->employer->name}",
+            'description' => substr(strip_tags($job_listing->description), 0, 160),
+            'datePosted' => $job_listing->created_at->toW3CString(),
+            'validThrough' => $job_listing->created_at->addDays(30)->toW3CString(),
+            'hiringOrganization' => [
+                '@type' => 'Organization',
+                'name' => $job_listing->employer->name,
+                'sameAs' => $job_listing->employer->website,
+                'logo' => $job_listing->employer->logo ? asset('storage/' . $job_listing->employer->logo) : null,
+            ],
+            'jobLocation' => [
+                '@type' => 'Place',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'addressLocality' => $job_listing->city,
+                    'addressRegion' => $job_listing->state,
+                    'addressCountry' => 'US',
+                ],
+            ],
+            'employmentType' => $this->mapJobType($job_listing->job_type),
+            'jobLocationType' => $job_listing->remote_position ? 'REMOTE' : 'ONSITE',
+            'experienceRequirements' => $job_listing->experience_required,
+            'applicantLocationRequirements' => [
+                '@type' => 'Country',
+                'name' => 'United States',
+            ],
+        ];
+
+        if ($job_listing->salary_type === 'hourly') {
+            $schema['baseSalary'] = [
+                '@type' => 'MonetaryAmount',
+                'currency' => 'USD',
+                'value' => [
+                    '@type' => 'QuantitativeValue',
+                    'value' => $job_listing->hourly_rate_min,
+                    'unitText' => 'HOUR',
+                ],
+            ];
+        } elseif ($job_listing->salary_type === 'salary') {
+            $schema['baseSalary'] = [
+                '@type' => 'MonetaryAmount',
+                'currency' => 'USD',
+                'value' => [
+                    '@type' => 'QuantitativeValue',
+                    'value' => $job_listing->salary_range_min,
+                    'unitText' => 'YEAR',
+                ],
+            ];
+        } else {
+            $schema['baseSalary'] = [
+                '@type' => 'MonetaryAmount',
+                'currency' => 'USD',
+                'value' => [
+                    '@type' => 'QuantitativeValue',
+                    'value' => 0,
+                    'unitText' => 'YEAR',
+                ],
+            ];
+        }
+
+        $this->outputSchema($schema);
+    }
+
+    private function setEmployerSchema(Employer $employer)
+    {
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => $employer->name,
+            'description' => substr(strip_tags($employer->description), 0, 160),
+            'url' => $employer->website,
+            'logo' => $employer->logo ? asset('storage/' . $employer->logo) : null,
+            'location' => [
+                '@type' => 'Place',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'addressLocality' => $employer->city,
+                    'addressRegion' => $employer->state,
+                ],
+            ],
+        ];
+
+        $this->outputSchema($schema);
+    }
+
+    private function setBlogPostSchema(Entry $post)
+    {
+        $renderer = new Renderer();
+        $description = $post->get('metaDescription') ??
+            substr(strip_tags($renderer->render($post->get('body'))), 0, 160);
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => $post->get('title'),
+            'description' => $description,
+            'datePublished' => $post->getSystemProperties()->getCreatedAt()->format('c'),
+            'dateModified' => $post->getSystemProperties()->getUpdatedAt()->format('c'),
+            'author' => [
+                '@type' => 'Organization',
+                'name' => 'EquineHire',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'EquineHire',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://equinehire-static-assets.s3.amazonaws.com/favicon.jpg',
+                ],
+            ],
+        ];
+
+        if ($post->has('featuredImage')) {
+            $schema['image'] = $post->get('featuredImage')->getFile()->getUrl();
+        }
+
+        $this->outputSchema($schema);
+    }
+
+
+    ////////////////////////////////////////////////////////
+    // Helpers
+    ////////////////////////////////////////////////////////
+    private function outputSchema($schema)
+    {
+        $jsonLd = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        echo '<script type="application/ld+json">' . $jsonLd . '</script>';
+    }
 
     private function mapJobType($jobType)
     {
         $mapping = [
-            'Full-time' => 'FULL_TIME',
-            'Part-time' => 'PART_TIME',
-            'Contract' => 'CONTRACTOR',
-            'Temporary' => 'TEMPORARY',
-            'Internship' => 'INTERN',
-            'Volunteer' => 'VOLUNTEER',
-            // Add more mappings as needed
+            'full-time' => 'FULL_TIME',
+            'part-time' => 'PART_TIME',
+            'contract' => 'CONTRACTOR',
+            'temp' => 'TEMPORARY',
+            'freelance' => 'FREELANCE',
+            'working-student' => 'WORKING_STUDENT',
+            'internship' => 'INTERN',
+            'externship' => 'EXTERNSHIP',
+            'seasonal' => 'SEASONAL',
         ];
 
-        return $mapping[$jobType] ?? $jobType;
+        return $mapping[strtolower($jobType)] ?? $jobType;
     }
 }

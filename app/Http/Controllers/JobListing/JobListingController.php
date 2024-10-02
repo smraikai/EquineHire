@@ -32,10 +32,6 @@ class JobListingController extends Controller
         }
 
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
-
-        // Set SEO metadata
-        $this->seoController->setJobListingSEO($job_listing);
-
         return view('jobs.show', compact('job_listing', 'isOwner'));
     }
 }
