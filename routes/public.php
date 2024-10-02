@@ -7,6 +7,7 @@ use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
+use Illuminate\Http\Request;
 
 ////////////////////////////////////////////////////////////////////
 // Main Public Pages
@@ -48,7 +49,19 @@ Route::get('/terms-of-service', function () {
 ////////////////////////////////////////////////////////////////////
 // Job Listings & Employer (Public) Routes
 ////////////////////////////////////////////////////////////////////
-Route::get('/jobs', [JobSearchController::class, 'index'])->name('jobs.index');
+Route::get('/jobs', function (Request $request) {
+    $metaTitle = 'Search Equine Jobs';
+    $metaDescription = 'Search through hundreds of career opportunities in the Equine Industry.';
+
+    SEOMeta::setTitle($metaTitle);
+    SEOMeta::setDescription($metaDescription);
+    OpenGraph::setTitle($metaTitle);
+    OpenGraph::setDescription($metaDescription);
+    OpenGraph::setUrl(url('/jobs'));
+
+    return app(JobSearchController::class)->index($request);
+})->name('jobs.index');
+
 Route::get('/categories/{category:slug}', [JobSearchController::class, 'category'])->name('jobs.category');
 Route::get('/jobs/{job_slug}-{id}', [JobListingController::class, 'show'])
     ->name('jobs.show')
