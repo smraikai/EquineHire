@@ -66,7 +66,7 @@ Best regards,
             </div>
 
             <!-- Job Details & Employer Information -->
-            <div class="sticky flex flex-col self-start gap-5 top-5 md:w-1/3">
+            <div class="sticky flex flex-col self-start w-full gap-5 top-5 sm:w-1/3">
                 <!-- Job Details Section -->
                 <div class="flex flex-col gap-5 p-6 border rounded-md">
                     <!-- Employer Logo and Name -->
