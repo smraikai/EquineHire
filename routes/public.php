@@ -49,7 +49,7 @@ Route::get('/terms-of-service', function () {
 // Job Listings & Employer (Public) Routes
 ////////////////////////////////////////////////////////////////////
 Route::get('/jobs', [JobSearchController::class, 'index'])->name('jobs.index');
-Route::get('/jobs/{category:slug}', [JobSearchController::class, 'category'])->name('jobs.category');
+Route::get('/categories/{category:slug}', [JobSearchController::class, 'category'])->name('jobs.category');
 Route::get('/jobs/{job_slug}-{id}', [JobListingController::class, 'show'])
     ->name('jobs.show')
     ->where('job_slug', '[a-z0-9\-]+')

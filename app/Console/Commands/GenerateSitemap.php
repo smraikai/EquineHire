@@ -9,6 +9,7 @@ use App\Models\JobListing;
 use App\Models\Employer;
 use Contentful\Delivery\Client as ContentfulClient;
 use Contentful\Delivery\Query;
+use App\Models\JobListingCategory;
 
 class GenerateSitemap extends Command
 {
@@ -21,6 +22,7 @@ class GenerateSitemap extends Command
         $this->generateJobSitemap();
         $this->generateEmployerSitemap();
         $this->generateBlogSitemap();
+        $this->generateCategorySitemap(); // Add this line
         $this->generateIndexSitemap();
 
         $this->info('Sitemaps generated successfully: static pages, jobs, employers, blog posts, and index sitemap.');
@@ -101,6 +103,22 @@ class GenerateSitemap extends Command
         $blogSitemap->writeToFile(public_path('sitemap-blog.xml'));
     }
 
+    private function generateCategorySitemap()
+    {
+        $categorySitemap = Sitemap::create();
+
+        JobListingCategory::all()->each(function ($category) use ($categorySitemap) {
+            $categorySitemap->add(
+                Url::create(route('jobs.category', $category->slug))
+                    ->setLastModificationDate($category->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                    ->setPriority(0.8)
+            );
+        });
+
+        $categorySitemap->writeToFile(public_path('sitemap-categories.xml'));
+    }
+
     private function generateIndexSitemap()
     {
         $baseUrl = config('app.url');
@@ -109,8 +127,11 @@ class GenerateSitemap extends Command
             ->add(Url::create($baseUrl . '/sitemap-static.xml'))
             ->add(Url::create($baseUrl . '/sitemap-jobs.xml'))
             ->add(Url::create($baseUrl . '/sitemap-employers.xml'))
-            ->add(Url::create($baseUrl . '/sitemap-blog.xml'));
+            ->add(Url::create($baseUrl . '/sitemap-blog.xml'))
+            ->add(Url::create($baseUrl . '/sitemap-categories.xml')); // Add this line
 
         $indexSitemap->writeToFile(public_path('sitemap.xml'));
     }
+
+
 }

@@ -16,4 +16,8 @@
         <loc>https://equinehire.test/sitemap-blog.xml</loc>
     
             </url>
+    <url>
+        <loc>https://equinehire.test/sitemap-categories.xml</loc>
+    
+            </url>
 </urlset>
