@@ -31,9 +31,22 @@
                 <!-- User Interaction Links -->
                 @auth
                     <!-- Links for Logged-in Users -->
-                    <a href="{{ route('dashboard.employers.index') }}"
-                        class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">My
-                        Account</a>
+                    @php
+                        $user = Auth::user();
+                        $isEmployer = $user->isEmployer();
+                    @endphp
+                    <!-- Links for Logged-in Users -->
+                    @if ($isEmployer)
+                        <a href="{{ route('dashboard.employers.index') }}"
+                            class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">
+                            Employer Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('dashboard.job_seekers.index') }}"
+                            class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">
+                            Job Seeker Dashboard
+                        </a>
+                    @endif
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                         class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">Log

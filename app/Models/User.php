@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_employer',
     ];
 
     /**
@@ -43,6 +44,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_employer' => 'boolean',
         'trial_ends_at' => 'datetime',
     ];
 
@@ -86,6 +88,19 @@ class User extends Authenticatable
         $limit = $limits[$subscriptionType] ?? ($subscription ? 1 : 0);
 
         return $currentCount < $limit;
+    }
+
+    //////////////////////////////////////////////////
+    // User Type (Employer or Jobseeker)
+    //////////////////////////////////////////////////
+    public function isEmployer()
+    {
+        return $this->is_employer;
+    }
+
+    public function isJobSeeker()
+    {
+        return !$this->is_employer;
     }
 
 }

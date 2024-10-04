@@ -10,9 +10,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             JobListingCategoriesSeeder::class,
-                // EmployerSeeder::class,
-                // JobListingSeeder::class,
-            JobListingsSeeder::class, // Old EQH Jobs
+            // EmployerSeeder::class,
+            // JobListingSeeder::class,
+            // JobListingsSeeder::class, (old EQH listings)
         ]);
     }
 }
