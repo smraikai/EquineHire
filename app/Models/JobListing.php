@@ -120,6 +120,16 @@ class JobListing extends Model
         ];
     }
 
+    protected static function booted()
+    {
+        static::created(function ($jobListing) {
+            $jobListing->searchable();
+        });
+
+        static::updated(function ($jobListing) {
+            $jobListing->searchable();
+        });
+    }
 
     /**
      * Determine if the model should be searchable.
