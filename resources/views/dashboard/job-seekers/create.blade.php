@@ -2,7 +2,7 @@
 
 @php
     $metaTitle = 'Create Your Profile | EquineHire';
-    $pageTitle = 'Create Your Profile Profile';
+    $pageTitle = 'Create Your Profile';
 @endphp
 
 @section('content')
