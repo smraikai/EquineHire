@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use App\Models\UserType;
+use Illuminate\Support\Facades\Session;
 
 
 class RegisteredUserController extends Controller
@@ -21,24 +21,35 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $hasPlanSelected = session()->has('selected_plan') ||
-            session()->has('annual_discount') ||
-            session()->has('trial');
-
-        return view('auth.register', compact('hasPlanSelected'));
+        if (Session::has('selected_plan')) {
+            return $this->createEmployer();
+        }
+        return view('auth.register-choice');
     }
+
+    public function createJobSeeker(): View
+    {
+        Session::forget('selected_plan');
+        return view('auth.register', ['is_employer' => false]);
+    }
+    public function createEmployer(): View
+    {
+        return view('auth.register', ['is_employer' => true]);
+    }
+
     /**
      * Handle an incoming registration request.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'is_employer' => ['required', 'boolean'],
         ]);
 
         $user = User::create([
@@ -55,13 +66,6 @@ class RegisteredUserController extends Controller
         if ($user->isJobSeeker()) {
             return redirect()->route('dashboard.job_seekers.index');
         } elseif ($user->isEmployer()) {
-            if ($request->session()->has('annual_discount')) {
-                return redirect()->route('eh.checkout');
-            }
-            if ($request->session()->has('trial')) {
-                $request->session()->forget('trial');
-                return redirect()->route('trial.signup');
-            }
             if ($request->session()->has('selected_plan')) {
                 $planId = $request->session()->get('selected_plan');
                 return redirect()->route('subscription.checkout', ['plan' => $planId]);
@@ -69,7 +73,13 @@ class RegisteredUserController extends Controller
             return redirect()->route('subscription.plans');
         }
 
-        // Fallback redirect
         return redirect()->route('dashboard');
     }
+
+    public function clearSelectedPlan(Request $request): RedirectResponse
+    {
+        Session::forget('selected_plan');
+        return redirect()->route('register');
+    }
+
 }

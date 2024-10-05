@@ -68,7 +68,7 @@ class JobListing extends Model
     }
 
     ///////////////////////////////////////////////////////////////
-    // Search / Algolia Settings
+    // Search Settings
     ///////////////////////////////////////////////////////////////
     public function searchableAs()
     {
@@ -119,7 +119,6 @@ class JobListing extends Model
             ],
         ];
     }
-
 
     /**
      * Determine if the model should be searchable.
