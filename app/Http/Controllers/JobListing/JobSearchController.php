@@ -154,7 +154,7 @@ class JobSearchController extends Controller
         ]);
 
         // Set SEO metadata
-        $metaTitle = "{$category->name} Jobs | Find Equine Services Near You";
+        $metaTitle = "Find {$category->name} Near You | EquineHire";
         $metaDescription = "Discover {$category->name} job opportunities in the equine industry. Connect with top employers and find your dream job in the horse world.";
 
         SEOMeta::setTitle($metaTitle);
