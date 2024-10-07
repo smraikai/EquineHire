@@ -25,7 +25,7 @@
         <label for="description" class="block text-sm font-medium text-gray-700">Description <span
                 class="text-red-500">*</span></label>
         <div id="quill_editor"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('description') border-red-500 @enderror"
+            class="mt-1 block w-full rounded-t-none rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('description') border-red-500 @enderror"
             style="height: 200px;"></div>
         <input type="hidden" name="description" id="description"
             value="{{ old('description', $employer->description ?? '') }}" required>
