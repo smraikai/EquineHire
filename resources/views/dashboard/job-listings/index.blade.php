@@ -6,7 +6,7 @@
 @endphp
 
 @section('content')
-    <div class="container py-12 mx-auto sm:py-24">
+    <div class="container py-12 mx-auto sm:py-24 px-4">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             @if (auth()->user()->employer)
                 @if ($jobListings->isNotEmpty())
@@ -69,9 +69,9 @@
                                                         </td>
                                                         <td class="px-3 py-4 text-sm text-gray-500">
                                                             <a href="{{ route('jobs.show', ['job_slug' => Str::slug($jobListing->title), 'id' => $jobListing->id]) }}"
-                                                                class="text-indigo-600 hover:text-indigo-900">View</a>
+                                                                class="text-blue-600 hover:text-blue-900">View</a>
                                                             <a href="{{ route('employers.job-listings.edit', $jobListing->id) }}"
-                                                                class="ml-2 text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                                class="ml-2 text-blue-600 hover:text-blue-900">Edit</a>
                                                             <form
                                                                 action="{{ route('employers.job-listings.destroy', $jobListing->id) }}"
                                                                 method="POST" class="inline ml-2">
@@ -113,7 +113,7 @@
                     <div class="flex flex-col items-center p-6 bg-white border rounded-md">
                         <p class="text-sm text-gray-600">You haven't created any job listings yet.</p>
                         <a href="{{ route('employers.job-listings.create') }}"
-                            class="inline-flex items-center justify-center px-4 py-2 mt-4 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            class="inline-flex items-center justify-center px-4 py-2 mt-4 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                             <x-coolicon-add-plus-circle class="w-5 h-5 mr-2" /> Create Job Listing
                         </a>
                     </div>

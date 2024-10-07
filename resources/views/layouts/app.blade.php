@@ -66,7 +66,7 @@
                                         alt="{{ Auth::user()->name }}">
                                 @else
                                     <div
-                                        class="flex items-center justify-center w-8 h-8 text-sm font-semibold text-white bg-indigo-600 rounded-full">
+                                        class="flex items-center justify-center w-8 h-8 text-sm font-semibold text-white bg-blue-600 rounded-full">
                                         {{ Str::upper(Str::substr(Auth::user()->name, 0, 2)) }}
                                     </div>
                                 @endif

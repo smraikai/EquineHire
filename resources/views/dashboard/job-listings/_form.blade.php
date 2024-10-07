@@ -172,7 +172,7 @@
     <div>
         <label for="salary_type" class="block text-sm font-medium text-gray-700">Salary Type (Optional)</label>
         <select name="salary_type" id="salary_type"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('salary_type') border-red-500 @enderror">
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('salary_type') border-red-500 @enderror">
             <option value="">Select Salary Type</option>
             <option value="hourly"
                 {{ old('salary_type', $jobListing->salary_type ?? '') == 'hourly' ? 'selected' : '' }}>Hourly</option>
@@ -193,7 +193,7 @@
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
                 <select name="hourly_rate_min" id="hourly_rate_min"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm">
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select minimum rate</option>
                     @for ($i = 10; $i <= 100; $i += 5)
                         <option value="{{ $i }}"
@@ -214,7 +214,7 @@
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
                 <select name="hourly_rate_max" id="hourly_rate_max"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm">
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select maximum rate</option>
                     @for ($i = 15; $i <= 200; $i += 5)
                         <option value="{{ $i }}"
@@ -238,7 +238,7 @@
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
                 <select name="salary_range_min" id="salary_range_min"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm">
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select minimum salary</option>
                     @for ($i = 10000; $i <= 100000; $i += 10000)
                         <option value="{{ $i }}"
@@ -259,7 +259,7 @@
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
                 <select name="salary_range_max" id="salary_range_max"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-r-md sm:text-sm">
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select maximum salary</option>
                     @for ($i = 20000; $i <= 200000; $i += 10000)
                         <option value="{{ $i }}"

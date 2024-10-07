@@ -7,7 +7,7 @@
 
 @section('content')
     @include('dashboard._profile-strength')
-    <div class="container py-12 mx-auto sm:py-24">
+    <div class="container px-4 py-12 mx-auto sm:py-24">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <form action="{{ route('employers.update', $employer) }}" method="POST" enctype="multipart/form-data"
                 class="p-6 m-4 bg-white rounded-lg shadow-sm sm:m-0">

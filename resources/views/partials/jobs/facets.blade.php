@@ -65,7 +65,7 @@
             <div class="mt-4">
                 <label for="job_type" class="block text-sm font-medium text-gray-700">Job Type</label>
                 <select id="job_type" name="job_type" x-ref="jobTypeSelect"
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">All Job Types</option>
                     @foreach ($jobTypes as $jobType)
                         <option value="{{ $jobType }}" @selected(request('job_type') == $jobType)>{{ $jobType }}</option>
@@ -78,7 +78,7 @@
                 <label for="experience_level" class="block text-sm font-medium text-gray-700">Experience
                     Required</label>
                 <select id="experience_level" name="experience_level" x-ref="experienceLevelSelect"
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">All Experience Levels</option>
                     @foreach ($experienceLevels as $level)
                         <option value="{{ $level }}" @selected(request('experience_level') == $level)>{{ $level }}</option>
@@ -90,7 +90,7 @@
             <div class="mt-4">
                 <label for="salary_type" class="block text-sm font-medium text-gray-700">Salary Type</label>
                 <select id="salary_type" name="salary_type" x-ref="salaryTypeSelect"
-                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="">All Salary Types</option>
                     @foreach ($salaryTypes as $salaryType)
                         <option value="{{ $salaryType }}" @selected(request('salary_type') == $salaryType)>{{ Str::title($salaryType) }}
