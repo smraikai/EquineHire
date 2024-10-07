@@ -461,3 +461,62 @@ section {
 [x-cloak] {
     display: none !important;
 }
+
+.bio {
+    @apply text-base text-gray-700;
+}
+
+.bio p {
+    @apply mb-3;
+}
+
+.bio h1 {
+    @apply mb-2 text-2xl font-bold text-gray-800;
+}
+
+.bio h2 {
+    @apply mb-2 text-xl font-semibold text-gray-800;
+}
+
+.bio h3 {
+    @apply mb-2 text-lg font-medium text-gray-800;
+}
+
+.bio h4,
+.bio h5,
+.bio h6 {
+    @apply mb-2 text-base font-medium text-gray-800;
+}
+
+.bio ul,
+.bio ol {
+    @apply pl-5 mb-3;
+}
+
+.bio ul {
+    @apply list-disc;
+}
+
+.bio ol {
+    @apply list-decimal;
+}
+
+.bio li {
+    @apply mb-1;
+}
+
+.bio a {
+    @apply text-blue-600 underline hover:text-blue-800;
+}
+
+.bio blockquote {
+    @apply pl-4 my-3 italic border-l-4 border-gray-300;
+}
+
+.bio code {
+    @apply bg-gray-100 rounded px-1 py-0.5 font-mono text-sm;
+}
+
+.bio pre {
+    @apply p-3 my-3 overflow-x-auto font-mono text-sm bg-gray-100 rounded;
+}

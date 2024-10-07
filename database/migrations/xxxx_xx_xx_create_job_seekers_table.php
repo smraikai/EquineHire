@@ -13,7 +13,8 @@ return new class extends Migration {
             $table->string('full_name');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
-            $table->string('location')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('profile_picture_url')->nullable();
             $table->text('bio')->nullable();
             $table->string('resume_url')->nullable();

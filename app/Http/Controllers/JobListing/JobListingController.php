@@ -7,6 +7,10 @@ use App\Http\Controllers\SEOController;
 use App\Models\JobListing;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
+
 class JobListingController extends Controller
 {
     protected $seoController;
@@ -19,6 +23,11 @@ class JobListingController extends Controller
     public function show(Request $request, $job_slug, $id)
     {
         $job_listing = JobListing::with('employer')->findOrFail($id);
+
+        // Remember page in case someone logs in from a job listing
+        if (!Auth::check()) {
+            Session::put('previous_url', url()->current());
+        }
 
         // Set SEO metadata
         $this->seoController->setJobListingSEO($job_listing);

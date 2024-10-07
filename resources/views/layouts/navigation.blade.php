@@ -42,10 +42,19 @@
                             Employer Dashboard
                         </a>
                     @else
-                        <a href="{{ route('dashboard.job_seekers.index') }}"
+                        <a href="{{ route('profile.edit') }}"
                             class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">
-                            Job Seeker Dashboard
+                            My Profile
                         </a>
+
+                        {{-- WAIT: Dashboard Edit
+                        
+                        <a href="{{ route('dashboard.job-seekers.index') }}"
+                            class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">
+                            My Profile
+                        </a>
+
+                        --}}
                     @endif
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -84,7 +93,6 @@
 
         </div>
     </div>
-
 
     <!-- Blur effect overlay -->
     <div x-show="open" x-transition:enter="transition-opacity ease-linear duration-300"
@@ -131,10 +139,21 @@
                     <!-- Action buttons -->
                     <div class="p-4 border-gray-200">
                         @auth
-                            <a href="{{ route('dashboard.employers.index') }}"
-                                class="flex items-center justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-800">
-                                My Account
-                            </a>
+                            @php
+                                $user = Auth::user();
+                                $isEmployer = $user->isEmployer();
+                            @endphp
+                            @if ($isEmployer)
+                                <a href="{{ route('dashboard.employers.index') }}"
+                                    class="flex items-center justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-800">
+                                    Employer Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('profile.edit') }}"
+                                    class="flex items-center justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-800">
+                                    My Profile
+                                </a>
+                            @endif
                             <form method="POST" action="{{ route('logout') }}" class="mt-4">
                                 @csrf
                                 <button type="submit"

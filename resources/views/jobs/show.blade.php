@@ -57,11 +57,19 @@ Best regards,
                 </div>
 
                 <!-- Apply Now Button (Full Width) -->
-                <a id="apply_now" href="{{ $applyLink ?? '#' }}"
-                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
-                    {{ !$applyLink ? 'disabled' : '' }}>
-                    Apply Now
-                </a>
+                @auth
+                    <a id="apply_now" href="{{ $applyLink ?? '#' }}"
+                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
+                        {{ !$applyLink ? 'disabled' : '' }}>
+                        Apply Now
+                    </a>
+                @else
+                    <a href="{{ route('register') }}"
+                        class="flex items-center justify-center w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                        <span>Login to Apply</span>
+                        <x-heroicon-o-arrow-up-right class="w-3 h-3 ml-2" />
+                    </a>
+                @endauth
 
             </div>
 
@@ -126,12 +134,20 @@ Best regards,
                         </div>
                     </div>
 
-                    <!-- Apply Now Button -->
-                    <a id="apply_now" href="{{ $applyLink ?? '#' }}"
-                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
-                        {{ !$applyLink ? 'disabled' : '' }}>
-                        Apply Now
-                    </a>
+                    <!-- Apply Now Button (Full Width) -->
+                    @auth
+                        <a id="apply_now" href="{{ $applyLink ?? '#' }}"
+                            class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
+                            {{ !$applyLink ? 'disabled' : '' }}>
+                            Apply Now
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}"
+                            class="flex items-center justify-center w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                            <span>Login to Apply</span>
+                            <x-heroicon-o-arrow-up-right class="w-3 h-3 ml-2" />
+                        </a>
+                    @endauth
 
                 </div>
 

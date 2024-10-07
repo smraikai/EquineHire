@@ -1,16 +1,13 @@
 <?php
 
-use App\Http\Controllers\Jobseeker\JobSeekerController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Jobseeker\JobSeekerProfileController;
 
-Route::prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/job-seekers', [JobSeekerController::class, 'index'])
-        ->name('job_seekers.index');
+Route::resource('job-seekers', JobSeekerProfileController::class);
 
-    Route::post('/job-seekers', [JobSeekerController::class, 'store'])
-        ->name('job_seekers.store');
-});
+Route::get('/job-seekers', [JobSeekerProfileController::class, 'index'])->name('dashboard.job-seekers.index');
+Route::post('/job-seekers', [JobSeekerProfileController::class, 'store'])->name('dashboard.job-seekers.store');
 
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::get('/job-seekers/{jobSeeker}/edit', [JobSeekerProfileController::class, 'edit'])->name('dashboard.job-seekers.edit');
+Route::put('/job-seekers/{jobSeeker}', [JobSeekerProfileController::class, 'update'])->name('dashboard.job-seekers.update');
 
-Route::resource('job-seekers', JobSeekerController::class);
+Route::delete('/job-seekers/{jobSeeker}', [JobSeekerProfileController::class, 'destroy'])->name('job-seekers.destroy');

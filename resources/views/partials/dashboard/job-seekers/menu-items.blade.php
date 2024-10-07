@@ -1,32 +1,12 @@
 <li>
-    <div class="text-xs font-semibold leading-6 text-gray-400">Dashboard</div>
-    <ul role="list" class="mt-2 -mx-2 space-y-1">
-        <li>
-            <a href="{{ route('job-seekers.index') }}"
-                class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
-                <x-heroicon-o-home class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
-                Dashboard Home
-            </a>
-        </li>
-    </ul>
-</li>
-
-<li>
     <div class="text-xs font-semibold leading-6 text-gray-400">Profile</div>
     <ul role="list" class="mt-2 -mx-2 space-y-1">
         @if (auth()->user()->jobSeeker)
             <li>
-                <a href="{{ route('job-seekers.show', auth()->user()->jobSeeker) }}"
+                <a href="{{ route('dashboard.job-seekers.index', auth()->user()->jobSeeker) }}"
                     class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
-                    <x-heroicon-o-user class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
-                    View Profile
-                </a>
-            </li>
-            <li>
-                <a href="#"
-                    class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
-                    <x-heroicon-o-document-text class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
-                    My Resume
+                    <x-heroicon-o-pencil-square class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
+                    My Profile
                 </a>
             </li>
         @else
@@ -51,6 +31,8 @@
                 Find Jobs
             </a>
         </li>
+        {{-- WAIT: Dashboard Edit
+        
         <li>
             <a href="#"
                 class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
@@ -66,5 +48,6 @@
                 Applications
             </a>
         </li>
+        --}}
     </ul>
 </li>

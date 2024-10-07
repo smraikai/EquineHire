@@ -1,18 +1,17 @@
 <?php
 
 use App\Http\Middleware\SubscriptionCheck;
-use App\Http\Controllers\JobSeekerController;
 
 // Employer 
 Route::middleware([SubscriptionCheck::class, 'auth'])->group(function () {
     require __DIR__ . '/employers/dashboard.php';
-    require __DIR__ . '/employers/uploads.php';
     require __DIR__ . '/employers/job-listings.php';
     require __DIR__ . '/employers/analytics.php';
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     require __DIR__ . '/jobseekers/dashboard.php';
+    require __DIR__ . '/uploads.php';
 });
 
 // Main Routes

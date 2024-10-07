@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         if ($user->isJobSeeker()) {
-            return redirect()->route('dashboard.job_seekers.index');
+            return redirect()->route('dashboard.job-seekers.index');
         } elseif ($user->isEmployer()) {
             if ($request->session()->has('selected_plan')) {
                 $planId = $request->session()->get('selected_plan');

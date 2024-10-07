@@ -64,6 +64,10 @@
                                     <img class="w-8 h-8 rounded-full bg-gray-50"
                                         src="{{ Storage::url(Auth::user()->employer->logo) }}"
                                         alt="{{ Auth::user()->name }}">
+                                @elseif (!Auth::user()->is_employer && Auth::user()->jobSeeker && Auth::user()->jobSeeker->profile_picture_url)
+                                    <img class="w-8 h-8 rounded-full bg-gray-50"
+                                        src="{{ Storage::url(Auth::user()->jobSeeker->profile_picture_url) }}"
+                                        alt="{{ Auth::user()->name }}">
                                 @else
                                     <div
                                         class="flex items-center justify-center w-8 h-8 text-sm font-semibold text-white bg-indigo-600 rounded-full">
