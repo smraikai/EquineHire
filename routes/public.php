@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 // Main Public Pages
 ////////////////////////////////////////////////////////////////////
 Route::get('/', function () {
-    $metaTitle = 'Find Equine Services Near You';
-    $metaDescription = 'Discover local boarding facilities, farriers, veterinarians, trainers, and more equine services. Connect with top professionals in your area.';
+    $metaTitle = 'Find Equine Jobs Near You';
+    $metaDescription = 'Find amazing career opportunities in the equine industry with EquineHire, ranging from training and riding to healthcare and breeding.';
 
     SEOMeta::setTitle($metaTitle);
     SEOMeta::setDescription($metaDescription);

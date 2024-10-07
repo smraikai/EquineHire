@@ -59,7 +59,7 @@ return [
          */
         'defaults' => [
             'title' => 'EquineHire', // set false to total remove
-            'description' => 'Find equine services near you on EquineHire, the best Equine Job', // set false to total remove
+            'description' => 'Find equine jobs near you on EquineHire.', // set false to total remove
             'url' => 'current', // Set to null or 'full' to use Url::full(), set to 'current' to use Url::current(), set false to total remove
             'type' => 'WebPage',
             'images' => ['https://equinehire-static-assets.s3.amazonaws.com/socialshare.jpg'],
