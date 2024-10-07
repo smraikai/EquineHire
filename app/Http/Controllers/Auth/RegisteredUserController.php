@@ -45,18 +45,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Start Annual Discount Registration
-        if ($request->session()->has('annual_discount')) {
-            return redirect()->route('eh.checkout');
-        }
-
-        // Start: Trial Registration
-        if ($request->session()->has('trial')) {
-            $request->session()->forget('trial');
-            return redirect()->route('trial.signup');
-        }
-        // End: Trial Registration
-
         if ($request->session()->has('selected_plan')) {
             $planId = $request->session()->get('selected_plan');
             return redirect()->route('subscription.checkout', ['plan' => $planId]);
