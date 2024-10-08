@@ -178,16 +178,17 @@
                                     value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->resume_path : '' }}">
                             </div>
                         </div>
-                    </div>
-                    <div class="pt-5">
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Submit Application
-                            </button>
+                        <div class="pt-5">
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Submit Application
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
+
                 <div class="mt-2 text-center">
                     <p class="text-sm font-medium text-gray-700">
                         By creating an account or submitting this form, you agree to our
