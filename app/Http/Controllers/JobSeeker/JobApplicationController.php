@@ -115,13 +115,13 @@ class JobApplicationController extends Controller
                 'resume_path' => $validated['resume_path'],
             ]);
 
-            // Get the employer's email through the job listing
-            $employerEmail = $jobListing->employer->user->email;
+            // Use the email_link from the JobListing
+            $jobListingEmail = $jobListing->email_link;
 
             // Send email to employer
-            if ($employerEmail) {
-                Mail::to($employerEmail)->send(new NewJobApplicationMail($jobApplication));
-                Log::info('Job application email sent to employer', ['employer_email' => $employerEmail]);
+            if ($jobListingEmail) {
+                Mail::to($jobListingEmail)->send(new NewJobApplicationMail($jobApplication));
+                Log::info('Job application email sent to employer', ['employer_email' => $jobListingEmail]);
             } else {
                 Log::warning('No employer email found for job listing', ['job_listing_id' => $jobListing->id]);
             }
