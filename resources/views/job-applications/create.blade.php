@@ -101,7 +101,7 @@
                                 </div>
 
                                 <div id="account_fields" class="hidden sm:col-span-6">
-                                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-6">
                                         <div class="sm:col-span-3">
                                             <label for="password"
                                                 class="block text-sm font-medium text-gray-700">Password</label>
