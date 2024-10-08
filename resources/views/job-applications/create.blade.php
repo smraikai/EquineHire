@@ -44,7 +44,7 @@
                         </div>
                     @endif
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-6">
                         <div class="sm:col-span-6">
                             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                             <div class="mt-1">
@@ -55,25 +55,28 @@
                             </div>
                         </div>
 
-                        <div class="sm:col-span-3">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <div class="mt-1">
-                                <input type="email" name="email" id="email" autocomplete="email"
-                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    required placeholder="your.email@example.com"
-                                    value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->email : old('email') }}">
+                        <div class="grid grid-cols-1 gap-6 sm:col-span-6 sm:grid-cols-2">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <div class="mt-1">
+                                    <input type="email" name="email" id="email" autocomplete="email"
+                                        class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        required placeholder="your.email@example.com"
+                                        value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->email : old('email') }}">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                <div class="mt-1">
+                                    <input type="tel" name="phone" id="phone" autocomplete="tel"
+                                        class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        placeholder="(123) 456-7890"
+                                        value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->phone : old('phone') }}">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="sm:col-span-3">
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                            <div class="mt-1">
-                                <input type="tel" name="phone" id="phone" autocomplete="tel"
-                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="(123) 456-7890"
-                                    value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->phone : old('phone') }}">
-                            </div>
-                        </div>
 
                         <div class="sm:col-span-6">
                             <label for="cover_letter" class="block text-sm font-medium text-gray-700">Cover
@@ -178,13 +181,13 @@
                                     value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->resume_path : '' }}">
                             </div>
                         </div>
-                        <div class="pt-5">
-                            <div class="flex justify-end">
-                                <button type="submit"
-                                    class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Submit Application
-                                </button>
-                            </div>
+                    </div>
+                    <div class="pt-5">
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Submit Application
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -206,6 +209,37 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Phone number formatting
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+                });
+            }
+
+            // Email formatting
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                emailInput.addEventListener('blur', function(e) {
+                    let email = e.target.value.trim().toLowerCase();
+                    e.target.value = email;
+                });
+            }
+
+            // Password fields visibility
+            const createAccountCheckbox = document.getElementById('create_account');
+            const accountFields = document.getElementById('account_fields');
+            if (createAccountCheckbox && accountFields) {
+                createAccountCheckbox.addEventListener('change', function() {
+                    accountFields.classList.toggle('hidden', !this.checked);
+                });
+            }
+        });
+    </script>
+
     <script src="https://releases.transloadit.com/uppy/v3.3.1/uppy.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
