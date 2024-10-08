@@ -30,6 +30,21 @@ class UploadController extends Controller
         return response()->json(['success' => true, 'path' => $path]);
     }
 
+    public function uploadResume(Request $request)
+    {
+        $request->validate([
+            'resume' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB max
+        ]);
+
+        $path = $request->file('resume')->store('resumes');
+
+        return response()->json([
+            'success' => true,
+            'path' => $path,
+            'url' => Storage::url($path)
+        ]);
+    }
+
     public function deleteFile(Request $request)
     {
         $path = $request->input('path');

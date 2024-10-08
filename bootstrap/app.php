@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\JobListingViewCounter;
+use App\Http\Middleware\CheckUserType;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'job.view.counter' => JobListingViewCounter::class,
+            'user.type' => CheckUserType::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

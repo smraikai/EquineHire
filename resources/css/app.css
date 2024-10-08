@@ -41,6 +41,11 @@ input::placeholder {
     font-style: normal;
 }
 
+.font-logo:hover {
+    opacity: 80%;
+    transition: .3s ease-in-out;
+}
+
 .fancy-title {
     font-family: "Poppins", serif;
     font-weight: 700;

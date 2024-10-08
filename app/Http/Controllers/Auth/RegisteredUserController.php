@@ -31,26 +31,31 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', Rules\Password::defaults()], // Removed 'confirmed'
+            'account_type' => ['required', 'in:employer,jobseeker'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_employer' => $request->account_type === 'employer',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        if ($request->session()->has('selected_plan')) {
-            $planId = $request->session()->get('selected_plan');
-            return redirect()->route('subscription.checkout', ['plan' => $planId]);
+        if ($user->is_employer) {
+            if ($request->session()->has('selected_plan')) {
+                $planId = $request->session()->get('selected_plan');
+                return redirect()->route('subscription.checkout', ['plan' => $planId]);
+            }
+            return redirect()->route('subscription.plans');
         }
 
-        return redirect()->route('subscription.plans');
+        return redirect()->route('jobs.index');
     }
 
     ////////////////////////////////////////////////////////////////

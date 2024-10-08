@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_employer',
     ];
 
     /**
@@ -43,6 +44,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_employer' => 'boolean',
         'trial_ends_at' => 'datetime',
     ];
 
@@ -54,6 +56,11 @@ class User extends Authenticatable
     public function employer()
     {
         return $this->hasOne(Employer::class);
+    }
+
+    public function jobSeeker()
+    {
+        return $this->hasOne(JobSeeker::class);
     }
 
     ////////////////////////////////////////////////

@@ -37,7 +37,12 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Determine the correct dashboard route based on is_employer
+        $dashboardRoute = $request->user()->is_employer
+            ? 'profile.edit' // Or use the appropriate employer dashboard route
+            : 'dashboard.job-seeker.index';
+
+        return Redirect::route($dashboardRoute)->with('status', 'profile-updated');
     }
 
     /**

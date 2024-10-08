@@ -31,9 +31,10 @@
                 <!-- User Interaction Links -->
                 @auth
                     <!-- Links for Logged-in Users -->
-                    <a href="{{ route('dashboard.employers.index') }}"
-                        class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">My
-                        Account</a>
+                    <a href="{{ auth()->user()->is_employer ? route('dashboard.employers.index') : route('dashboard.job-seeker.index') }}"
+                        class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">
+                        My Account
+                    </a>
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                         class="text-sm {{ Route::currentRouteName() === 'home' ? 'text-white' : 'text-gray-700' }} hover:text-gray-500">Log
@@ -118,7 +119,7 @@
                     <!-- Action buttons -->
                     <div class="p-4 border-gray-200">
                         @auth
-                            <a href="{{ route('dashboard.employers.index') }}"
+                            <a href="{{ auth()->user()->is_employer ? route('dashboard.employers.index') : route('dashboard.job-seeker.index') }}"
                                 class="flex items-center justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-800">
                                 My Account
                             </a>

@@ -157,4 +157,12 @@ class JobListing extends Model
             ->values()
             ->toArray();
     }
+
+    ///////////////////////////////////////////////////////////////
+    // Job Applications
+    ///////////////////////////////////////////////////////////////
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

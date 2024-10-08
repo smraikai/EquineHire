@@ -27,9 +27,16 @@
 </head>
 
 <body class="font-sans antialiased">
+
+    @if (session('success'))
+        <x-success-message :message="session('success')" />
+    @endif
+    @if (session('error'))
+        <x-error-message :message="session('error')" />
+    @endif
+
     <div class="">
         @include('layouts.navigation')
-
         <!-- Page Heading -->
         @if (isset($header))
             <header class="bg-white shadow">

@@ -3,14 +3,15 @@
         <div class="flex flex-wrap">
             <div class="w-full px-0 mb-8 lg:w-1/2 lg:mb-0">
                 <div class="logo">
-                    <a href="{{ route('home') }}" class="text-3xl">
+                    <a href="{{ route('home') }}" class="text-3xl text-gray-900 font-logo">
                         EquineHire
                     </a>
                 </div>
                 <div class="mt-4">
-                    <p class="max-w-sm text-sm text-gray-500">&copy; <?= date('Y') ?> EquineHire, a project of <a
-                            href="https://equinehire.com" target="_blank">Equine
-                            Hire, LLC.</a> Proudly built in Kentucky.</p>
+                    <p class="max-w-sm text-sm text-gray-500">
+                        &copy; <?= date('Y') ?> EquineHire. Connecting passionate equestrians with incredible job
+                        opportunities. Proudly built in Kentucky, serving the equine community.
+                    </p>
                 </div>
             </div>
             <div class="w-full px-0 mb-8 lg:w-1/4 lg:mb-0">

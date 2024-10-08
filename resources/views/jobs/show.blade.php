@@ -2,20 +2,6 @@
 
 @php
     $applyLink = $job_listing->application_link;
-    if (!$applyLink && $job_listing->email_link) {
-        $subject = rawurlencode("Application for {$job_listing->title} from EquineHire");
-        $body = rawurlencode("Dear Hiring Manager,
-
-I'm excited to apply for the {$job_listing->title} position I found on EquineHire! With my background in [relevant field], I believe I'd be a great fit for your team.
-
-I've attached my resume for your review. I look forward to discussing how my skills align with your needs!
-
-Thank you for your consideration.
-
-Best regards,
-[Your Name]");
-        $applyLink = "mailto:{$job_listing->email_link}?subject={$subject}&body={$body}";
-    }
 
     // Add UTM parameters to the apply link
     if ($applyLink) {
@@ -57,9 +43,8 @@ Best regards,
                 </div>
 
                 <!-- Apply Now Button (Full Width) -->
-                <a id="apply_now" href="{{ $applyLink ?? '#' }}"
-                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
-                    {{ !$applyLink ? 'disabled' : '' }}>
+                <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
+                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
                     Apply Now
                 </a>
 
@@ -127,17 +112,13 @@ Best regards,
                     </div>
 
                     <!-- Apply Now Button -->
-                    <a id="apply_now" href="{{ $applyLink ?? '#' }}"
-                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 {{ !$applyLink ? 'opacity-50 cursor-not-allowed' : '' }}"
-                        {{ !$applyLink ? 'disabled' : '' }}>
+                    <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
+                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
                         Apply Now
                     </a>
 
                 </div>
-
             </div>
-
-
         </div>
     </div>
 @endsection

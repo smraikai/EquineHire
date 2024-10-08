@@ -9,13 +9,9 @@
         <!-- Left side: Login form -->
         <div class="flex items-center justify-center w-full px-4 py-8 md:w-1/2">
             <div class="w-full max-w-xl">
-                <p class="mb-8 text-sm md:text-base">Not an employer? <a href="{{ route('jobs.index') }}"
-                        class="text-blue-600 hover:text-blue-800">Explore equine jobs in
-                        your area</a>.</p>
 
                 <div class="mb-8">
-                    <h1 class="mb-2 text-3xl font-bold md:text-4xl fancy-title">Employer Login</h1>
-                    <p class="text-base text-gray-600 md:text-lg">Log in to access your account.</p>
+                    <h1 class="mb-2 text-3xl font-bold md:text-4xl fancy-title">Account Login</h1>
                 </div>
 
                 <!-- Session Status -->
