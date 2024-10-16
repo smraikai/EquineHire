@@ -133,7 +133,7 @@
                                         auth()->user()->jobSeeker->resume_path)
                                     Resume
                                 @else
-                                    Upload Resume
+                                    Upload Resume (PDF only)
                                 @endif
                             </label>
                             <div class="mt-2">
@@ -254,7 +254,7 @@
                     autoProceed: true,
                     restrictions: {
                         maxFileSize: 5 * 1024 * 1024, // 5MB
-                        allowedFileTypes: ['.pdf', '.doc', '.docx'],
+                        allowedFileTypes: ['.pdf'], // PDF only
                         maxNumberOfFiles: 1
                     }
                 })

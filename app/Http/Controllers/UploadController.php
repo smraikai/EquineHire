@@ -33,7 +33,7 @@ class UploadController extends Controller
     public function uploadResume(Request $request)
     {
         $request->validate([
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB max
+            'resume' => 'required|file|mimes:pdf|max:5120', // 5MB max, PDF only
         ]);
 
         $path = $request->file('resume')->store('resumes');
