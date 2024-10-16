@@ -51,7 +51,7 @@
                                 <input type="text" name="name" id="name" autocomplete="name"
                                     class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     required placeholder="Enter your full name"
-                                    value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->name : old('name') }}">
+                                    value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->name ?? auth()->user()->name : old('name') }}">
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                                     <input type="email" name="email" id="email" autocomplete="email"
                                         class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         required placeholder="your.email@example.com"
-                                        value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->email : old('email') }}">
+                                        value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->email ?? auth()->user()->email : old('email') }}">
                                 </div>
                             </div>
 
@@ -72,7 +72,7 @@
                                     <input type="tel" name="phone" id="phone" autocomplete="tel"
                                         class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         placeholder="(123) 456-7890"
-                                        value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->phone : old('phone') }}">
+                                        value="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker ? auth()->user()->jobSeeker->phone : old('phone') }}">
                                 </div>
                             </div>
                         </div>
@@ -127,14 +127,20 @@
 
                         <div class="sm:col-span-6">
                             <label for="resume" class="block mb-2 text-sm font-medium text-gray-700">
-                                @if (auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker->resume_path)
+                                @if (auth()->check() &&
+                                        !auth()->user()->is_employer &&
+                                        auth()->user()->jobSeeker &&
+                                        auth()->user()->jobSeeker->resume_path)
                                     Resume
                                 @else
                                     Upload Resume
                                 @endif
                             </label>
                             <div class="mt-2">
-                                @if (auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker->resume_path)
+                                @if (auth()->check() &&
+                                        !auth()->user()->is_employer &&
+                                        auth()->user()->jobSeeker &&
+                                        auth()->user()->jobSeeker->resume_path)
                                     <div id="current-resume">
                                         @php
                                             $resumeExtension = pathinfo(
@@ -175,10 +181,10 @@
                                     </div>
                                 @endif
                                 <div id="uppy-drop-target"
-                                    class="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker->resume_path ? 'hidden' : '' }}">
+                                    class="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker && auth()->user()->jobSeeker->resume_path ? 'hidden' : '' }}">
                                 </div>
                                 <input type="hidden" id="resume_path" name="resume_path"
-                                    value="{{ auth()->check() && !auth()->user()->is_employer ? auth()->user()->jobSeeker->resume_path : '' }}">
+                                    value="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker ? auth()->user()->jobSeeker->resume_path : '' }}">
                             </div>
                         </div>
                     </div>

@@ -13,10 +13,12 @@ class JobSeekerDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $jobSeeker = $user->jobSeeker;
         $applications = JobApplication::where('user_id', $user->id)->with('jobListing')->get();
 
         return view('dashboard.job-seeker.index', [
             'user' => $user,
+            'jobSeeker' => $jobSeeker,
             'applications' => $applications,
         ]);
     }

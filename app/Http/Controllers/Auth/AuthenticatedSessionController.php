@@ -28,7 +28,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard.employers.index', absolute: false));
+        // Route user based on account type
+        if ($request->user()->is_employer) {
+            return redirect()->intended(route('dashboard.employers.index', absolute: false));
+        } else {
+            return redirect()->intended(route('jobs.index', absolute: false));
+        }
     }
 
     /**

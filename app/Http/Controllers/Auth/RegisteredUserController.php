@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\JobSeeker;
 
 class RegisteredUserController extends Controller
 {
@@ -43,6 +44,14 @@ class RegisteredUserController extends Controller
             'is_employer' => $request->account_type === 'employer',
         ]);
 
+        if (!$user->is_employer) {
+            JobSeeker::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
@@ -57,27 +66,4 @@ class RegisteredUserController extends Controller
 
         return redirect()->route('jobs.index');
     }
-
-    ////////////////////////////////////////////////////////////////
-    // Annual Discount
-    ////////////////////////////////////////////////////////////////
-    public function createWithDiscount(): View
-    {
-        session(['annual_discount' => true]);
-        return view('auth.register');
-    }
-    public function handleLoggedInDiscount(Request $request)
-    {
-        if (!$request->user()->subscribed('default')) {
-            // User is logged in but not subscribed, redirect to checkout
-            session(['annual_discount' => true]);
-            return redirect()->route('eh.checkout');
-        } else {
-            // User is already subscribed, redirect to dashboard with a message
-            return redirect()->route('dashboard.employers.index')
-                ->with('info', 'You are already subscribed. Check your billing portal for plan changes or upgrades.');
-        }
-    }
-
-
 }

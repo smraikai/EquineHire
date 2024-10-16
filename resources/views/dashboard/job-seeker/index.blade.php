@@ -26,26 +26,26 @@
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Name</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        {{ auth()->user()->jobSeeker->name }}
+                                        {{ $jobSeeker->name ?? auth()->user()->name }}
                                     </dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Email</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        {{ auth()->user()->jobSeeker->email }}
+                                        {{ $jobSeeker->email ?? auth()->user()->email }}
                                     </dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Phone</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        {{ auth()->user()->jobSeeker->phone ?? 'Not provided' }}
+                                        {{ $jobSeeker->phone ?? 'Not provided' }}
                                     </dd>
                                 </div>
                                 <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Resume</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                        @if (auth()->user()->jobSeeker->resume_path)
-                                            <a href="{{ Storage::url(auth()->user()->jobSeeker->resume_path) }}"
+                                        @if ($jobSeeker && $jobSeeker->resume_path)
+                                            <a href="{{ Storage::url($jobSeeker->resume_path) }}"
                                                 class="font-medium text-blue-600 hover:text-blue-500" target="_blank">View
                                                 Resume</a>
                                         @else
@@ -71,7 +71,7 @@
                             Applications</h2>
                     </div>
 
-                    @if (auth()->user()->jobSeeker->jobApplications->count() > 0)
+                    @if ($jobSeeker && $jobSeeker->jobApplications->count() > 0)
                         <ul role="list" class="divide-y divide-gray-100">
                             @foreach (auth()->user()->jobSeeker->jobApplications as $application)
                                 <li class="flex items-center justify-between py-5">
@@ -94,7 +94,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <p class="text-sm text-gray-500">You haven't submitted any job applications yet.</p>
+                        <p class="mt-4 text-sm text-gray-500">You haven't submitted any job applications yet.</p>
                     @endif
                 </div>
             </div>
