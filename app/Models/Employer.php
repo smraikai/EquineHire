@@ -63,6 +63,9 @@ class Employer extends Model
     {
         $array = $this->toArray();
 
+        // Make sure the name is included in the searchable array
+        $array['name'] = $this->name;
+
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
                 'lat' => $this->latitude,
@@ -71,6 +74,18 @@ class Employer extends Model
         }
 
         return $array;
+    }
+
+    public function getAlgoliaSettings()
+    {
+        return [
+            'searchableAttributes' => [
+                'name',
+                'description',
+                'city',
+                'state',
+            ],
+        ];
     }
 
     public function getLogoUrlAttribute()
