@@ -53,10 +53,10 @@
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('state') border-red-500 @enderror"
                 required>
                 <option value="">Select your company's state</option>
-                @foreach ($states as $abbr => $name)
-                    <option value="{{ $abbr }}"
-                        {{ old('state', $employer->state ?? '') == $abbr ? 'selected' : '' }}>
-                        {{ $name }}
+                @foreach ($states as $state)
+                    <option value="{{ $state }}"
+                        {{ old('state', $employer->state ?? '') == $state ? 'selected' : '' }}>
+                        {{ $state }}
                     </option>
                 @endforeach
             </select>

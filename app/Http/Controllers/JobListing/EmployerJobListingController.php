@@ -102,7 +102,7 @@ class EmployerJobListingController extends Controller
             'description' => 'required',
             'remote_position' => 'required|boolean',
             'city' => 'nullable|required_if:remote_position,0|string|max:255',
-            'state' => 'nullable|required_if:remote_position,0|string|size:2|in:' . implode(',', array_keys($this->getStates())),
+            'state' => 'nullable|required_if:remote_position,0|string|in:' . implode(',', $this->getStates()),
             'job_type' => 'required|in:full-time,part-time,contract,temp,freelance,internship,externship,seasonal,working-student',
             'experience_required' => 'required|in:0-1 Years,1-2 Years,2-5 Years,5+ Years',
             'salary_type' => 'nullable|in:hourly,salary',

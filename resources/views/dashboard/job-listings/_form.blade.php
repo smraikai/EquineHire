@@ -89,7 +89,6 @@
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
             @enderror
         </div>
-
         <div>
             <label for="state" class="block text-sm font-medium text-gray-700">State <span
                     class="text-red-500">*</span></label>
@@ -97,10 +96,10 @@
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('state') border-red-500 @enderror"
                 required>
                 <option value="">Select a state</option>
-                @foreach ($states as $abbr => $name)
-                    <option value="{{ $abbr }}"
-                        {{ old('state', $jobListing->state ?? '') == $abbr ? 'selected' : '' }}>
-                        {{ $name }}
+                @foreach ($states as $state)
+                    <option value="{{ $state }}"
+                        {{ old('state', $jobListing->state ?? '') == $state ? 'selected' : '' }}>
+                        {{ $state }}
                     </option>
                 @endforeach
             </select>
