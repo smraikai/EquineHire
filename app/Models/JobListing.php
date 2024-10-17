@@ -94,6 +94,9 @@ class JobListing extends Model
 
         $array['boosted_rank'] = $this->is_boosted ? 9001 : 0;
 
+        // Include employer name
+        $array['employer_name'] = $this->employer->name;
+
         // Add new facets
         $array['category_ids'] = [$this->category_id];
         $array['state'] = $this->state ? trim($this->state) : null;
