@@ -14,7 +14,7 @@ class JobSeekerDashboardController extends Controller
     {
         $user = Auth::user();
         $jobSeeker = $user->jobSeeker;
-        $applications = JobApplication::where('user_id', $user->id)->with('jobListing')->get();
+        $applications = JobApplication::where('job_seeker_id', $jobSeeker->id)->with('jobListing')->get();
 
         return view('dashboard.job-seeker.index', [
             'user' => $user,
