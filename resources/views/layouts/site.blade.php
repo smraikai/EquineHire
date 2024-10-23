@@ -24,7 +24,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet">
+
 </head>
+
+<!-- Start cookieyes banner -->
+<script id="cookieyes" type="text/javascript"
+    src="https://cdn-cookieyes.com/client_data/ebd7fd5af13b4d4c9873c0b9/script.js"></script> <!-- End cookieyes banner -->
 
 <body class="font-sans antialiased">
 
