@@ -27,10 +27,6 @@
 
 </head>
 
-<!-- Start cookieyes banner -->
-<script id="cookieyes" type="text/javascript"
-    src="https://cdn-cookieyes.com/client_data/ebd7fd5af13b4d4c9873c0b9/script.js"></script> <!-- End cookieyes banner -->
-
 <body class="font-sans antialiased">
 
     @if (session('success'))
