@@ -68,14 +68,17 @@
                                                             </span>
                                                         </td>
                                                         <td class="px-3 py-4 text-sm text-gray-500">
-                                                            <a href="{{ route('jobs.show', ['job_slug' => Str::slug($jobListing->title), 'id' => $jobListing->id]) }}"
-                                                                class="text-blue-600 hover:text-blue-900">View</a>
-                                                            <a href="{{ route('employers.job-listings.edit', $jobListing->id) }}"
-                                                                class="ml-2 text-blue-600 hover:text-blue-900">Edit</a>
+                                                            @if ($jobListing->is_active)
+                                                                <a href="{{ route('jobs.show', ['job_slug' => Str::slug($jobListing->title), 'id' => $jobListing->id]) }}"
+                                                                    class="text-blue-600 hover:text-blue-900">View</a>
+                                                                <a href="{{ route('employers.job-listings.edit', $jobListing->id) }}"
+                                                                    class="ml-2 text-blue-600 hover:text-blue-900">Edit</a>
+                                                            @endif
 
                                                             @if (!$jobListing->isArchived())
                                                                 <form action="{{ route('jobs.archive', $jobListing) }}"
-                                                                    method="POST" class="inline ml-2">
+                                                                    method="POST"
+                                                                    class="inline {{ $jobListing->is_active ? 'ml-2' : '' }}">
                                                                     @csrf
                                                                     @method('PATCH')
                                                                     <button type="submit"
@@ -86,7 +89,8 @@
                                                                 </form>
                                                             @else
                                                                 <form action="{{ route('jobs.unarchive', $jobListing) }}"
-                                                                    method="POST" class="inline ml-2">
+                                                                    method="POST"
+                                                                    class="inline {{ $jobListing->is_active ? 'ml-2' : '' }}">
                                                                     @csrf
                                                                     @method('PATCH')
                                                                     <button type="submit"
