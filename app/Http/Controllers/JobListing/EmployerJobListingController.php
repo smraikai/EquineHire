@@ -23,7 +23,9 @@ class EmployerJobListingController extends Controller
             return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
         }
 
-        $jobListings = $user->jobListings()->paginate(10);
+        $jobListings = $user->jobListings()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('dashboard.job-listings.index', compact('jobListings'));
     }
 
@@ -92,6 +94,37 @@ class EmployerJobListingController extends Controller
 
         return redirect()->route('employers.job-listings.index')
             ->with('success', 'Job listing deleted successfully.');
+    }
+
+    public function archive(Request $request, JobListing $jobListing)
+    {
+        // Ensure the authenticated user owns this job listing
+        if ($request->user()->cannot('update', $jobListing)) {
+            abort(403);
+        }
+
+        $jobListing->archive();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Job listing has been archived.');
+    }
+
+    public function unarchive(Request $request, JobListing $jobListing)
+    {
+        if ($request->user()->cannot('update', $jobListing)) {
+            abort(403);
+        }
+
+        if (!$request->user()->canRestoreJobListing()) {  // Changed this line
+            return back()->with('error', 'You have reached your active job listing limit. Please upgrade your plan to restore more listings.');
+        }
+
+        $jobListing->unarchive();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Job listing has been restored.');
     }
 
     private function validateJobListing(Request $request)

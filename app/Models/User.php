@@ -73,7 +73,6 @@ class User extends Authenticatable
             ->latest()
             ->first();
 
-        // Use $subscription->type instead of $subscription->name
         $subscriptionType = $subscription ? $subscription->type : null;
 
         $limits = [
@@ -82,17 +81,42 @@ class User extends Authenticatable
             'unlimited_plan' => 999,
         ];
 
-        $currentCount = $this->jobListings()->count();
+        $currentCount = $this->jobListings()
+            ->where('is_active', true)
+            ->count();
 
-        Log::info('User ID: ' . $this->id);
-        Log::info('Subscription: ', ['type' => $subscriptionType, 'status' => $subscription ? $subscription->stripe_status : 'None']);
-        Log::info('Job Listings: ', ['count' => $currentCount, 'raw' => $this->jobListings()->pluck('id')->toArray()]);
-        Log::info('Limit: ' . ($limits[$subscriptionType] ?? 0));
-
-        // Add a default limit for users with active subscriptions but unknown plan
         $limit = $limits[$subscriptionType] ?? ($subscription ? 1 : 0);
 
-        return $currentCount < $limit;
+        return $currentCount < $limit;  // Strict less than for new listings
+    }
+
+    public function canRestoreJobListing()
+    {
+        return $this->checkJobListingLimit(1);
+    }
+
+    private function checkJobListingLimit($additionalCount = 0)
+    {
+        $subscription = $this->subscriptions()
+            ->where('stripe_status', 'active')
+            ->latest()
+            ->first();
+
+        $subscriptionType = $subscription ? $subscription->type : null;
+
+        $limits = [
+            'basic_plan' => 1,
+            'pro_plan' => 5,
+            'unlimited_plan' => 999,
+        ];
+
+        $currentCount = $this->jobListings()
+            ->where('is_active', true)
+            ->count();
+
+        $limit = $limits[$subscriptionType] ?? ($subscription ? 1 : 0);
+
+        return ($currentCount + $additionalCount) <= $limit;
     }
 
 }

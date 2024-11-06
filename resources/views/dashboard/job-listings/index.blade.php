@@ -64,7 +64,7 @@
                                                         <td class="px-3 py-4 text-sm text-gray-500">
                                                             <span
                                                                 class="inline-flex px-2 text-xs font-semibold leading-5 rounded-full {{ $jobListing->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                                {{ $jobListing->is_active ? 'Active' : 'Inactive' }}
+                                                                {{ $jobListing->is_active ? 'Active' : 'Archived' }}
                                                             </span>
                                                         </td>
                                                         <td class="px-3 py-4 text-sm text-gray-500">
@@ -84,7 +84,7 @@
                                                                     <button type="submit"
                                                                         class="text-red-600 hover:text-red-900"
                                                                         onclick="return confirm('Are you sure you want to remove this job listing?')">
-                                                                        Remove
+                                                                        Archive
                                                                     </button>
                                                                 </form>
                                                             @else
@@ -94,7 +94,7 @@
                                                                     @csrf
                                                                     @method('PATCH')
                                                                     <button type="submit"
-                                                                        class="text-green-600 hover:text-green-900">
+                                                                        class="text-blue-600 hover:text-blue-900">
                                                                         Restore
                                                                     </button>
                                                                 </form>
@@ -108,8 +108,9 @@
                                                                     Boosted
                                                                 </span>
                                                             @else
-                                                                <button onclick="openBoostModal({{ $jobListing->id }})"
-                                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700 transition-colors duration-200 ease-in-out min-w-[150px]">
+                                                                <button
+                                                                    @if ($jobListing->is_active) onclick="openBoostModal({{ $jobListing->id }})" @endif
+                                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium {{ $jobListing->is_active ? 'text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-700' : 'text-gray-400 cursor-not-allowed' }} bg-white border {{ $jobListing->is_active ? 'border-blue-600' : 'border-gray-300' }} rounded-md transition-colors duration-200 ease-in-out min-w-[150px]">
                                                                     <x-heroicon-o-rocket-launch class="w-4 h-4 mr-1.5" />
                                                                     Boost My Listing
                                                                 </button>

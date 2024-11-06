@@ -25,8 +25,3 @@ require __DIR__ . '/public.php';
 require __DIR__ . '/subscription.php';
 require __DIR__ . '/api.php';
 require __DIR__ . '/webhook.php';
-
-Route::middleware(['auth'])->group(function () {
-    Route::patch('/jobs/{jobListing}/archive', [JobListingController::class, 'archive'])->name('jobs.archive');
-    Route::patch('/jobs/{jobListing}/unarchive', [JobListingController::class, 'unarchive'])->name('jobs.unarchive');
-});
