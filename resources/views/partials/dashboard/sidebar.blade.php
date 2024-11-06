@@ -51,6 +51,28 @@
                         </li>
                     </ul>
                 </li>
+
+                <li>
+                    <div class="text-xs font-semibold leading-6 text-gray-400">Applicants</div>
+                    <a href="{{ route('employer.applications.index') }}"
+                        class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
+                        <x-heroicon-o-users class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
+                        <span class="flex items-center gap-2">
+                            View Applications
+                            @php
+                                $newApplicationsCount = Auth::user()
+                                    ->employer->jobListings->flatMap->jobApplications->where('status', 'new')
+                                    ->count();
+                            @endphp
+                            @if ($newApplicationsCount > 0)
+                                <span class="px-2 py-0.5 text-xs font-medium text-white bg-emerald-500 rounded-full">
+                                    {{ $newApplicationsCount }}
+                                </span>
+                            @endif
+                        </span>
+                    </a>
+                </li>
+
                 <li>
                     <div class="text-xs font-semibold leading-6 text-gray-400">Billing</div>
                     <ul role="list" class="mt-2 -mx-2 space-y-1">
@@ -161,6 +183,24 @@
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+
+                        <!-- Applications section -->
+                        <li>
+                            <div class="text-xs font-semibold leading-6 text-gray-400">Applicants</div>
+                            <a href="{{ route('employer.applications.index') }}"
+                                class="flex p-2 text-sm font-semibold leading-6 text-gray-700 rounded-md hover:text-blue-600 hover:bg-gray-50 group gap-x-3">
+                                <x-heroicon-o-users class="w-6 h-6 text-gray-400 shrink-0 group-hover:text-blue-600" />
+                                <span class="flex items-center gap-2">
+                                    View Applications
+                                    @if ($newApplicationsCount > 0)
+                                        <span
+                                            class="px-2 py-0.5 text-xs font-medium text-white bg-emerald-500 rounded-full">
+                                            {{ $newApplicationsCount }}
+                                        </span>
+                                    @endif
+                                </span>
+                            </a>
                         </li>
 
                         <!-- Billing section -->

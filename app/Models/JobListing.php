@@ -168,4 +168,28 @@ class JobListing extends Model
     {
         return $this->hasMany(JobApplication::class);
     }
+
+    public function archive()
+    {
+        $this->is_active = false;
+        $this->save();
+
+        // Since shouldBeSearchable() returns false when inactive,
+        // this will remove it from Algolia
+        $this->unsearchable();
+    }
+
+    public function unarchive()
+    {
+        $this->is_active = true;
+        $this->save();
+
+        // Make searchable again if activated
+        $this->searchable();
+    }
+
+    public function isArchived()
+    {
+        return !$this->is_active;
+    }
 }

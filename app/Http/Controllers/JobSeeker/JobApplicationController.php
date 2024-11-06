@@ -88,16 +88,26 @@ class JobApplicationController extends Controller
         } else {
             $user = Auth::user();
             if ($user) {
-                // Update existing JobSeeker profile
-                $jobSeeker = JobSeeker::updateOrCreate(
-                    ['user_id' => $user->id],
-                    [
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                        'phone' => $validated['phone'] ?? null,
-                        'resume_path' => $validated['resume_path'] ?? null,
-                    ]
-                );
+                try {
+                    // Update existing JobSeeker profile
+                    $jobSeeker = JobSeeker::updateOrCreate(
+                        ['user_id' => $user->id],
+                        [
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                            'phone' => $validated['phone'] ?? null,
+                            'resume_path' => $validated['resume_path'] ?? null,
+                        ]
+                    );
+                } catch (\Illuminate\Database\QueryException $e) {
+                    if ($e->getCode() == 23000) { // Integrity constraint violation
+                        Log::warning('Attempt to update to existing email', ['email' => $validated['email']]);
+                        return back()->withErrors([
+                            'email' => 'This email is already associated with another job seeker profile.',
+                        ])->withInput();
+                    }
+                    throw $e;
+                }
             } else {
                 // No account, no JobSeeker profile
                 $jobSeeker = null;

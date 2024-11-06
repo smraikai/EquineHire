@@ -96,7 +96,7 @@ class EmployerJobListingController extends Controller
 
     private function validateJobListing(Request $request)
     {
-        return $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|max:255',
             'category_id' => 'required|exists:job_listing_categories,id',
             'description' => 'required',
@@ -114,6 +114,15 @@ class EmployerJobListingController extends Controller
             'application_link' => 'required_if:application_type,link|nullable|url',
             'email_link' => 'required_if:application_type,email|nullable|email',
         ]);
+
+        // Clear the unused application field based on application_type
+        if ($validatedData['application_type'] === 'email') {
+            $validatedData['application_link'] = null;
+        } else {
+            $validatedData['email_link'] = null;
+        }
+
+        return $validatedData;
     }
 
     private function generateUniqueSlug($title)

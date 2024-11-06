@@ -31,6 +31,11 @@
             <div class="my-8">
                 @include('partials.dashboard._analytics')
             </div>
+
+            <!-- Add this after your existing job listings section -->
+            <div class="mt-8">
+                @include('dashboard.partials._recent-applications')
+            </div>
         </div>
     </div>
 @endsection

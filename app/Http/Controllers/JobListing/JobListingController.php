@@ -34,4 +34,32 @@ class JobListingController extends Controller
         $isOwner = auth()->check() && auth()->user()->id === $job_listing->user_id;
         return view('jobs.show', compact('job_listing', 'isOwner'));
     }
+
+    public function archive(Request $request, JobListing $jobListing)
+    {
+        // Ensure the authenticated user owns this job listing
+        if ($request->user()->cannot('update', $jobListing)) {
+            abort(403);
+        }
+
+        $jobListing->archive();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Job listing has been archived.');
+    }
+
+    public function unarchive(Request $request, JobListing $jobListing)
+    {
+        // Ensure the authenticated user owns this job listing
+        if ($request->user()->cannot('update', $jobListing)) {
+            abort(403);
+        }
+
+        $jobListing->unarchive();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Job listing has been restored.');
+    }
 }

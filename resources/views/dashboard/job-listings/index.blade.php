@@ -6,7 +6,7 @@
 @endphp
 
 @section('content')
-    <div class="container py-12 mx-auto sm:py-24 px-4">
+    <div class="container px-4 py-12 mx-auto sm:py-24">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             @if (auth()->user()->employer)
                 @if ($jobListings->isNotEmpty())
@@ -28,7 +28,7 @@
                             <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                                        <table class="min-w-full divide-y divide-gray-300">
+                                        <table class="min-w-full divide-y divide-gray-200">
                                             <thead class="bg-gray-50">
                                                 <tr>
                                                     <th scope="col"
@@ -72,15 +72,29 @@
                                                                 class="text-blue-600 hover:text-blue-900">View</a>
                                                             <a href="{{ route('employers.job-listings.edit', $jobListing->id) }}"
                                                                 class="ml-2 text-blue-600 hover:text-blue-900">Edit</a>
-                                                            <form
-                                                                action="{{ route('employers.job-listings.destroy', $jobListing->id) }}"
-                                                                method="POST" class="inline ml-2">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="text-red-600 hover:text-red-900"
-                                                                    onclick="return confirm('Are you sure you want to delete this job listing?')">Delete</button>
-                                                            </form>
+
+                                                            @if (!$jobListing->isArchived())
+                                                                <form action="{{ route('jobs.archive', $jobListing) }}"
+                                                                    method="POST" class="inline ml-2">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button type="submit"
+                                                                        class="text-red-600 hover:text-red-900"
+                                                                        onclick="return confirm('Are you sure you want to remove this job listing?')">
+                                                                        Remove
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <form action="{{ route('jobs.unarchive', $jobListing) }}"
+                                                                    method="POST" class="inline ml-2">
+                                                                    @csrf
+                                                                    @method('PATCH')
+                                                                    <button type="submit"
+                                                                        class="text-green-600 hover:text-green-900">
+                                                                        Restore
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         </td>
                                                         <td class="px-3 py-4 text-sm text-gray-500">
                                                             @if ($jobListing->is_boosted)

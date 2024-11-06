@@ -27,8 +27,7 @@
             @endif
         </div>
 
-        <div
-            class="hidden border border-gray-200 rounded-md shadow-sm sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div class="hidden rounded-md sm:flex-1 sm:flex sm:items-center sm:justify-between">
 
             <div>
                 <span class="relative z-0 inline-flex rounded-md shadow-sm">
