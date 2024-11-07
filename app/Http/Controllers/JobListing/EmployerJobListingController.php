@@ -24,7 +24,8 @@ class EmployerJobListingController extends Controller
         }
 
         $jobListings = $user->jobListings()
-            ->orderBy('created_at', 'desc')
+            ->orderBy('is_active', 'desc')  // Active listings first
+            ->orderBy('created_at', 'desc') // Then by creation date
             ->paginate(10);
         return view('dashboard.job-listings.index', compact('jobListings'));
     }

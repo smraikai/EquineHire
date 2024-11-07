@@ -25,4 +25,3 @@ Route::get('/applications/{jobApplication}', [JobApplicationController::class, '
     ->name('employer.applications.show');
 Route::patch('/applications/{jobApplication}/status', [JobApplicationController::class, 'updateStatus'])
     ->name('employer.applications.update-status');
-
