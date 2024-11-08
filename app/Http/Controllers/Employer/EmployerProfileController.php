@@ -47,8 +47,13 @@ class EmployerProfileController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'street_address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255|in:' . implode(',', $this->getStates()),
+            'state' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+            'postal_code' => 'nullable|string|max:20',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo_path' => 'nullable|string',
             'featured_image_path' => 'nullable|string',
@@ -89,8 +94,13 @@ class EmployerProfileController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'street_address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255|in:' . implode(',', $this->getStates()),
+            'state' => 'nullable|string|max:255',
+            'country' => 'required|string|max:255',
+            'postal_code' => 'nullable|string|max:20',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo_path' => 'nullable|string',
             'featured_image_path' => 'nullable|string',
@@ -99,6 +109,10 @@ class EmployerProfileController extends Controller
         DB::beginTransaction();
 
         try {
+            // Convert latitude and longitude to floats
+            $validatedData['latitude'] = (float) $validatedData['latitude'];
+            $validatedData['longitude'] = (float) $validatedData['longitude'];
+
             if ($request->filled('logo_path')) {
                 $employer->logo = $validatedData['logo_path'];
             }
@@ -110,7 +124,8 @@ class EmployerProfileController extends Controller
             $employer->update($validatedData);
 
             DB::commit();
-            return redirect()->route('employers.index', $employer)->with('success', 'Employer profile updated successfully.');
+            return redirect()->route('employers.index', $employer)
+                ->with('success', 'Employer profile updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();

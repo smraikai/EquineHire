@@ -19,14 +19,20 @@ class Employer extends Model
         'name',
         'description',
         'website',
+        'street_address',
         'city',
         'state',
+        'country',
+        'postal_code',
+        'latitude',
+        'longitude',
         'logo',
         'featured_image',
     ];
 
     protected $casts = [
-
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     public function user()
@@ -66,10 +72,10 @@ class Employer extends Model
         // Make sure the name is included in the searchable array
         $array['name'] = $this->name;
 
-        if ($this->latitude && $this->longitude) {
+        if (isset($array['latitude']) && isset($array['longitude'])) {
             $array['_geoloc'] = [
-                'lat' => $this->latitude,
-                'lng' => $this->longitude,
+                'lat' => (float) $array['latitude'],
+                'lng' => (float) $array['longitude']
             ];
         }
 
