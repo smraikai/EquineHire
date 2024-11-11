@@ -36,6 +36,18 @@ class JobApplicationController extends Controller
 
     public function index()
     {
+        // Debug the employer ID
+        dd([
+            'employer_id' => auth()->user()->employer->id,
+            'has_employer' => auth()->user()->employer !== null,
+            // Check raw applications count
+            'total_applications' => JobApplication::count(),
+            // Check applications for this employer
+            'employer_applications' => JobApplication::whereHas('jobListing', function ($query) {
+                $query->where('employer_id', auth()->user()->employer->id);
+            })->count()
+        ]);
+
         $applications = JobApplication::whereHas('jobListing', function ($query) {
             $query->where('employer_id', auth()->user()->employer->id);
         })
