@@ -36,9 +36,13 @@ class JobApplicationController extends Controller
 
     public function index()
     {
-        dd([
-            'employer_id' => auth()->user()->employer->id,
-            'job_listings' => \App\Models\JobListing::where('employer_id', auth()->user()->employer->id)->get(),
-        ]);
+        $applications = JobApplication::whereHas('jobListing', function ($query) {
+            $query->where('employer_id', auth()->user()->employer->id);
+        })
+            ->with(['jobListing'])
+            ->latest()
+            ->paginate(15);
+
+        return view('dashboard.applications.index', compact('applications'));
     }
 }
