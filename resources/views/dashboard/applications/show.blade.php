@@ -28,8 +28,9 @@
                                 </div>
                                 <div>
                                     <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $jobApplication->name }}</h1>
-                                    <p class="text-sm text-gray-500">Application for
-                                        {{ $jobApplication->jobListing->title }}</p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ $jobApplication->jobListing ? 'Application for ' . $jobApplication->jobListing->title : 'Job listing no longer available' }}
+                                    </p>
                                 </div>
                             </div>
 

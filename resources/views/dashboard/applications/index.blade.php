@@ -53,7 +53,8 @@
                                                         <div class="text-gray-500">{{ $application->email }}</div>
                                                     </td>
                                                     <td class="px-3 py-4 text-sm text-gray-500">
-                                                        <div class="text-gray-900">{{ $application->jobListing->title }}
+                                                        <div class="text-gray-900">
+                                                            {{ $application->jobListing?->title ?? 'Job listing no longer available' }}
                                                         </div>
                                                     </td>
                                                     <td class="px-3 py-4 text-sm text-gray-500">
