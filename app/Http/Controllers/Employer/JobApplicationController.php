@@ -8,10 +8,19 @@ use Illuminate\Http\Request;
 
 class JobApplicationController extends Controller
 {
+
+    ////////////////////////////////////////
+    // Admin User Helper Function
+    ////////////////////////////////////////
+    private function isAdmin(): bool
+    {
+        return auth()->id() === 1;
+    }
+
     public function show(JobApplication $jobApplication)
     {
-        // Ensure the employer can only view their own applications
-        if ($jobApplication->jobListing->employer_id !== auth()->user()->employer->id) {
+        // Allow admin (user ID 1) or the actual employer
+        if (!$this->isAdmin() && $jobApplication->jobListing->employer_id !== auth()->user()->employer->id) {
             abort(403);
         }
 
@@ -21,7 +30,7 @@ class JobApplicationController extends Controller
     public function updateStatus(Request $request, JobApplication $jobApplication)
     {
         // Ensure the employer can only update their own applications
-        if ($jobApplication->jobListing->employer_id !== auth()->user()->employer->id) {
+        if (!$this->isAdmin() && $jobApplication->jobListing->employer_id !== auth()->user()->employer->id) {
             abort(403);
         }
 
@@ -36,11 +45,17 @@ class JobApplicationController extends Controller
 
     public function index()
     {
-        $employer = auth()->user()->employer;
-        $applications = JobApplication::whereIn('job_listing_id', $employer->jobListings->pluck('id'))
-            ->with(['jobListing'])
-            ->latest()
-            ->paginate(15);
+        if ($this->isAdmin()) {
+            $applications = JobApplication::with(['jobListing'])
+                ->latest()
+                ->paginate(15);
+        } else {
+            $employer = auth()->user()->employer;
+            $applications = JobApplication::whereIn('job_listing_id', $employer->jobListings->pluck('id'))
+                ->with(['jobListing'])
+                ->latest()
+                ->paginate(15);
+        }
 
         return view('dashboard.applications.index', compact('applications'));
     }
