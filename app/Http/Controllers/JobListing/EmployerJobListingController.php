@@ -9,6 +9,7 @@ use App\Models\JobListingCategory;
 use App\Traits\HasStates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class EmployerJobListingController extends Controller
 {
@@ -131,25 +132,51 @@ class EmployerJobListingController extends Controller
     private function validateJobListing(Request $request)
     {
         $validatedData = $request->validate([
+            // Basic Information
             'title' => 'required|max:255',
             'category_id' => 'required|exists:job_listing_categories,id',
             'description' => 'required',
             'remote_position' => 'required|boolean',
-            'city' => 'nullable|required_if:remote_position,0|string|max:255',
-            'state' => 'nullable|required_if:remote_position,0|string|in:' . implode(',', $this->getStates()),
+
+            // Location fields - only validate street_address, rest will follow
+            'street_address' => 'required_if:remote_position,0|nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:20',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+
+            // Job Details
             'job_type' => 'required|in:full-time,part-time,contract,temp,freelance,internship,externship,seasonal,working-student',
             'experience_required' => 'required|in:0-1 Years,1-2 Years,2-5 Years,5+ Years',
+
+            // Compensation
             'salary_type' => 'nullable|in:hourly,salary',
             'hourly_rate_min' => 'required_if:salary_type,hourly|nullable|numeric|min:10|max:100',
             'hourly_rate_max' => 'required_if:salary_type,hourly|nullable|numeric|min:15|max:200|gt:hourly_rate_min',
             'salary_range_min' => 'required_if:salary_type,salary|nullable|numeric|min:10000|max:100000',
             'salary_range_max' => 'required_if:salary_type,salary|nullable|numeric|min:20000|max:300000|gt:salary_range_min',
+
+            // Application Method
             'application_type' => 'required|in:link,email',
             'application_link' => 'required_if:application_type,link|nullable|url',
             'email_link' => 'required_if:application_type,email|nullable|email',
+        ], [
+            'street_address.required_if' => 'Please enter a complete address using the address search field.',
         ]);
 
-        // Clear the unused application field based on application_type
+        // Only require state (county), latitude, and longitude
+        if (
+            !$request->remote_position &&
+            (!$request->state || !$request->latitude || !$request->longitude)
+        ) {
+            throw ValidationException::withMessages([
+                'street_address' => ['Please enter an address using the address search field.']
+            ]);
+        }
+
+        // Clear unused application field based on application_type
         if ($validatedData['application_type'] === 'email') {
             $validatedData['application_link'] = null;
         } else {

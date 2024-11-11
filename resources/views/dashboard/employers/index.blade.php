@@ -6,7 +6,7 @@
 @endphp
 
 @section('content')
-    <div class="container py-12 mx-auto sm:py-24 px-4">
+    <div class="container px-4 py-12 mx-auto sm:py-24">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
 
             @if ($employer)
@@ -25,22 +25,23 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">City</label>
-                            <div class="block w-full mt-1 bg-gray-100 border rounded-md">
-                                <p class="px-3 py-2">{{ $employer->city }}</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">State</label>
-                            <div class="block w-full mt-1 bg-gray-100 border rounded-md">
-                                <p class="px-3 py-2">{{ $employer->state }}</p>
-                            </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700">Address</label>
+                        <div class="block w-full mt-1 bg-gray-100 border rounded-md">
+                            <p class="px-3 py-2">
+                                @php
+                                    $addressParts = array_filter([
+                                        $employer->street_address,
+                                        $employer->city,
+                                        $employer->state,
+                                        $employer->postal_code,
+                                        $employer->country,
+                                    ]);
+                                @endphp
+                                {{ !empty($addressParts) ? implode(', ', $addressParts) : 'No address provided' }}
+                            </p>
                         </div>
                     </div>
-
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700">Website</label>
                         @if ($employer->website)

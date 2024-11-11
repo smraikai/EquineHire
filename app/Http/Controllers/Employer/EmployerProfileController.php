@@ -95,7 +95,7 @@ class EmployerProfileController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'street_address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'country' => 'required|string|max:255',
             'postal_code' => 'nullable|string|max:20',

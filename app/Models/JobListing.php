@@ -18,9 +18,14 @@ class JobListing extends Model
         'title',
         'slug',
         'description',
+        'street_address',
         'remote_position',
         'city',
         'state',
+        'country',
+        'postal_code',
+        'latitude',
+        'longitude',
         'job_type',
         'experience_required',
         'salary_type',
@@ -87,8 +92,8 @@ class JobListing extends Model
 
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
-                'lat' => $this->latitude,
-                'lng' => $this->longitude,
+                'lat' => (float) $this->latitude,  // Cast to float
+                'lng' => (float) $this->longitude  // Cast to float
             ];
         }
 

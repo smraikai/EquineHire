@@ -60,9 +60,10 @@
                         <span class="flex items-center gap-2">
                             View Applications
                             @php
-                                $newApplicationsCount = Auth::user()
-                                    ->employer->jobListings->flatMap->jobApplications->where('status', 'new')
-                                    ->count();
+                                $newApplicationsCount =
+                                    Auth::user()
+                                        ->employer?->jobListings?->flatMap->jobApplications->where('status', 'new')
+                                        ->count() ?? 0;
                             @endphp
                             @if ($newApplicationsCount > 0)
                                 <span class="px-2 py-0.5 text-xs font-medium text-white bg-emerald-500 rounded-full">

@@ -34,65 +34,38 @@
         @enderror
     </div>
 
-
     <div id="location_fields" class="space-y-4">
-        <!-- Replace the existing location fields with this -->
         <div>
-            <label for="location_search" class="block text-sm font-medium text-gray-700">Search Address</label>
+            <label for="location_search" class="block text-sm font-medium text-gray-700">Search Address <span
+                    class="text-red-500">*</span></label>
             <input type="text" id="location_search"
                 class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                placeholder="Start typing your address...">
+                placeholder="Start typing your address..."
+                value="{{ old('street_address', $employer->street_address ?? '')
+                    ? old('street_address', $employer->street_address) .
+                        ', ' .
+                        old('city', $employer->city) .
+                        ', ' .
+                        old('state', $employer->state) .
+                        ' ' .
+                        old('postal_code', $employer->postal_code) .
+                        ', ' .
+                        old('country', $employer->country ?? 'United States')
+                    : '' }}">
         </div>
 
-        <!-- Hidden fields to store the actual values -->
+        <!-- Hidden fields for form submission -->
         <input type="hidden" name="street_address" id="street_address"
             value="{{ old('street_address', $employer->street_address ?? '') }}">
         <input type="hidden" name="city" id="city" value="{{ old('city', $employer->city ?? '') }}">
         <input type="hidden" name="state" id="state" value="{{ old('state', $employer->state ?? '') }}">
-        <input type="hidden" name="country" id="country" value="{{ old('country', $employer->country ?? '') }}">
+        <input type="hidden" name="country" id="country"
+            value="{{ old('country', $employer->country ?? 'United States') }}">
         <input type="hidden" name="postal_code" id="postal_code"
             value="{{ old('postal_code', $employer->postal_code ?? '') }}">
         <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $employer->latitude ?? '') }}">
         <input type="hidden" name="longitude" id="longitude"
             value="{{ old('longitude', $employer->longitude ?? '') }}">
-
-        <!-- Display fields (readonly) -->
-        <div class="grid grid-cols-1 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Street Address</label>
-                <input type="text" id="display_street_address" readonly
-                    value="{{ old('street_address', $employer->street_address ?? '') }}"
-                    class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md select-none">
-            </div>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">City</label>
-                    <input type="text" id="display_city" readonly value="{{ old('city', $employer->city ?? '') }}"
-                        class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md select-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">State/Region</label>
-                    <input type="text" id="display_state" readonly
-                        value="{{ old('state', $employer->state ?? '') }}"
-                        class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md select-none">
-                </div>
-            </div>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Country</label>
-                    <input type="text" id="display_country" readonly
-                        value="{{ old('country', $employer->country ?? '') }}"
-                        class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md select-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Postal Code</label>
-                    <input type="text" id="display_postal_code" readonly
-                        value="{{ old('postal_code', $employer->postal_code ?? '') }}"
-                        class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md select-none">
-                </div>
-            </div>
-        </div>
-
     </div>
 
 
@@ -187,9 +160,6 @@
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
 
-            // Reset all fields
-            resetAddressFields();
-
             if (!place.geometry) {
                 console.log("No location data available");
                 return;
@@ -199,49 +169,35 @@
             document.getElementById('latitude').value = place.geometry.location.lat();
             document.getElementById('longitude').value = place.geometry.location.lng();
 
+            // Update the search field with the formatted address
+            document.getElementById('location_search').value = place.formatted_address;
+
+            let streetNumber = '';
             // Process address components
             for (const component of place.address_components) {
                 const type = component.types[0];
-
                 switch (type) {
                     case 'street_number':
+                        streetNumber = component.long_name;
+                        break;
                     case 'route':
-                        updateAddressField('street_address',
-                            (document.getElementById('street_address').value + ' ' + component
-                                .long_name).trim());
+                        document.getElementById('street_address').value =
+                            `${streetNumber} ${component.long_name}`.trim();
                         break;
                     case 'locality':
-                        updateAddressField('city', component.long_name);
+                        document.getElementById('city').value = component.long_name;
                         break;
                     case 'administrative_area_level_1':
-                        updateAddressField('state', component.long_name);
+                        document.getElementById('state').value = component.long_name;
                         break;
                     case 'country':
-                        updateAddressField('country', component.long_name);
+                        document.getElementById('country').value = component.long_name;
                         break;
                     case 'postal_code':
-                        updateAddressField('postal_code', component.long_name);
+                        document.getElementById('postal_code').value = component.long_name;
                         break;
                 }
             }
-
-            // Clear the search field
-            locationSearch.value = '';
         });
-
-        function updateAddressField(field, value) {
-            document.getElementById(field).value = value;
-            document.getElementById(`display_${field}`).value = value;
-        }
-
-        function resetAddressFields() {
-            const fields = ['street_address', 'city', 'state', 'country', 'postal_code'];
-            fields.forEach(field => {
-                document.getElementById(field).value = '';
-                document.getElementById(`display_${field}`).value = '';
-            });
-            document.getElementById('latitude').value = '';
-            document.getElementById('longitude').value = '';
-        }
     });
 </script>

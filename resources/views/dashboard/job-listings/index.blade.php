@@ -54,9 +54,6 @@
                                                         <td class="py-4 pl-4 pr-3 text-sm sm:pl-6">
                                                             <div class="font-medium text-gray-900">{{ $jobListing->title }}
                                                             </div>
-                                                            <div class="text-gray-500">
-                                                                {{ $jobListing->remote_position ? 'Remote' : $jobListing->city . ', ' . $jobListing->state }}
-                                                            </div>
                                                         </td>
                                                         <td class="px-3 py-4 text-sm text-gray-500">
                                                             {{ $jobListing->created_at->format('M d, Y') }}

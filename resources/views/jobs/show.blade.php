@@ -63,11 +63,6 @@
                         <h3 class="text-xl font-semibold text-center">
                             {{ $job_listing->employer->name }}
                         </h3>
-                        <div class="text-center">
-                            @if ($job_listing->employer->city && $job_listing->employer->state)
-                                <p>{{ $job_listing->employer->city }}, {{ $job_listing->employer->state }}</p>
-                            @endif
-                        </div>
                         <a class="text-xs text-gray-500" href="{{ route('employers.show', $job_listing->employer) }}">View
                             Profile</a>
                     </div>
@@ -79,7 +74,16 @@
                                 @if ($job_listing->remote_position)
                                     Remote
                                 @else
-                                    {{ $job_listing->city }}, {{ $job_listing->state }}
+                                    @if ($job_listing->city || $job_listing->state || $job_listing->country)
+                                        {{ collect([
+                                            $job_listing->city,
+                                            // Only show state if it's different from the city
+                                            $job_listing->state !== $job_listing->city ? $job_listing->state : null,
+                                            $job_listing->country,
+                                        ])->filter()->join(', ') }}
+                                    @else
+                                        Location not specified
+                                    @endif
                                 @endif
                             </span>
                         </div>
