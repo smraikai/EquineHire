@@ -36,8 +36,9 @@ class JobApplicationController extends Controller
 
     public function index()
     {
-        $employer = auth()->user()->employer;
-        $applications = JobApplication::whereIn('job_listing_id', $employer->jobListings->pluck('id'))
+        $applications = JobApplication::whereHas('jobListing', function ($query) {
+            $query->where('employer_id', auth()->user()->employer->id);
+        })
             ->with(['jobListing'])
             ->latest()
             ->paginate(15);
