@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Employer;
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
+use App\Models\Employer;
 
 class JobApplicationController extends Controller
 {
@@ -45,12 +46,20 @@ class JobApplicationController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
+
+        if (!$this->isAdmin()) {
+            if (!Employer::employerProfileCheck($user)) {
+                return redirect()->route('employers.index')->with('error', 'You need to complete your employer profile first.');
+            }
+        }
+
         if ($this->isAdmin()) {
             $applications = JobApplication::with(['jobListing'])
                 ->latest()
                 ->paginate(15);
         } else {
-            $employer = auth()->user()->employer;
+            $employer = $user->employer;
             $applications = JobApplication::whereIn('job_listing_id', $employer->jobListings->pluck('id'))
                 ->with(['jobListing'])
                 ->latest()
