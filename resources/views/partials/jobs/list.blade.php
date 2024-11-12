@@ -45,7 +45,16 @@
                                          @if ($job_listing->remote_position)
                                              Remote
                                          @else
-                                             {{ $job_listing->city }}, {{ $job_listing->state }}
+                                             @if ($job_listing->city || $job_listing->state || $job_listing->country)
+                                                 {{ collect([
+                                                     $job_listing->city,
+                                                     // Only show state if it's different from the city
+                                                     $job_listing->state !== $job_listing->city ? $job_listing->state : null,
+                                                     $job_listing->country,
+                                                 ])->filter()->join(', ') }}
+                                             @else
+                                                 Location not specified
+                                             @endif
                                          @endif
                                      </span>
                                  </div>
@@ -70,7 +79,18 @@
                                      @if ($job_listing->remote_position)
                                          <span>Remote</span>
                                      @else
-                                         <span>{{ $job_listing->city }}, {{ $job_listing->state }}</span>
+                                         @if ($job_listing->city || $job_listing->state || $job_listing->country)
+                                             <span>
+                                                 {{ collect([
+                                                     $job_listing->city,
+                                                     // Only show state if it's different from the city
+                                                     $job_listing->state !== $job_listing->city ? $job_listing->state : null,
+                                                     $job_listing->country,
+                                                 ])->filter()->join(', ') }}
+                                             </span>
+                                         @else
+                                             <span>Location not specified</span>
+                                         @endif
                                      @endif
                                  </div>
                              </div>
