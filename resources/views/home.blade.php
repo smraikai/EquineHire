@@ -64,7 +64,7 @@
                 </p>
             </div>
             <div class="mt-12 space-y-4">
-                @foreach (\App\Models\JobListing::latest()->take(10)->get() as $job_listing)
+                @foreach (\App\Models\JobListing::where('is_active', true)->latest()->take(10)->get() as $job_listing)
                     @include('partials.jobs.list', ['job_listing' => $job_listing])
                 @endforeach
             </div>
