@@ -153,6 +153,7 @@ class EmployerJobListingController extends Controller
 
             // Compensation
             'salary_type' => 'nullable|in:hourly,salary',
+            'currency' => 'required_if:salary_type,hourly,salary|nullable|in:' . implode(',', array_keys(JobListing::CURRENCIES)),
             'hourly_rate_min' => 'required_if:salary_type,hourly|nullable|numeric|min:10|max:100',
             'hourly_rate_max' => 'required_if:salary_type,hourly|nullable|numeric|min:15|max:200|gt:hourly_rate_min',
             'salary_range_min' => 'required_if:salary_type,salary|nullable|numeric|min:10000|max:100000',
@@ -163,7 +164,7 @@ class EmployerJobListingController extends Controller
             'application_link' => 'required_if:application_type,link|nullable|url',
             'email_link' => 'required_if:application_type,email|nullable|email',
         ], [
-            'street_address.required_if' => 'Please enter a complete address using the address search field.',
+            'street_address.required_if' => 'Please select an address from the search dropdown.',
         ]);
 
         // Only require state (county), latitude, and longitude

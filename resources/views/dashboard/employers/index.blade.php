@@ -94,7 +94,7 @@
                     <p class="text-gray-800 text-md">Create an Employer Profile to start posting
                         your job listings.</p>
                     <a href="{{ route('employers.create') }}"
-                        class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
+                        class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border rounded-md sm:w-auto sm:px-6 hover:bg-gray-100">
                         <x-coolicon-add-plus-circle class="w-6 h-6 mr-2" /> Create Employer Profile
                     </a>
                 </div>

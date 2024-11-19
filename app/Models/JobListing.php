@@ -40,6 +40,7 @@ class JobListing extends Model
         'is_boosted',
         'boost_expires_at',
         'views',
+        'currency',  // Add this line
     ];
 
     protected $casts = [
@@ -52,6 +53,40 @@ class JobListing extends Model
         'salary_range_max' => 'decimal:2',
     ];
 
+    // Currencies
+    public const CURRENCIES = [
+        'USD' => [
+            'code' => 'USD',
+            'symbol' => '$',
+            'name' => 'US Dollar'
+        ],
+        'CAD' => [
+            'code' => 'CAD',
+            'symbol' => '$',
+            'name' => 'Canadian Dollar'
+        ],
+        'EUR' => [
+            'code' => 'EUR',
+            'symbol' => '€',
+            'name' => 'Euro'
+        ],
+        'GBP' => [
+            'code' => 'GBP',
+            'symbol' => '£',
+            'name' => 'British Pound'
+        ],
+        'CHF' => [
+            'code' => 'CHF',
+            'symbol' => 'CHF',
+            'name' => 'Swiss Franc'
+        ]
+    ];
+
+    // Add this method to get default currency
+    public static function getDefaultCurrency()
+    {
+        return 'USD';
+    }
 
     public function employer()
     {
