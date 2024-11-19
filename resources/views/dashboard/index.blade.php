@@ -57,44 +57,6 @@
 @endsection
 
 @section('scripts')
-    <!-- Conversion Tracking for Employer Subscription -->
-    @if (request()->query('subscription_completed'))
-        <script>
-            // Initialize the data layer if it doesn't exist
-            window.dataLayer = window.dataLayer || [];
-
-            // Prepare the data object
-            let purchaseData = {
-                'event': 'purchase',
-                'currency': 'USD'
-            };
-
-            @if (isset($subscription))
-                purchaseData.transaction_id = '{{ $subscription->id }}';
-                purchaseData.subscription_id = '{{ $subscription->id }}';
-                purchaseData.items = [{
-                    'item_name': '{{ $subscription->name }}',
-                    'item_category': 'Subscription',
-                    'quantity': 1
-                }];
-            @endif
-
-            @if (isset($amount))
-                purchaseData.value = {{ $amount }};
-                if (purchaseData.items && purchaseData.items[0]) {
-                    purchaseData.items[0].price = {{ $amount }};
-                }
-            @endif
-
-            @if (Auth::check())
-                purchaseData.user_id = '{{ Auth::id() }}';
-            @endif
-
-            // Push data to the data layer
-            window.dataLayer.push(purchaseData);
-        </script>
-    @endif
-
     <!-- Chart.js for Page Views -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection

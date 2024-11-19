@@ -91,7 +91,7 @@ class SubscriptionController extends Controller
             }
         }
 
-        return redirect()->route('dashboard.employers.index', ['subscription_completed' => true]);
+        return redirect()->route('subscription.thank-you', ['subscription_completed' => true]);
     }
 
     public function handleIncompletePayment(Request $request)
