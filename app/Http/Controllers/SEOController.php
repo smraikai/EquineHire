@@ -123,7 +123,8 @@ class SEOController extends Controller
                     '@type' => 'PostalAddress',
                     'addressLocality' => $job_listing->city,
                     'addressRegion' => $job_listing->state,
-                    'addressCountry' => 'US',
+                    'addressCountry' => $job_listing->country ?? 'US',
+                    'postalCode' => $job_listing->postal_code,
                 ],
             ],
             'employmentType' => $this->mapJobType($job_listing->job_type),
@@ -131,34 +132,36 @@ class SEOController extends Controller
             'experienceRequirements' => $job_listing->experience_required,
             'applicantLocationRequirements' => [
                 '@type' => 'Country',
-                'name' => 'United States',
+                'name' => $job_listing->country ?? 'United States',
             ],
         ];
 
         if ($job_listing->salary_type === 'hourly') {
             $schema['baseSalary'] = [
                 '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
+                'currency' => $job_listing->currency ?? 'USD',
                 'value' => [
                     '@type' => 'QuantitativeValue',
-                    'value' => $job_listing->hourly_rate_min,
+                    'minValue' => $job_listing->hourly_rate_min,
+                    'maxValue' => $job_listing->hourly_rate_max,
                     'unitText' => 'HOUR',
                 ],
             ];
         } elseif ($job_listing->salary_type === 'salary') {
             $schema['baseSalary'] = [
                 '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
+                'currency' => $job_listing->currency ?? 'USD',
                 'value' => [
                     '@type' => 'QuantitativeValue',
-                    'value' => $job_listing->salary_range_min,
+                    'minValue' => $job_listing->salary_range_min,
+                    'maxValue' => $job_listing->salary_range_max,
                     'unitText' => 'YEAR',
                 ],
             ];
         } else {
             $schema['baseSalary'] = [
                 '@type' => 'MonetaryAmount',
-                'currency' => 'USD',
+                'currency' => $job_listing->currency ?? 'USD',
                 'value' => [
                     '@type' => 'QuantitativeValue',
                     'value' => 0,
@@ -183,11 +186,22 @@ class SEOController extends Controller
                 '@type' => 'Place',
                 'address' => [
                     '@type' => 'PostalAddress',
+                    'streetAddress' => $employer->street_address,
                     'addressLocality' => $employer->city,
                     'addressRegion' => $employer->state,
+                    'addressCountry' => $employer->country ?? 'US',
+                    'postalCode' => $employer->postal_code,
                 ],
             ],
         ];
+
+        if ($employer->latitude && $employer->longitude) {
+            $schema['location']['geo'] = [
+                '@type' => 'GeoCoordinates',
+                'latitude' => $employer->latitude,
+                'longitude' => $employer->longitude,
+            ];
+        }
 
         $this->outputSchema($schema);
     }

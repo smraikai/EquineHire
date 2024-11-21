@@ -22,50 +22,7 @@
 </form>
 
 <script>
-    // Auto-detect user's country if no country is selected
-    if (!document.getElementById('countrySelect').value) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                const geocoder = new google.maps.Geocoder();
-                const latlng = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-
-                geocoder.geocode({
-                    location: latlng
-                }, (results, status) => {
-                    if (status === 'OK') {
-                        if (results[0]) {
-                            for (let component of results[0].address_components) {
-                                if (component.types.includes('country')) {
-                                    const userCountry = component.long_name;
-                                    const select = document.getElementById('countrySelect');
-
-                                    // Find and select the matching option
-                                    for (let option of select.options) {
-                                        if (option.text === userCountry) {
-                                            option.selected = true;
-                                            select.dispatchEvent(new Event('change'));
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-        }
-    }
-
     document.getElementById('countrySelect').addEventListener('change', function() {
         document.getElementById('jobSearchForm').submit();
     });
 </script>
-
-@push('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&libraries=places">
-    </script>
-@endpush
