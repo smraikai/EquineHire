@@ -127,18 +127,15 @@ class JobListing extends Model
 
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
-                'lat' => (float) $this->latitude,  // Cast to float
-                'lng' => (float) $this->longitude  // Cast to float
+                'lat' => (float) $this->latitude,
+                'lng' => (float) $this->longitude
             ];
         }
 
         $array['boosted_rank'] = $this->is_boosted ? 9001 : 0;
-
-        // Include employer name
         $array['employer_name'] = $this->employer->name;
-
-        // Add new facets
         $array['category_ids'] = [$this->category_id];
+        $array['country'] = $this->country ? trim($this->country) : null;
         $array['state'] = $this->state ? trim($this->state) : null;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
@@ -153,7 +150,7 @@ class JobListing extends Model
         return [
             'attributesForFaceting' => [
                 'searchable(city)',
-                'searchable(state)',
+                'searchable(country)', // Changed from state
                 'job_type',
                 'experience_required',
                 'salary_type',
@@ -186,16 +183,16 @@ class JobListing extends Model
     }
 
     /**
-     * Get unique states from active job listings.
+     * Get unique countries from active job listings.
      *
      * @return array
      */
-    public static function getUniqueStates()
+    public static function getUniqueCountries()
     {
         return self::where('is_active', true)
-            ->whereNotNull('state')
+            ->whereNotNull('country')
             ->distinct()
-            ->pluck('state')
+            ->pluck('country')
             ->sort()
             ->values()
             ->toArray();
