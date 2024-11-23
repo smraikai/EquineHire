@@ -8,6 +8,7 @@ use App\Models\Employer;
 use App\Observers\EmployerObserver;
 use App\Policies\EmployerPolicy;
 use Illuminate\Support\Facades\View;
+use App\Services\LocationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(LocationService::class, function ($app) {
+            return new LocationService();
+        });
     }
 
     /**

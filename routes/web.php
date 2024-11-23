@@ -25,3 +25,4 @@ require __DIR__ . '/public.php';
 require __DIR__ . '/subscription.php';
 require __DIR__ . '/api.php';
 require __DIR__ . '/webhook.php';
+require __DIR__ . '/location.php';
