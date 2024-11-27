@@ -33,14 +33,14 @@ class LocationService
         $location['country'] = $country;
         $location['flag'] = self::LOCATIONS[$country]['flag'] ?? self::LOCATIONS[self::DEFAULT_COUNTRY]['flag'];
 
-        Session::put(self::SESSION_KEY, $location);
+        session([self::SESSION_KEY => $location]);
     }
 
     public function getLocation(): array
     {
         $defaultLocation = self::LOCATIONS[self::DEFAULT_COUNTRY];
         $defaultLocation['country'] = self::DEFAULT_COUNTRY;
-        return Session::get(self::SESSION_KEY, $defaultLocation);
+        return session(self::SESSION_KEY, $defaultLocation);
     }
 
     /*

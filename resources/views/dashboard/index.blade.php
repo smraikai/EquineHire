@@ -45,8 +45,8 @@
                 <div class="mx-auto">
                     <x-heroicon-o-building-office class="w-12 h-12 mx-auto text-gray-400" />
                 </div>
-                <h3 class="mt-4 text-lg font-semibold text-gray-900">Ready to Post Your Job?</h3>
-                <p class="mt-2 text-sm text-gray-600">Create an employer profile to start posting job listings.</p>
+                <h3 class="mt-4 text-lg font-semibold text-gray-900">Ready to Post a Job?</h3>
+                <p class="mt-2 text-sm text-gray-600">Create an employer profile to get started.</p>
                 <div class="mt-6">
                     <a href="{{ route('employers.create') }}"
                         class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

@@ -20,6 +20,7 @@
                         <button @click="open = !open"
                             class="flex items-center px-3 py-2 space-x-2 text-sm text-gray-600 bg-white border rounded-md hover:text-gray-900">
                             <span>{{ app(App\Services\LocationService::class)->getFlag() }}</span>
+                            <span>{{ app(App\Services\LocationService::class)->getDisplayName() }}</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 9l-7 7-7-7" />
@@ -32,11 +33,16 @@
                         <div class="py-1">
                             @foreach (['US' => 'United States', 'GB' => 'United Kingdom', 'EU' => 'European Union', 'CA' => 'Canada'] as $code => $name)
                                 <button @click="setLocation('{{ $code }}')"
-                                    class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100">
+                                    class="flex items-center w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100">
                                     @php
-                                        $locationService = app(App\Services\LocationService::class);
-                                        $locationService->setLocation($code);
+                                        $flag = match ($code) {
+                                            'US' => '🇺🇸',
+                                            'GB' => '🇬🇧',
+                                            'EU' => '🇪🇺',
+                                            'CA' => '🇨🇦',
+                                        };
                                     @endphp
+                                    <span class="mr-2">{{ $flag }}</span>
                                     {{ $name }}
                                 </button>
                             @endforeach

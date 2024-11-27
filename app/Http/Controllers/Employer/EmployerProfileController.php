@@ -8,6 +8,7 @@ use App\Models\Employer;
 use App\Traits\HasStates;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class EmployerProfileController extends Controller
 {
@@ -48,16 +49,25 @@ class EmployerProfileController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'street_address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'required|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string|max:255',
             'postal_code' => 'nullable|string|max:20',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo_path' => 'nullable|string',
             'featured_image_path' => 'nullable|string',
+        ], [
+            'street_address.required' => 'Please select an address from the search dropdown.',
         ]);
+
+        // Add validation check for required location fields
+        if (!$request->state || !$request->latitude || !$request->longitude) {
+            throw ValidationException::withMessages([
+                'street_address' => ['Please enter an address using the address search field.']
+            ]);
+        }
 
         DB::beginTransaction();
 
@@ -96,15 +106,24 @@ class EmployerProfileController extends Controller
             'description' => 'required|string',
             'street_address' => 'required|string|max:255',
             'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'required|string|max:255',
+            'state' => 'nullable|string',
+            'country' => 'nullable|string|max:255',
             'postal_code' => 'nullable|string|max:20',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
             'website' => ['nullable', 'url', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
             'logo_path' => 'nullable|string',
             'featured_image_path' => 'nullable|string',
+        ], [
+            'street_address.required' => 'Please select an address from the search dropdown.',
         ]);
+
+        // Add validation check for required location fields
+        if (!$request->state || !$request->latitude || !$request->longitude) {
+            throw ValidationException::withMessages([
+                'street_address' => ['Please enter an address using the address search field.']
+            ]);
+        }
 
         DB::beginTransaction();
 

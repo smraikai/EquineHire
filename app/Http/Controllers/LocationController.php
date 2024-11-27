@@ -24,8 +24,7 @@ class LocationController extends Controller
 
         return response()->json([
             'success' => true,
-            'currency' => $this->locationService->getCurrency(),
-            'symbol' => $this->locationService->getCurrencySymbol()
+            'location' => $this->locationService->getLocation()
         ]);
     }
 

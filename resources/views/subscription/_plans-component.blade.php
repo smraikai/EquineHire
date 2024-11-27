@@ -3,7 +3,8 @@
                         <div
                             class="rounded-3xl shadow-md p-8 ring-1 {{ $index === 1 ? 'ring-blue-500 ring-2' : 'ring-gray-200' }} bg-white xl:p-10">
                             <div class="flex items-center justify-between gap-x-4">
-                                <h3 id="{{ $plan['id'] }}" class="text-lg font-semibold leading-8 text-gray-900">
+                                <h3 id="{{ is_callable($plan['id']) ? $plan['id']() : $plan['id'] }}"
+                                    class="text-lg font-semibold leading-8 text-gray-900">
                                     {{ $plan['name'] }}
                                 </h3>
                                 @if ($index === 1)
@@ -14,7 +15,7 @@
                             </div>
                             <p class="flex items-baseline mt-6 gap-x-1">
                                 <span class="text-4xl font-bold tracking-tight text-gray-900">
-                                    ${{ $plan['price'] }}
+                                    {{ app(App\Services\LocationService::class)->getCurrencySymbol() }}{{ $plan['prices'][app(App\Services\LocationService::class)->getCurrency()] }}
                                 </span>
                                 <span class="text-sm font-semibold leading-6 text-gray-600">
                                     /{{ $plan['interval'] }}
@@ -35,7 +36,8 @@
                             </ul>
                             <form action="{{ route('subscription.store-plan') }}" method="POST" class="mt-8">
                                 @csrf
-                                <input type="hidden" value="{{ $plan['id'] }}" name="plan">
+                                <input type="hidden"
+                                    value="{{ is_callable($plan['id']) ? $plan['id']() : $plan['id'] }}" name="plan">
                                 <input type="hidden" value="{{ $plan['name'] }}" name="planName">
                                 <button type="submit"
                                     class="w-full px-3 py-2 text-sm font-semibold leading-6 text-center text-white bg-blue-600 rounded-md shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-blue-700 focus-visible:outline-blue-600">
