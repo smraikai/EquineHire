@@ -132,15 +132,22 @@ class JobListing extends Model
             ];
         }
 
+        $array['country'] = $this->country ? strtoupper(trim($this->country)) : null;
+
         $array['boosted_rank'] = $this->is_boosted ? 9001 : 0;
         $array['employer_name'] = $this->employer->name;
         $array['category_ids'] = [$this->category_id];
-        $array['country'] = $this->country ? trim($this->country) : null;
         $array['state'] = $this->state ? trim($this->state) : null;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
         $array['salary_type'] = $this->salary_type;
         $array['remote_position'] = (bool) $this->remote_position;
+
+        Log::info('Job Listing Indexed:', [
+            'id' => $this->id,
+            'country' => $array['country'],
+            'title' => $this->title
+        ]);
 
         return $array;
     }
@@ -148,15 +155,26 @@ class JobListing extends Model
     public function getAlgoliaSettings()
     {
         return [
+            'searchableAttributes' => [
+                'title',
+                'description',
+                'employer_name',
+                'city',
+                'country'
+            ],
             'attributesForFaceting' => [
                 'searchable(city)',
-                'searchable(country)', // Changed from state
+                'searchable(country)',
                 'job_type',
                 'experience_required',
                 'salary_type',
                 'filterOnly(category_ids)',
                 'filterOnly(remote_position)'
             ],
+            'customRanking' => [
+                'desc(boosted_rank)',
+                'desc(created_at)'
+            ]
         ];
     }
 

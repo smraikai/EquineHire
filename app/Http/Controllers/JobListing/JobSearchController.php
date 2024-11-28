@@ -25,7 +25,7 @@ class JobSearchController extends Controller
 
         $validatedData = $request->validate([
             'keyword' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
             'categories' => 'nullable|array',
             'job_type' => 'nullable|string',
             'experience_level' => 'nullable|string',
@@ -34,19 +34,22 @@ class JobSearchController extends Controller
         ]);
 
         $keyword = $request->input('keyword', '');
-        $state = $validatedData['state'] ?? null;
+        $country = isset($validatedData['country']) && $validatedData['country']
+            ? strtoupper(trim($validatedData['country']))
+            : null;
         $categoryIds = $request->input('categories', []);
         $jobType = $request->input('job_type');
         $experienceLevel = $request->input('experience_level');
         $salaryType = $request->input('salary_type');
         $remotePosition = $request->boolean('remote_position');
 
-        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($state, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
-            $options['facets'] = ['state', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($country, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
+            $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
             $facetFilters = [];
-            if ($state) {
-                $facetFilters[] = "state:{$state}";
+            if ($country) {
+                $facetFilters[] = "country:{$country}";
+                Log::info('Applying country filter:', ['filter' => "country:{$country}"]);
             }
             if (!empty($categoryIds)) {
                 $categoryFilters = array_map(function ($id) {
@@ -86,7 +89,7 @@ class JobSearchController extends Controller
 
         Log::info('Search parameters:', [
             'keyword' => $keyword,
-            'state' => $state,
+            'country' => $country,
             'categoryIds' => $categoryIds,
             'jobType' => $jobType,
             'experienceLevel' => $experienceLevel,
@@ -102,7 +105,7 @@ class JobSearchController extends Controller
             'results' => $results,
             'facets' => [
                 'categories' => $categories,
-                'states' => $facets['state'] ?? [],
+                'countries' => $facets['country'] ?? [],
                 'job_types' => $facets['job_type'] ?? [],
                 'experience_levels' => $facets['experience_required'] ?? [],
                 'salary_types' => $facets['salary_type'] ?? [],
@@ -115,31 +118,24 @@ class JobSearchController extends Controller
 
     public function category(Request $request, JobListingCategory $category)
     {
-
-        \Log::info('Category ID: ' . $category->id);
-        \Log::info('Category Slug: ' . $category->slug);
-
         $validatedData = $request->validate([
             'keyword' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
         ]);
 
         $keyword = $request->input('keyword', '');
-        $state = $validatedData['state'] ?? null;
+        $country = $validatedData['country'] ? strtoupper(trim($validatedData['country'])) : null;
 
-        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($category, $state) {
+        $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($category, $country) {
+            $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
+
             $facetFilters = ["category_ids:{$category->id}"];
-            if ($state) {
-                $facetFilters[] = "state:{$state}";
+            if ($country) {
+                $facetFilters[] = "country:{$country}";
+                Log::info('Applying category country filter:', ['filter' => "country:{$country}"]);
             }
 
             $options['facetFilters'] = $facetFilters;
-
-            Log::info('Algolia category search query:', [
-                'query' => $query,
-                'options' => $options
-            ]);
-
             return $algolia->search($query, $options);
         });
 
@@ -148,7 +144,7 @@ class JobSearchController extends Controller
         Log::info('Category search parameters:', [
             'category' => $category->name,
             'keyword' => $keyword,
-            'state' => $state,
+            'country' => $country,
             'resultsCount' => $results->count(),
             'resultsTotal' => $results->total(),
         ]);
