@@ -30,9 +30,15 @@ class LocationController extends Controller
 
     public function current(Request $request)
     {
-        // If no location is set, detect it
-        if (!session()->has('user_location')) {
+        // If no location is set or location check is older than 24 hours
+        if (
+            !session()->has('user_location') ||
+            (session()->has('location_checked') &&
+                now()->diffInHours(session('location_checked')) >= 24)
+        ) {
+
             $this->locationService->detectAndSetLocation($request->ip());
+            session(['location_checked' => now()]);
         }
 
         return response()->json($this->locationService->getLocation());
