@@ -53,39 +53,6 @@
     </div>
     @include('partials.footer')
     @yield('scripts')
-
-    {{-- START: Get Location --}}
-    <script>
-        function getUserLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-
-                    // Add to form or URL parameters
-                    const searchForm = document.querySelector('#search-form');
-                    if (searchForm) {
-                        const latInput = document.createElement('input');
-                        latInput.type = 'hidden';
-                        latInput.name = 'lat';
-                        latInput.value = lat;
-
-                        const lngInput = document.createElement('input');
-                        lngInput.type = 'hidden';
-                        lngInput.name = 'lng';
-                        lngInput.value = lng;
-
-                        searchForm.appendChild(latInput);
-                        searchForm.appendChild(lngInput);
-                    }
-                });
-            }
-        }
-
-        // Call when page loads
-        document.addEventListener('DOMContentLoaded', getUserLocation);
-    </script>
-    {{-- END: Get Location --}}
 </body>
 
 </html>

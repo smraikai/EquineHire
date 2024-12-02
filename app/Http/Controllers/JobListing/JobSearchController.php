@@ -9,6 +9,7 @@ use Algolia\AlgoliaSearch\SearchIndex;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Traits\HasStates;
+use App\Services\LocationService;
 
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
@@ -17,6 +18,13 @@ class JobSearchController extends Controller
 {
 
     use HasStates;
+
+    protected $locationService;
+
+    public function __construct(LocationService $locationService)
+    {
+        $this->locationService = $locationService;
+    }
 
     public function index(Request $request)
     {
@@ -46,6 +54,21 @@ class JobSearchController extends Controller
 
         $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($country, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
+
+            // Get user's selected/detected location
+            $userLocation = $this->locationService->getLocation();
+
+            // Only use IP-based geolocation if no specific country is selected
+            if (!$country) {
+                if (session()->has('user_location')) {
+                    // Use specific coordinates based on country
+                    $coordinates = $this->getCountryCoordinates($userLocation['country']);
+                    $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
+                } else {
+                    // Fall back to IP-based geolocation
+                    $options['aroundLatLngViaIP'] = true;
+                }
+            }
 
             $facetFilters = [];
             if ($country) {
@@ -79,9 +102,6 @@ class JobSearchController extends Controller
                 'query' => $query,
                 'options' => $options
             ]);
-
-            // Add IP-based geolocation sorting
-            $options['aroundLatLngViaIP'] = true;
 
             // Optional: Adjust ranking to balance distance vs. relevance
             $options['getRankingInfo'] = true;
@@ -121,7 +141,18 @@ class JobSearchController extends Controller
         ]);
     }
 
+    private function getCountryCoordinates(string $countryCode): array
+    {
+        // Rough central coordinates for supported countries
+        $coordinates = [
+            'US' => ['lat' => 37.0902, 'lng' => -95.7129],
+            'GB' => ['lat' => 55.3781, 'lng' => -3.4360],
+            'EU' => ['lat' => 50.8503, 'lng' => 4.3517],  // Brussels as center point for EU
+            'CA' => ['lat' => 56.1304, 'lng' => -106.3468],
+        ];
 
+        return $coordinates[$countryCode] ?? $coordinates['US'];
+    }
 
     public function category(Request $request, JobListingCategory $category)
     {

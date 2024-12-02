@@ -26,3 +26,4 @@ require __DIR__ . '/subscription.php';
 require __DIR__ . '/api.php';
 require __DIR__ . '/webhook.php';
 require __DIR__ . '/location.php';
+require __DIR__ . '/tests.php';
