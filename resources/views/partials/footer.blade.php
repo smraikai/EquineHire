@@ -74,13 +74,10 @@
                     <li><a href="/terms-of-service" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
                     <li>
                         <script language="JavaScript">
-                            <!--
                             var name = "help";
                             var domain = "equinehire.com";
                             document.write('<a href=\"mailto:' + name + '@' + domain + '\" class="text-gray-600 hover:text-gray-900">');
                             document.write('Contact</a>');
-                            // 
-                            -->
                         </script>
                     </li>
                 </ul>

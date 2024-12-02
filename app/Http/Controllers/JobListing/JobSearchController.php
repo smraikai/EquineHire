@@ -43,6 +43,7 @@ class JobSearchController extends Controller
         $salaryType = $request->input('salary_type');
         $remotePosition = $request->boolean('remote_position');
 
+
         $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($country, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
@@ -78,6 +79,12 @@ class JobSearchController extends Controller
                 'query' => $query,
                 'options' => $options
             ]);
+
+            // Add IP-based geolocation sorting
+            $options['aroundLatLngViaIP'] = true;
+
+            // Optional: Adjust ranking to balance distance vs. relevance
+            $options['getRankingInfo'] = true;
 
             return $algolia->search($query, $options);
         });
