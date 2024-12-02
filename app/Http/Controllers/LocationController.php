@@ -28,8 +28,13 @@ class LocationController extends Controller
         ]);
     }
 
-    public function current()
+    public function current(Request $request)
     {
+        // If no location is set, detect it
+        if (!session()->has('user_location')) {
+            $this->locationService->detectAndSetLocation($request->ip());
+        }
+
         return response()->json($this->locationService->getLocation());
     }
 }

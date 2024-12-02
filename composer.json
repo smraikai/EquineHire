@@ -28,6 +28,7 @@
         "league/flysystem-aws-s3-v3": "^3.27",
         "meilisearch/meilisearch-php": "^1.7",
         "spatie/laravel-sitemap": "^7.2",
+        "stevebauman/location": "^7.4",
         "torann/geoip": "^3.0"
     },
     "require-dev": {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Session;
+use Stevebauman\Location\Facades\Location;
 
 class LocationService
 {
@@ -41,6 +42,24 @@ class LocationService
         $defaultLocation = self::LOCATIONS[self::DEFAULT_COUNTRY];
         $defaultLocation['country'] = self::DEFAULT_COUNTRY;
         return session(self::SESSION_KEY, $defaultLocation);
+    }
+
+    public function detectAndSetLocation(?string $ip = null): void
+    {
+        // Get IP (defaults to current request IP)
+        $position = Location::get($ip);
+
+        if ($position) {
+            $country = strtoupper($position->countryCode);
+            // Only set if it's a supported country, otherwise use default
+            if (isset(self::LOCATIONS[$country])) {
+                $this->setLocation($country);
+            } else {
+                $this->setLocation(self::DEFAULT_COUNTRY);
+            }
+        } else {
+            $this->setLocation(self::DEFAULT_COUNTRY);
+        }
     }
 
     /*
