@@ -32,7 +32,7 @@
                     <!-- Dropdown -->
                     <div x-show="open" @click.away="open = false"
                         class="absolute z-50 mt-2 bg-white rounded-md shadow-lg">
-                        <div class="py-1 overflow-y-auto max-h-28">
+                        <div class="py-1 overflow-y-auto max-h-32">
                             @php
                                 $countries = [
                                     'US' => 'United States',
