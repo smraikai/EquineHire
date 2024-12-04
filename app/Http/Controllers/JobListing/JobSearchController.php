@@ -55,41 +55,41 @@ class JobSearchController extends Controller
         $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($country, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
-            $facetFilters = [];
+            // Get user's selected/detected location
+            $userLocation = $this->locationService->getLocation();
 
-            // Apply country filter if available
-            if ($country) {
-                $facetFilters[] = "country:{$country}";
-                Log::info('Applying country filter:', ['filter' => "country:{$country}"]);
-            } else {
-                // Fallback: If no country, consider city and state
-                if ($this->city) {
-                    $facetFilters[] = "city:{$this->city}";
-                }
-                if ($this->state) {
-                    $facetFilters[] = "state:{$this->state}";
+            // Only use IP-based geolocation if no specific country is selected
+            if (!$country) {
+                if (session()->has('user_location')) {
+                    // Use specific coordinates based on country
+                    $coordinates = $this->getCountryCoordinates($userLocation['country']);
+                    $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
+                } else {
+                    // Fall back to IP-based geolocation
+                    $options['aroundLatLngViaIP'] = true;
                 }
             }
 
+            $facetFilters = [];
+            if ($country) {
+                $facetFilters[] = "country:{$country}";
+                Log::info('Applying country filter:', ['filter' => "country:{$country}"]);
+            }
             if (!empty($categoryIds)) {
                 $categoryFilters = array_map(function ($id) {
                     return "category_ids:{$id}";
                 }, $categoryIds);
                 $facetFilters[] = $categoryFilters;
             }
-
             if ($jobType) {
                 $facetFilters[] = "job_type:{$jobType}";
             }
-
             if ($experienceLevel) {
                 $facetFilters[] = "experience_required:{$experienceLevel}";
             }
-
             if ($salaryType) {
                 $facetFilters[] = "salary_type:{$salaryType}";
             }
-
             if ($remotePosition) {
                 $facetFilters[] = 'remote_position:true';
             }
@@ -98,12 +98,13 @@ class JobSearchController extends Controller
                 $options['facetFilters'] = $facetFilters;
             }
 
-            // Use geolocation if available, otherwise rely on city/state
-            if (!$country && $this->latitude && $this->longitude) {
-                $options['aroundLatLng'] = "{$this->latitude}, {$this->longitude}";
-            } else {
-                $options['aroundLatLngViaIP'] = true;
-            }
+            Log::info('Algolia search query:', [
+                'query' => $query,
+                'options' => $options
+            ]);
+
+            // Optional: Adjust ranking to balance distance vs. relevance
+            $options['getRankingInfo'] = true;
 
             return $algolia->search($query, $options);
         });
