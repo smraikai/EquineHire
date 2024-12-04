@@ -58,21 +58,17 @@ class JobSearchController extends Controller
             // Get user's selected/detected location
             $userLocation = $this->locationService->getLocation();
 
-            // Only use location-based search if no specific country is selected
-            if (!$country) {
-                if (session()->has('user_location')) {
-                    // Use specific coordinates based on country
-                    $coordinates = $this->getCountryCoordinates($userLocation['country']);
-                    $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
-
-                    // Include jobs without location data
-                    $options['ignorePlaces'] = true;
-                } else {
-                    // Fall back to IP-based geolocation
-                    $options['aroundLatLngViaIP'] = true;
-                    $options['ignorePlaces'] = true;
-                }
-            }
+            // // Only use IP-based geolocation if no specific country is selected
+            // if (!$country && !$remotePosition) {
+            //     if (session()->has('user_location')) {
+            //         // Use specific coordinates based on country
+            //         $coordinates = $this->getCountryCoordinates($userLocation['country']);
+            //         $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
+            //     } else {
+            //         // Fall back to IP-based geolocation
+            //         $options['aroundLatLngViaIP'] = true;
+            //     }
+            // }
 
             $facetFilters = [];
             if ($country) {
