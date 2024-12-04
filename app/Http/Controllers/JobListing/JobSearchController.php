@@ -64,6 +64,7 @@ class JobSearchController extends Controller
                     // Use specific coordinates based on country
                     $coordinates = $this->getCountryCoordinates($userLocation['country']);
                     $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
+                    $options['minimumAroundRadius'] = 1000000; // 1000km in meters
                 } else {
                     // Fall back to IP-based geolocation
                     $options['aroundLatLngViaIP'] = true;
