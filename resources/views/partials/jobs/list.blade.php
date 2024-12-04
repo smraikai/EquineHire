@@ -23,7 +23,8 @@
                          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                              <div>
                                  <div class="flex items-center justify-between">
-                                     <h3 class="text-base font-semibold text-gray-900 truncate sm:text-lg">
+                                     <h3
+                                         class="text-base font-semibold text-gray-900 truncate max-w-[280px] sm:max-w-[450px] sm:text-lg">
                                          {{ $job_listing->title }}</h3>
                                      @if ($job_listing->is_boosted)
                                          <span
