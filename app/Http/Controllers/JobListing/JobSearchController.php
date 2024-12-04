@@ -55,21 +55,6 @@ class JobSearchController extends Controller
         $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($country, $categoryIds, $jobType, $experienceLevel, $salaryType, $remotePosition) {
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
-            // Get user's selected/detected location
-            $userLocation = $this->locationService->getLocation();
-
-            // // Only use IP-based geolocation if no specific country is selected
-            // if (!$country && !$remotePosition) {
-            //     if (session()->has('user_location')) {
-            //         // Use specific coordinates based on country
-            //         $coordinates = $this->getCountryCoordinates($userLocation['country']);
-            //         $options['aroundLatLng'] = "{$coordinates['lat']}, {$coordinates['lng']}";
-            //     } else {
-            //         // Fall back to IP-based geolocation
-            //         $options['aroundLatLngViaIP'] = true;
-            //     }
-            // }
-
             $facetFilters = [];
             if ($country) {
                 $facetFilters[] = "country:{$country}";
@@ -98,11 +83,6 @@ class JobSearchController extends Controller
                 $options['facetFilters'] = $facetFilters;
             }
 
-            Log::info('Algolia search query:', [
-                'query' => $query,
-                'options' => $options
-            ]);
-
             // Optional: Adjust ranking to balance distance vs. relevance
             $options['getRankingInfo'] = true;
 
@@ -113,18 +93,6 @@ class JobSearchController extends Controller
         $results = $algoliaResults->paginate(15);
         $rawResults = $algoliaResults->raw();
         $facets = $rawResults['facets'] ?? [];
-
-        Log::info('Search parameters:', [
-            'keyword' => $keyword,
-            'country' => $country,
-            'categoryIds' => $categoryIds,
-            'jobType' => $jobType,
-            'experienceLevel' => $experienceLevel,
-            'salaryType' => $salaryType,
-            'remotePosition' => $remotePosition,
-            'resultsCount' => $results->count(),
-            'resultsTotal' => $results->total(),
-        ]);
 
         $categories = JobListingCategory::all();
 
@@ -139,47 +107,6 @@ class JobSearchController extends Controller
                 'remote_positions' => $facets['remote_position'] ?? [],
             ],
         ]);
-    }
-
-    private function getCountryCoordinates(string $countryCode): array
-    {
-        $coordinates = [
-            // Non-EU Countries
-            'US' => ['lat' => 37.0902, 'lng' => -95.7129],
-            'GB' => ['lat' => 55.3781, 'lng' => -3.4360],
-            'CA' => ['lat' => 56.1304, 'lng' => -106.3468],
-
-            // EU Countries
-            'AT' => ['lat' => 47.5162, 'lng' => 14.5501], // Austria
-            'BE' => ['lat' => 50.8503, 'lng' => 4.3517],  // Belgium
-            'BG' => ['lat' => 42.7339, 'lng' => 25.4858], // Bulgaria
-            'HR' => ['lat' => 45.1000, 'lng' => 15.2000], // Croatia
-            'CY' => ['lat' => 35.1264, 'lng' => 33.4299], // Cyprus
-            'CZ' => ['lat' => 49.8175, 'lng' => 15.4730], // Czech Republic
-            'DK' => ['lat' => 56.2639, 'lng' => 9.5018],  // Denmark
-            'EE' => ['lat' => 58.5953, 'lng' => 25.0136], // Estonia
-            'FI' => ['lat' => 61.9241, 'lng' => 25.7482], // Finland
-            'FR' => ['lat' => 46.2276, 'lng' => 2.2137],  // France
-            'DE' => ['lat' => 51.1657, 'lng' => 10.4515], // Germany
-            'GR' => ['lat' => 39.0742, 'lng' => 21.8243], // Greece
-            'HU' => ['lat' => 47.1625, 'lng' => 19.5033], // Hungary
-            'IE' => ['lat' => 53.1424, 'lng' => -7.6921], // Ireland
-            'IT' => ['lat' => 41.8719, 'lng' => 12.5674], // Italy
-            'LV' => ['lat' => 56.8796, 'lng' => 24.6032], // Latvia
-            'LT' => ['lat' => 55.1694, 'lng' => 23.8813], // Lithuania
-            'LU' => ['lat' => 49.8153, 'lng' => 6.1296],  // Luxembourg
-            'MT' => ['lat' => 35.9375, 'lng' => 14.3754], // Malta
-            'NL' => ['lat' => 52.1326, 'lng' => 5.2913],  // Netherlands
-            'PL' => ['lat' => 51.9194, 'lng' => 19.1451], // Poland
-            'PT' => ['lat' => 39.3999, 'lng' => -8.2245], // Portugal
-            'RO' => ['lat' => 45.9432, 'lng' => 24.9668], // Romania
-            'SK' => ['lat' => 48.6690, 'lng' => 19.6990], // Slovakia
-            'SI' => ['lat' => 46.1512, 'lng' => 14.9955], // Slovenia
-            'ES' => ['lat' => 40.4637, 'lng' => -3.7492], // Spain
-            'SE' => ['lat' => 60.1282, 'lng' => 18.6435], // Sweden
-        ];
-
-        return $coordinates[$countryCode] ?? $coordinates['US'];
     }
 
     public function category(Request $request, JobListingCategory $category)

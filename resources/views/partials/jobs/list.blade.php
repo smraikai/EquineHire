@@ -40,7 +40,7 @@
                                      <x-coolicon-checkbox-check class="w-4 h-4 mr-1" />
                                      {{ $job_listing->job_type }}
                                  </p>
-                                 <div class="flex items-center mt-1 text-sm text-gray-500 sm:hidden">
+                                 <div class="flex items-center mt-1 text-xs text-gray-500 sm:hidden">
                                      <x-coolicon-map-pin class="flex-shrink-0 w-4 h-4 mr-1" />
                                      <span class="truncate">
                                          @if ($job_listing->remote_position)
@@ -75,7 +75,7 @@
                                          {{ $job_listing->created_at->diffForHumans() }}
                                      </span>
                                  @endif
-                                 <div class="items-center hidden text-sm text-gray-500 sm:flex sm:justify-end">
+                                 <div class="items-center hidden text-xs text-gray-500 sm:flex sm:justify-end">
                                      <x-coolicon-map-pin class="w-4 h-4 mr-1" />
                                      @if ($job_listing->remote_position)
                                          <span>Remote</span>
