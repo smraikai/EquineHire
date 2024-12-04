@@ -76,9 +76,9 @@ class User extends Authenticatable
         $subscriptionType = $subscription ? $subscription->type : null;
 
         $limits = [
-            'basic_plan' => 1,
-            'pro_plan' => 5,
-            'unlimited_plan' => 999,
+            'basic' => 1,
+            'pro' => 5,
+            'unlimited' => 999,
         ];
 
         $currentCount = $this->jobListings()

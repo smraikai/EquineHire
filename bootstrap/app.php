@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'job.view.counter' => JobListingViewCounter::class,
             'user.type' => CheckUserType::class,
         ]);
+        $middleware->append(\App\Http\Middleware\DetectUserLocation::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

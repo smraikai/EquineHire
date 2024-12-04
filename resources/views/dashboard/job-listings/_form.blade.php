@@ -78,36 +78,43 @@
         @enderror
     </div>
 
-    <div id="location_fields" class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4" style="display: none;">
+
+
+    <div id="location_fields" class="space-y-4" style="display: none;">
         <div>
-            <label for="city" class="block text-sm font-medium text-gray-700">City <span
+            <label for="location_search" class="block text-sm font-medium text-gray-700">Search Address <span
                     class="text-red-500">*</span></label>
-            <input type="text" name="city" id="city"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('city') border-red-500 @enderror"
-                value="{{ old('city', $jobListing->city ?? '') }}">
-            @error('city')
-                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-            @enderror
+            <input type="text" id="location_search"
+                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                placeholder="Start typing your address..."
+                value="{{ old('street_address', $jobListing->street_address ?? '')
+                    ? old('street_address', $jobListing->street_address) .
+                        ', ' .
+                        old('city', $jobListing->city) .
+                        ', ' .
+                        old('state', $jobListing->state) .
+                        ' ' .
+                        old('postal_code', $jobListing->postal_code) .
+                        ', ' .
+                        old('country', $jobListing->country ?? 'United States')
+                    : '' }}">
         </div>
-        <div>
-            <label for="state" class="block text-sm font-medium text-gray-700">State <span
-                    class="text-red-500">*</span></label>
-            <select name="state" id="state"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('state') border-red-500 @enderror"
-                required>
-                <option value="">Select a state</option>
-                @foreach ($states as $state)
-                    <option value="{{ $state }}"
-                        {{ old('state', $jobListing->state ?? '') == $state ? 'selected' : '' }}>
-                        {{ $state }}
-                    </option>
-                @endforeach
-            </select>
-            @error('state')
-                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-            @enderror
-        </div>
+
+        <!-- Hidden fields for form submission -->
+        <input type="hidden" name="street_address" id="street_address"
+            value="{{ old('street_address', $jobListing->street_address ?? '') }}">
+        <input type="hidden" name="city" id="city" value="{{ old('city', $jobListing->city ?? '') }}">
+        <input type="hidden" name="state" id="state" value="{{ old('state', $jobListing->state ?? '') }}">
+        <input type="hidden" name="country" id="country"
+            value="{{ old('country', $jobListing->country ?? 'United States') }}">
+        <input type="hidden" name="postal_code" id="postal_code"
+            value="{{ old('postal_code', $jobListing->postal_code ?? '') }}">
+        <input type="hidden" name="latitude" id="latitude"
+            value="{{ old('latitude', $jobListing->latitude ?? '') }}">
+        <input type="hidden" name="longitude" id="longitude"
+            value="{{ old('longitude', $jobListing->longitude ?? '') }}">
     </div>
+
 
     <div>
         <label for="job_type" class="block text-sm font-medium text-gray-700">Job Type <span
@@ -183,6 +190,24 @@
         @enderror
     </div>
 
+    <div id="currency_selector" style="display: none;">
+        <label for="currency" class="block text-sm font-medium text-gray-700">Currency <span
+                class="text-red-500">*</span></label>
+        <select name="currency" id="currency"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('currency') border-red-500 @enderror"
+            required>
+            @foreach (\App\Models\JobListing::CURRENCIES as $code => $currency)
+                <option value="{{ $code }}"
+                    {{ old('currency', $jobListing->currency ?? 'USD') == $code ? 'selected' : '' }}>
+                    {{ $currency['symbol'] }} - {{ $currency['name'] }}
+                </option>
+            @endforeach
+        </select>
+        @error('currency')
+            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+        @enderror
+    </div>
+
     <div id="hourly_rate_fields" class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4"
         style="display: none;">
         <div>
@@ -190,7 +215,10 @@
                     class="text-red-500">*</span></label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
-                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
+                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
+                    id="hourly-currency-symbol">
+                    {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
+                </span>
                 <select name="hourly_rate_min" id="hourly_rate_min"
                     class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select minimum rate</option>
@@ -211,7 +239,10 @@
                     class="text-red-500">*</span></label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
-                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
+                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
+                    id="hourly-currency-symbol">
+                    {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
+                </span>
                 <select name="hourly_rate_max" id="hourly_rate_max"
                     class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select maximum rate</option>
@@ -235,7 +266,10 @@
                     class="text-red-500">*</span></label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
-                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
+                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
+                    id="salary-currency-symbol">
+                    {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
+                </span>
                 <select name="salary_range_min" id="salary_range_min"
                     class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select minimum salary</option>
@@ -256,7 +290,10 @@
                     class="text-red-500">*</span></label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
-                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">$</span>
+                    class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
+                    id="salary-currency-symbol">
+                    {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
+                </span>
                 <select name="salary_range_max" id="salary_range_max"
                     class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
                     <option value="">Select maximum salary</option>
@@ -327,3 +364,187 @@
         </button>
     </div>
 </div>
+
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&libraries=places">
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const remotePositionYes = document.getElementById('remote_position_yes');
+        const remotePositionNo = document.getElementById('remote_position_no');
+        const locationFields = document.getElementById('location_fields');
+
+        function toggleLocationFields() {
+            // Show location fields only if "No" is checked for remote position
+            const isRemote = document.querySelector('input[name="remote_position"]:checked')?.value === '1';
+            locationFields.classList.toggle('hidden', isRemote || !document.querySelector(
+                'input[name="remote_position"]:checked'));
+        }
+
+        remotePositionYes?.addEventListener('change', toggleLocationFields);
+        remotePositionNo?.addEventListener('change', toggleLocationFields);
+
+        // Ensure fields are hidden by default
+        toggleLocationFields();
+
+
+        // Google Places Autocomplete
+        const locationSearch = document.getElementById('location_search');
+        if (!locationSearch) return;
+
+        const autocomplete = new google.maps.places.Autocomplete(locationSearch, {
+            types: ['establishment', 'geocode'], // Add 'establishment' to include businesses and farms
+            fields: ['address_components', 'geometry', 'formatted_address', 'name']
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                console.log("No location data available");
+                return;
+            }
+
+            // Clear all fields first
+            const fields = ['street_address', 'city', 'state', 'country', 'postal_code', 'latitude',
+                'longitude'
+            ];
+            fields.forEach(field => {
+                document.getElementById(field).value = '';
+            });
+
+            // Set latitude and longitude
+            document.getElementById('latitude').value = place.geometry.location.lat();
+            document.getElementById('longitude').value = place.geometry.location.lng();
+
+            // Update the search field with the formatted address
+            document.getElementById('location_search').value = place.formatted_address;
+
+            let addressComponents = {
+                street_address: '',
+                city: '',
+                state: '',
+                country: '',
+                postal_code: ''
+            };
+
+            // Process address components for hidden fields
+            for (const component of place.address_components) {
+                const type = component.types[0];
+
+                switch (type) {
+                    case 'premise':
+                    case 'street_number':
+                    case 'route':
+                    case 'establishment':
+                        // Concatenate to build the street address
+                        addressComponents.street_address +=
+                            (addressComponents.street_address ? ' ' : '') + component.long_name;
+                        break;
+                    case 'postal_town':
+                    case 'locality':
+                    case 'sublocality':
+                    case 'administrative_area_level_3':
+                        if (!addressComponents.city) {
+                            addressComponents.city = component.long_name;
+                        }
+                        break;
+                    case 'administrative_area_level_1':
+                        addressComponents.state = component.long_name;
+                        break;
+                    case 'country':
+                        addressComponents.country = component.long_name;
+                        break;
+                    case 'postal_code':
+                        addressComponents.postal_code = component.long_name;
+                        break;
+                }
+            }
+
+            // If no street address was found, use the name of the place
+            if (!addressComponents.street_address && place.name) {
+                addressComponents.street_address = place.name;
+            }
+
+            // Set the values in the form
+            document.getElementById('street_address').value = addressComponents.street_address;
+            document.getElementById('city').value = addressComponents.city;
+            document.getElementById('state').value = addressComponents.state;
+            document.getElementById('country').value = addressComponents.country;
+            document.getElementById('postal_code').value = addressComponents.postal_code;
+        });
+
+        function resetAddressFields() {
+            const fields = ['street_address', 'city', 'state', 'country', 'postal_code', 'latitude',
+                'longitude'
+            ];
+            fields.forEach(field => {
+                document.getElementById(field).value = '';
+            });
+            document.getElementById('display_full_address').value = '';
+        }
+
+        function updateAddressField(field, value) {
+            document.getElementById(field).value = value;
+            document.getElementById(`display_${field}`).value = value;
+        }
+
+        function resetAddressFields() {
+            const fields = ['street_address', 'city', 'state', 'country', 'postal_code'];
+            fields.forEach(field => {
+                document.getElementById(field).value = '';
+                document.getElementById(`display_${field}`).value = '';
+            });
+            document.getElementById('latitude').value = '';
+            document.getElementById('longitude').value = '';
+        }
+    });
+
+    // Add this to your existing script section
+    document.addEventListener('DOMContentLoaded', function() {
+        const currencySelect = document.getElementById('currency');
+        const hourlyCurrencySymbols = document.querySelectorAll('#hourly-currency-symbol');
+        const salaryCurrencySymbols = document.querySelectorAll('#salary-currency-symbol');
+
+        const currencies = @json(\App\Models\JobListing::CURRENCIES);
+
+        currencySelect?.addEventListener('change', function() {
+            const symbol = currencies[this.value].symbol;
+            hourlyCurrencySymbols.forEach(span => span.textContent = symbol);
+            salaryCurrencySymbols.forEach(span => span.textContent = symbol);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const salaryTypeSelect = document.getElementById('salary_type');
+        const currencySelector = document.getElementById('currency_selector');
+        const currencySelect = document.getElementById('currency');
+        const hourlyCurrencySymbols = document.querySelectorAll('#hourly-currency-symbol');
+        const salaryCurrencySymbols = document.querySelectorAll('#salary-currency-symbol');
+        const currencies = @json(\App\Models\JobListing::CURRENCIES);
+
+        // Function to toggle currency selector visibility
+        function toggleCurrencySelector() {
+            const selectedValue = salaryTypeSelect.value;
+            currencySelector.style.display = selectedValue ? 'block' : 'none';
+
+            // Make currency field required only when salary type is selected
+            currencySelect.required = !!selectedValue;
+        }
+
+        // Initial state
+        toggleCurrencySelector();
+
+        // Listen for changes on salary type
+        salaryTypeSelect?.addEventListener('change', toggleCurrencySelector);
+
+        // Update currency symbols when currency changes
+        currencySelect?.addEventListener('change', function() {
+            const symbol = currencies[this.value].symbol;
+            hourlyCurrencySymbols.forEach(span => span.textContent = symbol);
+            salaryCurrencySymbols.forEach(span => span.textContent = symbol);
+        });
+    });
+</script>

@@ -34,37 +34,40 @@
         @enderror
     </div>
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div id="location_fields" class="space-y-4">
         <div>
-            <label for="city" class="block text-sm font-medium text-gray-700">City <span
+            <label for="location_search" class="block text-sm font-medium text-gray-700">Search Address <span
                     class="text-red-500">*</span></label>
-            <input type="text" name="city" id="city"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('city') border-red-500 @enderror"
-                value="{{ old('city', $employer->city ?? '') }}" required placeholder="Enter your company's city">
-            @error('city')
-                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-            @enderror
+            <input type="text" id="location_search"
+                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                placeholder="Start typing your address..."
+                value="{{ old('street_address', $employer->street_address ?? '')
+                    ? old('street_address', $employer->street_address) .
+                        ', ' .
+                        old('city', $employer->city) .
+                        ', ' .
+                        old('state', $employer->state) .
+                        ' ' .
+                        old('postal_code', $employer->postal_code) .
+                        ', ' .
+                        old('country', $employer->country ?? 'United States')
+                    : '' }}">
         </div>
 
-        <div>
-            <label for="state" class="block text-sm font-medium text-gray-700">State <span
-                    class="text-red-500">*</span></label>
-            <select name="state" id="state"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('state') border-red-500 @enderror"
-                required>
-                <option value="">Select your company's state</option>
-                @foreach ($states as $state)
-                    <option value="{{ $state }}"
-                        {{ old('state', $employer->state ?? '') == $state ? 'selected' : '' }}>
-                        {{ $state }}
-                    </option>
-                @endforeach
-            </select>
-            @error('state')
-                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-            @enderror
-        </div>
+        <!-- Hidden fields for form submission -->
+        <input type="hidden" name="street_address" id="street_address"
+            value="{{ old('street_address', $employer->street_address ?? '') }}">
+        <input type="hidden" name="city" id="city" value="{{ old('city', $employer->city ?? '') }}">
+        <input type="hidden" name="state" id="state" value="{{ old('state', $employer->state ?? '') }}">
+        <input type="hidden" name="country" id="country"
+            value="{{ old('country', $employer->country ?? 'United States') }}">
+        <input type="hidden" name="postal_code" id="postal_code"
+            value="{{ old('postal_code', $employer->postal_code ?? '') }}">
+        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $employer->latitude ?? '') }}">
+        <input type="hidden" name="longitude" id="longitude"
+            value="{{ old('longitude', $employer->longitude ?? '') }}">
     </div>
+
 
     <div>
         <label for="website" class="block text-sm font-medium text-gray-700">Website</label>
@@ -123,7 +126,8 @@
         @endif
         <div id="featured-image-uploader" class="{{ $employer->featured_image ? 'hidden' : '' }}"></div>
     </div>
-    <input type="hidden" id="featured_image_path" name="featured_image_path" value="{{ $employer->featured_image }}">
+    <input type="hidden" id="featured_image_path" name="featured_image_path"
+        value="{{ $employer->featured_image }}">
 
     <div class="flex flex-col-reverse items-end justify-end gap-4 sm:flex-row">
         <a href="{{ route('employers.index') }}"
@@ -137,3 +141,63 @@
 
     </div>
 </div>
+
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&libraries=places">
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationSearch = document.getElementById('location_search');
+        if (!locationSearch) return;
+
+        const autocomplete = new google.maps.places.Autocomplete(locationSearch, {
+            types: ['address'],
+            fields: ['address_components', 'geometry', 'formatted_address']
+        });
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                console.log("No location data available");
+                return;
+            }
+
+            // Set latitude and longitude
+            document.getElementById('latitude').value = place.geometry.location.lat();
+            document.getElementById('longitude').value = place.geometry.location.lng();
+
+            // Update the search field with the formatted address
+            document.getElementById('location_search').value = place.formatted_address;
+
+            let streetNumber = '';
+            // Process address components
+            for (const component of place.address_components) {
+                const type = component.types[0];
+                switch (type) {
+                    case 'street_number':
+                        streetNumber = component.long_name;
+                        break;
+                    case 'route':
+                        document.getElementById('street_address').value =
+                            `${streetNumber} ${component.long_name}`.trim();
+                        break;
+                    case 'locality':
+                        document.getElementById('city').value = component.long_name;
+                        break;
+                    case 'administrative_area_level_1':
+                        document.getElementById('state').value = component.long_name;
+                        break;
+                    case 'country':
+                        document.getElementById('country').value = component.long_name;
+                        break;
+                    case 'postal_code':
+                        document.getElementById('postal_code').value = component.long_name;
+                        break;
+                }
+            }
+        });
+    });
+</script>

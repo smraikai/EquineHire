@@ -11,7 +11,8 @@
         "artesaos/seotools": "^1.3",
         "aws/aws-sdk-php": "^3.306",
         "blade-ui-kit/blade-heroicons": "^2.4",
-        "blade-ui-kit/blade-icons": "^1.6",
+        "blade-ui-kit/blade-icons": "^1.7",
+        "blade-ui-kit/blade-ui-kit": "^0.6.3",
         "coconutcraig/laravel-postmark": "^3.2",
         "codeat3/blade-coolicons": "^1.5",
         "contentful/contentful-bundle": "^7.2",
@@ -26,7 +27,9 @@
         "league/csv": "^9.16",
         "league/flysystem-aws-s3-v3": "^3.27",
         "meilisearch/meilisearch-php": "^1.7",
-        "spatie/laravel-sitemap": "^7.2"
+        "spatie/laravel-sitemap": "^7.2",
+        "stevebauman/location": "^7.4",
+        "torann/geoip": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

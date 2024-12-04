@@ -18,9 +18,14 @@ class JobListing extends Model
         'title',
         'slug',
         'description',
+        'street_address',
         'remote_position',
         'city',
         'state',
+        'country',
+        'postal_code',
+        'latitude',
+        'longitude',
         'job_type',
         'experience_required',
         'salary_type',
@@ -35,6 +40,7 @@ class JobListing extends Model
         'is_boosted',
         'boost_expires_at',
         'views',
+        'currency',  // Add this line
     ];
 
     protected $casts = [
@@ -47,6 +53,40 @@ class JobListing extends Model
         'salary_range_max' => 'decimal:2',
     ];
 
+    // Currencies
+    public const CURRENCIES = [
+        'USD' => [
+            'code' => 'USD',
+            'symbol' => '$',
+            'name' => 'US Dollar'
+        ],
+        'CAD' => [
+            'code' => 'CAD',
+            'symbol' => '$',
+            'name' => 'Canadian Dollar'
+        ],
+        'EUR' => [
+            'code' => 'EUR',
+            'symbol' => '€',
+            'name' => 'Euro'
+        ],
+        'GBP' => [
+            'code' => 'GBP',
+            'symbol' => '£',
+            'name' => 'British Pound'
+        ],
+        'CHF' => [
+            'code' => 'CHF',
+            'symbol' => 'CHF',
+            'name' => 'Swiss Franc'
+        ]
+    ];
+
+    // Add this method to get default currency
+    public static function getDefaultCurrency()
+    {
+        return 'USD';
+    }
 
     public function employer()
     {
@@ -87,17 +127,15 @@ class JobListing extends Model
 
         if ($this->latitude && $this->longitude) {
             $array['_geoloc'] = [
-                'lat' => $this->latitude,
-                'lng' => $this->longitude,
+                'lat' => (float) $this->latitude,
+                'lng' => (float) $this->longitude
             ];
         }
 
+        $array['country'] = $this->country ? strtoupper(trim($this->country)) : null;
+
         $array['boosted_rank'] = $this->is_boosted ? 9001 : 0;
-
-        // Include employer name
         $array['employer_name'] = $this->employer->name;
-
-        // Add new facets
         $array['category_ids'] = [$this->category_id];
         $array['state'] = $this->state ? trim($this->state) : null;
         $array['job_type'] = $this->job_type;
@@ -105,21 +143,38 @@ class JobListing extends Model
         $array['salary_type'] = $this->salary_type;
         $array['remote_position'] = (bool) $this->remote_position;
 
+        Log::info('Job Listing Indexed:', [
+            'id' => $this->id,
+            'country' => $array['country'],
+            'title' => $this->title
+        ]);
+
         return $array;
     }
 
     public function getAlgoliaSettings()
     {
         return [
+            'searchableAttributes' => [
+                'title',
+                'description',
+                'employer_name',
+                'city',
+                'country'
+            ],
             'attributesForFaceting' => [
                 'searchable(city)',
-                'searchable(state)',
+                'searchable(country)',
                 'job_type',
                 'experience_required',
                 'salary_type',
                 'filterOnly(category_ids)',
                 'filterOnly(remote_position)'
             ],
+            'customRanking' => [
+                'desc(boosted_rank)',
+                'desc(created_at)'
+            ]
         ];
     }
 
@@ -146,16 +201,16 @@ class JobListing extends Model
     }
 
     /**
-     * Get unique states from active job listings.
+     * Get unique countries from active job listings.
      *
      * @return array
      */
-    public static function getUniqueStates()
+    public static function getUniqueCountries()
     {
         return self::where('is_active', true)
-            ->whereNotNull('state')
+            ->whereNotNull('country')
             ->distinct()
-            ->pluck('state')
+            ->pluck('country')
             ->sort()
             ->values()
             ->toArray();

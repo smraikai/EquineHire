@@ -32,9 +32,9 @@
                 @endif
                 <div class="text-center sm:text-left">
                     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{{ $employer->name }}</h1>
-                    @if ($employer->city || $employer->state)
+                    @if ($employer->city || $employer->state || $employer->country)
                         <p class="text-sm text-gray-500">
-                            {{ $employer->city }}{{ $employer->city && $employer->state ? ', ' : '' }}{{ $employer->state }}
+                            {{ collect([$employer->city, $employer->state, $employer->country])->filter()->join(', ') }}
                         </p>
                     @endif
                     <a href="{{ $employer->website }}" target="_blank"

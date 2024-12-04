@@ -25,22 +25,23 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">City</label>
-                            <div class="block w-full mt-1 bg-gray-100 border rounded-md">
-                                <p class="px-3 py-2">{{ $employer->city }}</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">State</label>
-                            <div class="block w-full mt-1 bg-gray-100 border rounded-md">
-                                <p class="px-3 py-2">{{ $employer->state }}</p>
-                            </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700">Address</label>
+                        <div class="block w-full mt-1 bg-gray-100 border rounded-md">
+                            <p class="px-3 py-2">
+                                @php
+                                    $addressParts = array_filter([
+                                        $employer->street_address,
+                                        $employer->city,
+                                        $employer->state,
+                                        $employer->postal_code,
+                                        $employer->country,
+                                    ]);
+                                @endphp
+                                {{ !empty($addressParts) ? implode(', ', $addressParts) : 'No address provided' }}
+                            </p>
                         </div>
                     </div>
-
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700">Website</label>
                         @if ($employer->website)
@@ -93,8 +94,9 @@
                     <p class="text-gray-800 text-md">Create an Employer Profile to start posting
                         your job listings.</p>
                     <a href="{{ route('employers.create') }}"
-                        class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
+                      <div class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
                         <x-heroicon-o-plus-circle class="w-6 h-6 mr-2" /> Create Employer Profile
+                      </div>
                     </a>
                 </div>
             @endif
