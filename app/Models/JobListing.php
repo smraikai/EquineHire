@@ -138,18 +138,15 @@ class JobListing extends Model
         $array['employer_name'] = $this->employer->name;
         $array['category_ids'] = [$this->category_id];
         $array['state'] = $this->state ? trim($this->state) : null;
+        $array['city'] = $this->city ? trim($this->city) : null;
         $array['job_type'] = $this->job_type;
         $array['experience_required'] = $this->experience_required;
         $array['salary_type'] = $this->salary_type;
         $array['remote_position'] = (bool) $this->remote_position;
 
-        Log::info('Job Listing Indexed:', [
-            'id' => $this->id,
-            'country' => $array['country'],
-            'title' => $this->title
-        ]);
-
-        return $array;
+        return array_filter($array, function ($value) {
+            return !is_null($value);
+        });
     }
 
     public function getAlgoliaSettings()
