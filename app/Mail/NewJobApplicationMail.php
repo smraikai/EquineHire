@@ -33,8 +33,11 @@ class NewJobApplicationMail extends Mailable
 
     public function content(): Content
     {
+        $view = $this->jobApplication->jobListing->user_id === 1
+            ? 'emails.new-job-application-legacy'
+            : 'emails.new-job-application';
         return new Content(
-            view: 'emails.new-job-application',
+            view: $view,
         );
     }
 

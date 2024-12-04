@@ -12,7 +12,7 @@
                 enctype="multipart/form-data" class="p-6 m-4 bg-white rounded-lg shadow-sm sm:m-0">
                 @csrf
                 @method('PUT')
-                @include('dashboard.job-listings._form', ['submitButtonText' => 'Update Employer Profile'])
+                @include('dashboard.job-listings._form', ['submitButtonText' => 'Update Job Listing'])
             </form>
         </div>
     </div>
