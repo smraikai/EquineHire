@@ -11,3 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:generate-sitemap')->daily();
 Schedule::command('jobs:remove-expired-boosts')->daily();
+Schedule::command('scout:import "App\Models\JobListing"')->dailyAt('00:00');
