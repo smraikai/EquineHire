@@ -177,12 +177,28 @@ class JobListing extends Model
 
     protected static function booted()
     {
+        // Ensure currency is set before creating the JobListing
+        static::creating(function ($jobListing) {
+            if (empty($jobListing->currency)) {
+                $jobListing->currency = self::getDefaultCurrency();
+            }
+        });
+
+        // Wrap searchable() calls in try-catch to avoid interruptions
         static::created(function ($jobListing) {
-            $jobListing->searchable();
+            try {
+                $jobListing->searchable();
+            } catch (\Exception $e) {
+                Log::error('Algolia indexing failed: ' . $e->getMessage());
+            }
         });
 
         static::updated(function ($jobListing) {
-            $jobListing->searchable();
+            try {
+                $jobListing->searchable();
+            } catch (\Exception $e) {
+                Log::error('Algolia indexing failed: ' . $e->getMessage());
+            }
         });
     }
 

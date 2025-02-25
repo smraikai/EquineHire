@@ -219,15 +219,11 @@
                     id="hourly-currency-symbol">
                     {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
                 </span>
-                <select name="hourly_rate_min" id="hourly_rate_min"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
-                    <option value="">Select minimum rate</option>
-                    @for ($i = 10; $i <= 100; $i += 5)
-                        <option value="{{ $i }}"
-                            {{ old('hourly_rate_min', $jobListing->hourly_rate_min ?? '') == $i ? 'selected' : '' }}>
-                            {{ $i }}.00</option>
-                    @endfor
-                </select>
+                <input type="number" step="0.01" min="10" max="100" name="hourly_rate_min"
+                    id="hourly_rate_min"
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm"
+                    placeholder="Enter minimum hourly rate"
+                    value="{{ old('hourly_rate_min', $jobListing->hourly_rate_min ?? '') }}">
             </div>
             @error('hourly_rate_min')
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -243,15 +239,11 @@
                     id="hourly-currency-symbol">
                     {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
                 </span>
-                <select name="hourly_rate_max" id="hourly_rate_max"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
-                    <option value="">Select maximum rate</option>
-                    @for ($i = 15; $i <= 200; $i += 5)
-                        <option value="{{ $i }}"
-                            {{ old('hourly_rate_max', $jobListing->hourly_rate_max ?? '') == $i ? 'selected' : '' }}>
-                            {{ $i }}.00</option>
-                    @endfor
-                </select>
+                <input type="number" step="0.01" min="15" max="200" name="hourly_rate_max"
+                    id="hourly_rate_max"
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm"
+                    placeholder="Enter maximum hourly rate"
+                    value="{{ old('hourly_rate_max', $jobListing->hourly_rate_max ?? '') }}">
             </div>
             @error('hourly_rate_max')
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -259,26 +251,22 @@
         </div>
     </div>
 
-    <div id="annual_salary_fields" class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4"
-        style="display: none;">
+    <div id="annual_salary_fields" class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
         <div>
-            <label for="salary_range_min" class="block text-sm font-medium text-gray-700">Salary Range Min <span
-                    class="text-red-500">*</span></label>
+            <label for="salary_range_min" class="block text-sm font-medium text-gray-700">
+                Salary Range Min <span class="text-red-500">*</span>
+            </label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
                     id="salary-currency-symbol">
                     {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
                 </span>
-                <select name="salary_range_min" id="salary_range_min"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
-                    <option value="">Select minimum salary</option>
-                    @for ($i = 10000; $i <= 100000; $i += 10000)
-                        <option value="{{ $i }}"
-                            {{ old('salary_range_min', $jobListing->salary_range_min ?? '') == $i ? 'selected' : '' }}>
-                            {{ number_format($i) }}</option>
-                    @endfor
-                </select>
+                <input type="number" step="1" min="10000" max="100000" name="salary_range_min"
+                    id="salary_range_min"
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm"
+                    placeholder="Enter minimum salary"
+                    value="{{ old('salary_range_min', $jobListing->salary_range_min ?? '') }}">
             </div>
             @error('salary_range_min')
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -286,23 +274,20 @@
         </div>
 
         <div>
-            <label for="salary_range_max" class="block text-sm font-medium text-gray-700">Salary Range Max <span
-                    class="text-red-500">*</span></label>
+            <label for="salary_range_max" class="block text-sm font-medium text-gray-700">
+                Salary Range Max <span class="text-red-500">*</span>
+            </label>
             <div class="flex mt-1 rounded-md shadow-sm">
                 <span
                     class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50"
                     id="salary-currency-symbol">
                     {{ \App\Models\JobListing::CURRENCIES[old('currency', $jobListing->currency ?? 'USD')]['symbol'] }}
                 </span>
-                <select name="salary_range_max" id="salary_range_max"
-                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm">
-                    <option value="">Select maximum salary</option>
-                    @for ($i = 20000; $i <= 200000; $i += 10000)
-                        <option value="{{ $i }}"
-                            {{ old('salary_range_max', $jobListing->salary_range_max ?? '') == $i ? 'selected' : '' }}>
-                            {{ number_format($i) }}</option>
-                    @endfor
-                </select>
+                <input type="number" step="1" min="20000" max="200000" name="salary_range_max"
+                    id="salary_range_max"
+                    class="flex-1 block w-full border-gray-300 rounded-none focus:ring-blue-500 focus:border-blue-500 rounded-r-md sm:text-sm"
+                    placeholder="Enter maximum salary"
+                    value="{{ old('salary_range_max', $jobListing->salary_range_max ?? '') }}">
             </div>
             @error('salary_range_max')
                 <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
