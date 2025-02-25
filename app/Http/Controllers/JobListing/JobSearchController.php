@@ -56,7 +56,9 @@ class JobSearchController extends Controller
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
             $facetFilters = [];
+            // Always filter for active job listings
             $facetFilters[] = "is_active:true";
+
             if ($country) {
                 $facetFilters[] = "country:{$country}";
                 Log::info('Applying country filter:', ['filter' => "country:{$country}"]);
@@ -123,7 +125,7 @@ class JobSearchController extends Controller
         $algoliaResults = JobListing::search($keyword, function (SearchIndex $algolia, string $query, array $options) use ($category, $country) {
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
-            $facetFilters = ["category_ids:{$category->id}", "is_active:true"];
+            $facetFilters = ["category_ids:{$category->id}"];
             if ($country) {
                 $facetFilters[] = "country:{$country}";
                 Log::info('Applying category country filter:', ['filter' => "country:{$country}"]);
