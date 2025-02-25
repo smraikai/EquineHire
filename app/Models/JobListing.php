@@ -166,7 +166,8 @@ class JobListing extends Model
                 'experience_required',
                 'salary_type',
                 'filterOnly(category_ids)',
-                'filterOnly(remote_position)'
+                'filterOnly(remote_position)',
+                'filterOnly(is_active)'
             ],
             'customRanking' => [
                 'desc(boosted_rank)',
@@ -239,12 +240,19 @@ class JobListing extends Model
 
     public function archive()
     {
-        $this->is_active = false;
-        $this->save();
+        try {
+            $this->is_active = false;
+            $this->save();
 
-        // Since shouldBeSearchable() returns false when inactive,
-        // this will remove it from Algolia
-        $this->unsearchable();
+            // Force remove from search index
+            $this->unsearchable();
+
+            Log::info("Job listing archived successfully: {$this->id} - {$this->title}");
+            return true;
+        } catch (\Exception $e) {
+            Log::error("Failed to archive job listing {$this->id}: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function unarchive()

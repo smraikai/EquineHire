@@ -56,6 +56,9 @@ class JobSearchController extends Controller
             $options['facets'] = ['country', 'category_ids', 'job_type', 'experience_required', 'salary_type', 'remote_position'];
 
             $facetFilters = [];
+            // Always filter for active job listings
+            $facetFilters[] = "is_active:true";
+
             if ($country) {
                 $facetFilters[] = "country:{$country}";
                 Log::info('Applying country filter:', ['filter' => "country:{$country}"]);
