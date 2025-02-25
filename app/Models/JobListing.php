@@ -241,11 +241,27 @@ class JobListing extends Model
     public function archive()
     {
         try {
+            // First remove from Algolia before changing the status
+            // This ensures we can still find the record in Algolia to delete it
+            $this->unsearchable();
+
+            // Now update the database record
             $this->is_active = false;
             $this->save();
 
-            // Force remove from search index
-            $this->unsearchable();
+            // Double-check removal using the Algolia client directly
+            try {
+                $client = \Algolia\AlgoliaSearch\SearchClient::create(
+                    config('scout.algolia.id'),
+                    config('scout.algolia.secret')
+                );
+                $index = $client->initIndex($this->searchableAs());
+                $index->deleteObject($this->getScoutKey());
+
+                Log::info("Job listing forcefully removed from Algolia: {$this->id}");
+            } catch (\Exception $e) {
+                Log::error("Error during force removal from Algolia: " . $e->getMessage());
+            }
 
             Log::info("Job listing archived successfully: {$this->id} - {$this->title}");
             return true;
