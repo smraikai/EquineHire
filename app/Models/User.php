@@ -119,4 +119,16 @@ class User extends Authenticatable
         return ($currentCount + $additionalCount) <= $limit;
     }
 
+    /**
+     * Check if user has an active subscription
+     *
+     * @return bool
+     */
+    public function hasActiveSubscription()
+    {
+        return $this->subscriptions()
+            ->where('stripe_status', 'active')
+            ->exists();
+    }
+
 }

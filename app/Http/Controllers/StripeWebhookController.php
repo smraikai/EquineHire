@@ -80,7 +80,7 @@ class StripeWebhookController extends WebhookController
 
             $user->subscriptions->filter(function ($subscription) use ($data) {
                 return $subscription->stripe_id === $data['id'];
-            })->each(function ($subscription) use ($data) {
+            })->each(function ($subscription) use ($data, $user) {
                 $subscription->update([
                     'name' => $data['items']['data'][0]['plan']['nickname'],
                     'stripe_status' => $data['status'],
@@ -91,6 +91,12 @@ class StripeWebhookController extends WebhookController
                 ]);
 
                 Log::info('Subscription updated: ' . $subscription->id);
+
+                // If subscription is no longer active, deactivate job listings
+                if ($data['status'] !== 'active') {
+                    $this->deactivateUserJobListings($user);
+                    Log::info('Deactivated job listings for user: ' . $user->id);
+                }
             });
         }
     }
@@ -104,12 +110,31 @@ class StripeWebhookController extends WebhookController
 
             $user->subscriptions->filter(function ($subscription) use ($data) {
                 return $subscription->stripe_id === $data['id'];
-            })->each(function ($subscription) {
+            })->each(function ($subscription) use ($user) {
                 $subscription->markAsCancelled();
 
-                Log::info('Subscription deleted: ' . $subscription->id);
+                // Deactivate all job listings when subscription is cancelled
+                $this->deactivateUserJobListings($user);
+
+                Log::info('Subscription deleted and job listings deactivated: ' . $subscription->id);
             });
         }
+    }
+
+    /**
+     * Deactivate all active job listings for a user
+     *
+     * @param \App\Models\User $user
+     * @return void
+     */
+    protected function deactivateUserJobListings(User $user)
+    {
+        $user->jobListings()
+            ->where('is_active', true)
+            ->get()
+            ->each(function ($jobListing) {
+                $jobListing->archive();
+            });
     }
 
     protected function getUserByStripeId($stripeId)

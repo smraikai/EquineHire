@@ -201,6 +201,14 @@ class JobListing extends Model
                 Log::error('Algolia indexing failed: ' . $e->getMessage());
             }
         });
+
+        // Add an observer for the updating event
+        static::updating(function ($jobListing) {
+            // If trying to set is_active to true, check subscription status
+            if ($jobListing->isDirty('is_active') && $jobListing->is_active && !$jobListing->canBeActive()) {
+                $jobListing->is_active = false;
+            }
+        });
     }
 
     /**
@@ -273,15 +281,53 @@ class JobListing extends Model
 
     public function unarchive()
     {
+        if (!$this->canBeActive()) {
+            return false;
+        }
+
         $this->is_active = true;
         $this->save();
-
-        // Make searchable again if activated
         $this->searchable();
+
+        return true;
     }
 
     public function isArchived()
     {
         return !$this->is_active;
+    }
+
+    /**
+     * Check if job listing can be active based on subscription status
+     *
+     * @return bool
+     */
+    public function canBeActive()
+    {
+        if (!$this->user) {
+            return false;
+        }
+
+        return $this->user->subscriptions()
+            ->where('stripe_status', 'active')
+            ->exists();
+    }
+
+    /**
+     * Handle job listing activation with subscription check
+     *
+     * @return bool
+     */
+    public function activate()
+    {
+        if (!$this->canBeActive()) {
+            return false;
+        }
+
+        $this->is_active = true;
+        $this->save();
+        $this->searchable();
+
+        return true;
     }
 }
