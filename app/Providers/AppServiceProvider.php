@@ -9,6 +9,7 @@ use App\Observers\EmployerObserver;
 use App\Policies\EmployerPolicy;
 use Illuminate\Support\Facades\View;
 use App\Services\LocationService;
+use App\Console\Commands\DeactivateJobListingsWithoutSubscription;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,5 +44,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', PlansComposer::class);
 
         // Additional gates or policy registrations can be added here
+
+        // Register the command if we're in the console
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                DeactivateJobListingsWithoutSubscription::class,
+            ]);
+        }
     }
 }
