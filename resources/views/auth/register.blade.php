@@ -44,7 +44,8 @@
                                 <span class="flex items-center justify-between mb-4">
                                     <span class="block text-sm font-medium text-gray-900">Job Seeker</span>
                                     <input type="radio" name="account_type" value="jobseeker"
-                                        class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                                        class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500" required
+                                        {{ request()->query('account_type') === 'jobseeker' ? 'checked' : '' }}>
                                 </span>
                                 <span class="flex items-center text-sm text-gray-500">
                                     <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor"

@@ -43,10 +43,17 @@
                 </div>
 
                 <!-- Apply Now Button (Full Width) -->
-                <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
-                    class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
-                    Apply Now
-                </a>
+                @if (auth()->check())
+                    <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
+                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                        Apply Now
+                    </a>
+                @else
+                    <button type="button" onclick="showLoginModal()"
+                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                        Apply Now
+                    </button>
+                @endif
 
             </div>
 
@@ -120,13 +127,94 @@
                     </div>
 
                     <!-- Apply Now Button -->
-                    <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
-                        class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
-                        Apply Now
-                    </a>
+                    @if (auth()->check())
+                        <a href="{{ $applyLink ?? route('job-applications.create', $job_listing) }}"
+                            class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                            Apply Now
+                        </a>
+                    @else
+                        <button type="button" onclick="showLoginModal()"
+                            class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                            Apply Now
+                        </button>
+                    @endif
 
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Login Required Modal -->
+    <x-modal id="loginModal" maxWidth="lg">
+        <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-blue-100 rounded-full sm:mx-0 sm:h-10 sm:w-10">
+                    <x-heroicon-o-user class="w-6 h-6 text-blue-600" />
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
+                        Account Required
+                    </h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                            Please create an account or log in to apply for this position. This helps us maintain
+                            high-quality job applications and allows you to track your applications.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
+            <a href="{{ route('register') }}?account_type=jobseeker"
+                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Create Account
+            </a>
+            <a href="{{ route('login') }}"
+                class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">
+                Log In
+            </a>
+        </div>
+    </x-modal>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Job listing page loaded');
+
+            function showLoginModal() {
+                console.log('Showing login modal');
+                const modal = document.getElementById('loginModal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                } else {
+                    console.error('Login modal element not found');
+                }
+            }
+
+            // Make showLoginModal available globally
+            window.showLoginModal = showLoginModal;
+
+            // Close modal when clicking outside
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('loginModal');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+@endpush

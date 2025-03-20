@@ -18,8 +18,18 @@ use App\Mail\NewJobApplicationMail;
 
 class JobApplicationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['create']);
+    }
+
     public function create(JobListing $jobListing)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')
+                ->with('message', 'Please create an account or log in to apply for this job.')
+                ->with('redirect_after_login', route('job-applications.create', $jobListing));
+        }
         return view('job-applications.create', compact('jobListing'));
     }
 
@@ -33,16 +43,10 @@ class JobApplicationController extends Controller
                 'email' => 'required|email|max:255',
                 'phone' => 'nullable|string|max:20',
                 'cover_letter' => 'required|string|max:5000',
-                'resume_path' => 'nullable|string',
-                'create_account' => 'boolean',
+                'resume_path' => 'required|string',
             ];
 
-            if ($request->boolean('create_account')) {
-                $rules['password'] = ['required', 'confirmed', Rules\Password::defaults()];
-            }
-
             $validated = $request->validate($rules);
-            $validated['create_account'] = $request->boolean('create_account');
 
             Log::info('Validation passed', ['job_listing_id' => $jobListing->id]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -53,71 +57,21 @@ class JobApplicationController extends Controller
             return back()->withErrors($e->errors())->withInput();
         }
 
-        // Handle user account and JobSeeker profile
-        if ($validated['create_account']) {
-            try {
-                $user = User::create([
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'password' => Hash::make($validated['password']),
-                    'is_employer' => false,
-                ]);
-
-                event(new Registered($user));
-                Auth::login($user);
-                Log::info('User account created', ['user_id' => $user->id]);
-
-                // Create JobSeeker profile for new user
-                $jobSeeker = JobSeeker::create([
-                    'user_id' => $user->id,
+        try {
+            // Update or create JobSeeker profile
+            $jobSeeker = JobSeeker::updateOrCreate(
+                ['user_id' => auth()->id()],
+                [
                     'name' => $validated['name'],
                     'email' => $validated['email'],
                     'phone' => $validated['phone'] ?? null,
                     'resume_path' => $validated['resume_path'] ?? null,
-                ]);
-            } catch (\Illuminate\Database\QueryException $e) {
-                if ($e->getCode() == 23000) { // Integrity constraint violation
-                    Log::info('Attempt to create duplicate account', ['email' => $validated['email']]);
-                    return back()->withErrors([
-                        'email' => 'An account with this email already exists. Please log in to continue.',
-                    ])->withInput();
-                }
-                Log::error('Failed to create user account', ['error' => $e->getMessage()]);
-                return back()->withErrors(['account_creation' => 'Failed to create user account. Please try again.'])->withInput();
-            }
-        } else {
-            $user = Auth::user();
-            if ($user) {
-                try {
-                    // Update existing JobSeeker profile
-                    $jobSeeker = JobSeeker::updateOrCreate(
-                        ['user_id' => $user->id],
-                        [
-                            'name' => $validated['name'],
-                            'email' => $validated['email'],
-                            'phone' => $validated['phone'] ?? null,
-                            'resume_path' => $validated['resume_path'] ?? null,
-                        ]
-                    );
-                } catch (\Illuminate\Database\QueryException $e) {
-                    if ($e->getCode() == 23000) { // Integrity constraint violation
-                        Log::warning('Attempt to update to existing email', ['email' => $validated['email']]);
-                        return back()->withErrors([
-                            'email' => 'This email is already associated with another job seeker profile.',
-                        ])->withInput();
-                    }
-                    throw $e;
-                }
-            } else {
-                // No account, no JobSeeker profile
-                $jobSeeker = null;
-            }
-        }
+                ]
+            );
 
-        try {
             $jobApplication = JobApplication::create([
                 'job_listing_id' => $jobListing->id,
-                'job_seeker_id' => $jobSeeker ? $jobSeeker->id : null,
+                'job_seeker_id' => $jobSeeker->id,
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'phone' => $validated['phone'] ?? null,

@@ -89,58 +89,17 @@
                             </div>
                         </div>
 
-                        @guest
-                            <div class="mb-4 space-y-4 sm:col-span-6">
-                                <div class="flex items-start">
-                                    <input id="create_account" name="create_account" type="checkbox" value="1"
-                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                    <div class="ml-3 text-sm">
-                                        <label for="create_account" class="font-medium text-gray-700">Create an account
-                                            to easily apply for future jobs.</label>
-                                    </div>
-                                </div>
-
-                                <div id="account_fields" class="hidden sm:col-span-6">
-                                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-6">
-                                        <div class="sm:col-span-3">
-                                            <label for="password"
-                                                class="block text-sm font-medium text-gray-700">Password</label>
-                                            <div class="mt-1">
-                                                <input type="password" name="password" id="password"
-                                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                            </div>
-                                        </div>
-
-                                        <div class="sm:col-span-3">
-                                            <label for="password_confirmation"
-                                                class="block text-sm font-medium text-gray-700">Confirm
-                                                Password</label>
-                                            <div class="mt-1">
-                                                <input type="password" name="password_confirmation" id="password_confirmation"
-                                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endguest
-
                         <div class="sm:col-span-6">
                             <label for="resume" class="block mb-2 text-sm font-medium text-gray-700">
-                                @if (auth()->check() &&
-                                        !auth()->user()->is_employer &&
-                                        auth()->user()->jobSeeker &&
-                                        auth()->user()->jobSeeker->resume_path)
-                                    Resume
+                                @if (auth()->user()->jobSeeker && auth()->user()->jobSeeker->resume_path)
+                                    Resume <span class="text-red-500">*</span>
                                 @else
-                                    Upload Resume (PDF only)
+                                    Upload Resume (PDF only) <span class="text-red-500">*</span>
                                 @endif
                             </label>
+                            <p class="mb-2 text-sm text-gray-500">A resume is required to apply for this position.</p>
                             <div class="mt-2">
-                                @if (auth()->check() &&
-                                        !auth()->user()->is_employer &&
-                                        auth()->user()->jobSeeker &&
-                                        auth()->user()->jobSeeker->resume_path)
+                                @if (auth()->user()->jobSeeker && auth()->user()->jobSeeker->resume_path)
                                     <div id="current-resume">
                                         @php
                                             $resumeExtension = pathinfo(
@@ -170,9 +129,8 @@
                                         @endif
                                         <button type="button" id="replace-resume-btn"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            <svg class="w-5 h-5 mr-2 -ml-1 text-gray-400"
-                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor">
+                                            <svg class="w-5 h-5 mr-2 -ml-1 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                                             </svg>
@@ -181,10 +139,10 @@
                                     </div>
                                 @endif
                                 <div id="uppy-drop-target"
-                                    class="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker && auth()->user()->jobSeeker->resume_path ? 'hidden' : '' }}">
+                                    class="{{ auth()->user()->jobSeeker && auth()->user()->jobSeeker->resume_path ? 'hidden' : '' }}">
                                 </div>
                                 <input type="hidden" id="resume_path" name="resume_path"
-                                    value="{{ auth()->check() && !auth()->user()->is_employer && auth()->user()->jobSeeker ? auth()->user()->jobSeeker->resume_path : '' }}">
+                                    value="{{ auth()->user()->jobSeeker ? auth()->user()->jobSeeker->resume_path : '' }}">
                             </div>
                         </div>
                     </div>
@@ -200,7 +158,7 @@
 
                 <div class="mt-2 text-center">
                     <p class="text-sm font-medium text-gray-700">
-                        By creating an account or submitting this form, you agree to our
+                        By submitting this form, you agree to our
                         <a href="{{ route('terms-of-service') }}" class="text-blue-600 hover:underline">Terms</a> and
                         <a href="{{ route('privacy-policy') }}" class="text-blue-600 hover:underline">Privacy Policy</a>.
                     </p>
@@ -232,15 +190,6 @@
                 emailInput.addEventListener('blur', function(e) {
                     let email = e.target.value.trim().toLowerCase();
                     e.target.value = email;
-                });
-            }
-
-            // Password fields visibility
-            const createAccountCheckbox = document.getElementById('create_account');
-            const accountFields = document.getElementById('account_fields');
-            if (createAccountCheckbox && accountFields) {
-                createAccountCheckbox.addEventListener('change', function() {
-                    accountFields.classList.toggle('hidden', !this.checked);
                 });
             }
         });
