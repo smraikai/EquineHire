@@ -31,28 +31,19 @@
             // Initialize the data layer if it doesn't exist
             window.dataLayer = window.dataLayer || [];
 
-            // Prepare the data object
+            // Prepare the data object for GA4 purchase event
             let purchaseData = {
                 'event': 'purchase',
-                'currency': 'USD'
-            };
-
-            @if (isset($subscription))
-                purchaseData.transaction_id = '{{ $subscription->id }}';
-                purchaseData.subscription_id = '{{ $subscription->id }}';
-                purchaseData.items = [{
-                    'item_name': '{{ $subscription->name }}',
+                'currency': 'USD',
+                'transaction_id': '{{ $subscription->id ?? '' }}',
+                'value': {{ $amount ?? 0 }},
+                'items': [{
+                    'item_name': '{{ $subscription->name ?? 'Subscription' }}',
                     'item_category': 'Subscription',
+                    'price': {{ $amount ?? 0 }},
                     'quantity': 1
-                }];
-            @endif
-
-            @if (isset($amount))
-                purchaseData.value = {{ $amount }};
-                if (purchaseData.items && purchaseData.items[0]) {
-                    purchaseData.items[0].price = {{ $amount }};
-                }
-            @endif
+                }]
+            };
 
             @if (Auth::check())
                 purchaseData.user_id = '{{ Auth::id() }}';
@@ -60,6 +51,17 @@
 
             // Push data to the data layer
             window.dataLayer.push(purchaseData);
+
+            // Send purchase event directly to GA4
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'purchase', {
+                    currency: purchaseData.currency,
+                    transaction_id: purchaseData.transaction_id,
+                    value: purchaseData.value,
+                    items: purchaseData.items,
+                    user_id: purchaseData.user_id
+                });
+            }
         </script>
     @endif
 @endsection
