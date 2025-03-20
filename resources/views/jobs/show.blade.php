@@ -145,35 +145,85 @@
     </div>
 
     <!-- Login Required Modal -->
-    <x-modal id="loginModal" maxWidth="lg">
-        <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-                <div
-                    class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-blue-100 rounded-full sm:mx-0 sm:h-10 sm:w-10">
-                    <x-heroicon-o-user class="w-6 h-6 text-blue-600" />
+    <x-modal id="loginModal" maxWidth="4xl">
+        <div class="relative bg-white">
+            <!-- Close button -->
+            <button type="button" onclick="showLoginModal()"
+                class="absolute right-4 top-4 z-10 text-white hover:text-gray-200 focus:outline-none">
+                <span class="sr-only">Close</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="flex flex-col sm:flex-row">
+                <!-- Left side - Image -->
+                <div class="w-full sm:w-1/2 bg-blue-600 relative overflow-hidden">
+                    <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-c.webp" alt="Equine Hire Community"
+                        class="absolute inset-0 w-full h-full object-cover">
                 </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">
-                        Account Required
-                    </h3>
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500">
-                            Please create an account or log in to apply for this position. This helps us maintain
-                            high-quality job applications and allows you to track your applications.
-                        </p>
+
+                <!-- Right side - Content -->
+                <div class="w-full sm:w-1/2 p-8">
+                    <div class="max-w-sm mx-auto">
+                        <h3 class="text-2xl font-semibold text-gray-900">Create Your Free Account</h3>
+                        <p class="mt-3 text-sm text-gray-600">Get started with these features:</p>
+
+                        <ul class="mt-8 space-y-6">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-base font-medium text-gray-900">Apply to Jobs</p>
+                                    <p class="mt-1 text-sm text-gray-500">Submit applications to top equine positions</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-base font-medium text-gray-900">Track Your Applications</p>
+                                    <p class="mt-1 text-sm text-gray-500">Keep track of all jobs you've applied to</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-base font-medium text-gray-900">Upload Your Resume</p>
+                                    <p class="mt-1 text-sm text-gray-500">Store and manage your professional resume</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="mt-10 space-y-4">
+                            <a href="{{ route('register') }}?account_type=jobseeker"
+                                class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Create Free Account
+                            </a>
+                            <a href="{{ route('login') }}"
+                                class="w-full inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Sign In
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
-            <a href="{{ route('register') }}?account_type=jobseeker"
-                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                Create Account
-            </a>
-            <a href="{{ route('login') }}"
-                class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm">
-                Log In
-            </a>
         </div>
     </x-modal>
 @endsection
