@@ -26,6 +26,7 @@
         "laravel/tinker": "^2.9",
         "league/csv": "^9.16",
         "league/flysystem-aws-s3-v3": "^3.27",
+        "livewire/livewire": "^3.5",
         "meilisearch/meilisearch-php": "^1.7",
         "spatie/laravel-sitemap": "^7.2",
         "stevebauman/location": "^7.4",

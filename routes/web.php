@@ -17,6 +17,9 @@ Route::middleware(['auth', 'user.type:jobseeker'])->group(function () {
     require __DIR__ . '/job-seeker/dashboard.php';
 });
 
+// Admin Routes
+require __DIR__ . '/admin.php';
+
 // Main Routes
 require __DIR__ . '/auth.php';
 require __DIR__ . '/job-seeker/application.php';
@@ -27,3 +30,6 @@ require __DIR__ . '/api.php';
 require __DIR__ . '/webhook.php';
 require __DIR__ . '/location.php';
 require __DIR__ . '/tests.php';
+
+// Add the following line at the end of the file
+Route::redirect('/admin', '/admin/dashboard')->middleware('admin');

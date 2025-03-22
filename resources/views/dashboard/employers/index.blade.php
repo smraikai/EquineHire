@@ -93,13 +93,13 @@
                 <div class="flex flex-col items-center p-6 bg-white border rounded-md">
                     <p class="text-gray-800 text-md">Create an Employer Profile to start posting
                         your job listings.</p>
-                    <a href="{{ route('employers.create') }}"
-                      <div class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
+                    <a href="{{ route('employers.create') }}" <div
+                        class="inline-flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-bold transition-colors duration-200 ease-in-out border sm:w-auto sm:px-6 hover:bg-gray-100">
                         <x-heroicon-o-plus-circle class="w-6 h-6 mr-2" /> Create Employer Profile
-                      </div>
-                    </a>
                 </div>
-            @endif
+                </a>
         </div>
+        @endif
+    </div>
     </div>
 @endsection
