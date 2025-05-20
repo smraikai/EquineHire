@@ -53,6 +53,7 @@
     </div>
     @include('partials.footer')
     @stack('scripts')
+    @yield('scripts')
 </body>
 
 </html>

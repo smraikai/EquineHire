@@ -104,16 +104,17 @@
                 <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     Frequently Asked Questions
                 </h2>
-                <dl class="mt-6 space-y-6 divide-y divide-gray-200">
-                    <div class="pt-6">
+                <dl class="mt-6 space-y-6 divide-y divide-gray-200" x-data="{ open: null }">
+                    <div class="pt-6" x-data="{ open: false }">
                         <dt class="text-lg">
-                            <button class="flex items-start justify-between w-full text-left text-gray-400"
-                                aria-expanded="false">
+                            <button type="button" class="flex items-start justify-between w-full text-left text-gray-400"
+                                @click="open = !open" :aria-expanded="open">
                                 <span class="font-medium text-gray-900">
                                     What is included in the subscription plans?
                                 </span>
                                 <span class="flex items-center ml-6 h-7">
-                                    <svg class="w-6 h-6 transform rotate-0" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="w-6 h-6 transform transition-transform duration-200"
+                                        :class="open ? 'rotate-180' : 'rotate-0'" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
@@ -121,7 +122,7 @@
                                 </span>
                             </button>
                         </dt>
-                        <dd class="pr-12 mt-2" style="display: none;">
+                        <dd class="pr-12 mt-2" x-show="open" x-transition style="display: none;">
                             <p class="text-base text-gray-500">
                                 We offer three subscription plans to suit your needs. The Basic Plan ($50/month) includes 1
                                 job post. Our Pro Plan ($120/3 months) allows up to 5 concurrent job posts. For unlimited
@@ -132,15 +133,16 @@
                         </dd>
                     </div>
 
-                    <div class="pt-6">
+                    <div class="pt-6" x-data="{ open: false }">
                         <dt class="text-lg">
-                            <button class="flex items-start justify-between w-full text-left text-gray-400"
-                                aria-expanded="false">
+                            <button type="button" class="flex items-start justify-between w-full text-left text-gray-400"
+                                @click="open = !open" :aria-expanded="open">
                                 <span class="font-medium text-gray-900">
                                     How can I cancel my subscription?
                                 </span>
                                 <span class="flex items-center ml-6 h-7">
-                                    <svg class="w-6 h-6 transform rotate-0" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="w-6 h-6 transform transition-transform duration-200"
+                                        :class="open ? 'rotate-180' : 'rotate-0'" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
@@ -148,7 +150,7 @@
                                 </span>
                             </button>
                         </dt>
-                        <dd class="pr-12 mt-2" style="display: none;">
+                        <dd class="pr-12 mt-2" x-show="open" x-transition style="display: none;">
                             <p class="text-base text-gray-500">
                                 You can cancel your subscription at any time from your account settings. Your listing will
                                 remain active until the end of your current billing period.
@@ -156,15 +158,16 @@
                         </dd>
                     </div>
 
-                    <div class="pt-6">
+                    <div class="pt-6" x-data="{ open: false }">
                         <dt class="text-lg">
-                            <button class="flex items-start justify-between w-full text-left text-gray-400"
-                                aria-expanded="false">
+                            <button type="button" class="flex items-start justify-between w-full text-left text-gray-400"
+                                @click="open = !open" :aria-expanded="open">
                                 <span class="font-medium text-gray-900">
                                     What payment methods do you accept?
                                 </span>
                                 <span class="flex items-center ml-6 h-7">
-                                    <svg class="w-6 h-6 transform rotate-0" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="w-6 h-6 transform transition-transform duration-200"
+                                        :class="open ? 'rotate-180' : 'rotate-0'" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
@@ -172,7 +175,7 @@
                                 </span>
                             </button>
                         </dt>
-                        <dd class="pr-12 mt-2" style="display: none;">
+                        <dd class="pr-12 mt-2" x-show="open" x-transition style="display: none;">
                             <p class="text-base text-gray-500">
                                 We accept payments via credit card (Visa, Mastercard, American Express) through Stripe, a
                                 secure and trusted payment processor. All transactions are processed on Stripe's PCI-DSS
@@ -267,24 +270,6 @@
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const buttons = document.querySelectorAll('dt button');
-            buttons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const dd = button.parentElement.nextElementSibling;
-                    const svg = button.querySelector('svg');
-
-                    if (button.getAttribute('aria-expanded') === 'false') {
-                        dd.style.display = 'block';
-                        button.setAttribute('aria-expanded', 'true');
-                        svg.classList.add('rotate-180');
-                    } else {
-                        dd.style.display = 'none';
-                        button.setAttribute('aria-expanded', 'false');
-                        svg.classList.remove('rotate-180');
-                    }
-                });
-            });
-        });
+        // Alpine.js handles FAQ toggling now. No custom JS needed.
     </script>
 @endsection
