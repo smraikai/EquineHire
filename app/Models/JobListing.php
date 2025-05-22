@@ -145,7 +145,7 @@ class JobListing extends Model
         $array['remote_position'] = (bool) $this->remote_position;
 
         return array_filter($array, function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         });
     }
 
@@ -190,7 +190,7 @@ class JobListing extends Model
             try {
                 $jobListing->searchable();
             } catch (\Exception $e) {
-                Log::error('Algolia indexing failed: ' . $e->getMessage());
+                Log::error('Algolia indexing failed: '.$e->getMessage());
             }
         });
 
@@ -198,14 +198,14 @@ class JobListing extends Model
             try {
                 $jobListing->searchable();
             } catch (\Exception $e) {
-                Log::error('Algolia indexing failed: ' . $e->getMessage());
+                Log::error('Algolia indexing failed: '.$e->getMessage());
             }
         });
 
         // Add an observer for the updating event
         static::updating(function ($jobListing) {
             // If trying to set is_active to true, check subscription status
-            if ($jobListing->isDirty('is_active') && $jobListing->is_active && !$jobListing->canBeActive()) {
+            if ($jobListing->isDirty('is_active') && $jobListing->is_active && ! $jobListing->canBeActive()) {
                 $jobListing->is_active = false;
             }
         });
@@ -218,8 +218,8 @@ class JobListing extends Model
      */
     public function shouldBeSearchable()
     {
-        // Only index the model if it's active
-        return $this->is_active === true;
+        // Only index the model if it's active AND the user has an active subscription
+        return $this->is_active === true && $this->user && $this->user->hasActiveSubscription();
     }
 
     /**
@@ -268,20 +268,20 @@ class JobListing extends Model
 
                 Log::info("Job listing forcefully removed from Algolia: {$this->id}");
             } catch (\Exception $e) {
-                Log::error("Error during force removal from Algolia: " . $e->getMessage());
+                Log::error("Error during force removal from Algolia: ".$e->getMessage());
             }
 
             Log::info("Job listing archived successfully: {$this->id} - {$this->title}");
             return true;
         } catch (\Exception $e) {
-            Log::error("Failed to archive job listing {$this->id}: " . $e->getMessage());
+            Log::error("Failed to archive job listing {$this->id}: ".$e->getMessage());
             return false;
         }
     }
 
     public function unarchive()
     {
-        if (!$this->canBeActive()) {
+        if (! $this->canBeActive()) {
             return false;
         }
 
@@ -294,7 +294,7 @@ class JobListing extends Model
 
     public function isArchived()
     {
-        return !$this->is_active;
+        return ! $this->is_active;
     }
 
     /**
@@ -304,7 +304,7 @@ class JobListing extends Model
      */
     public function canBeActive()
     {
-        if (!$this->user) {
+        if (! $this->user) {
             return false;
         }
 
@@ -320,7 +320,7 @@ class JobListing extends Model
      */
     public function activate()
     {
-        if (!$this->canBeActive()) {
+        if (! $this->canBeActive()) {
             return false;
         }
 
