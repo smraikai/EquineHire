@@ -27,7 +27,8 @@ class JobListingController extends Controller
             return redirect()->route('jobs.show', [$job_listing->slug, $job_listing->id], 301);
         }
 
-        if (!$job_listing->is_active) {
+        // Check if the job listing can be active (i.e., is active and user has active subscription)
+        if (! $job_listing->canBeActive()) {
             abort(404);
         }
 
