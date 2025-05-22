@@ -35,6 +35,10 @@
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Listings
                                             </th>
                                             <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                Subscription Status
+                                            </th>
+                                            <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created
                                             </th>
                                             <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
@@ -94,6 +98,21 @@
                                                 </td>
                                                 <td class="px-3 py-4 text-sm text-gray-500 text-center">
                                                     {{ $employer->jobListings()->count() }}
+                                                </td>
+                                                <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                                    @if ($employer->user)
+                                                        @if ($employer->user->hasActiveSubscription())
+                                                            <span
+                                                                class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+                                                        @else
+                                                            <span
+                                                                class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Inactive</span>
+                                                        @endif
+                                                    @else
+                                                        <span
+                                                            class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">No
+                                                            User</span>
+                                                    @endif
                                                 </td>
                                                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                                                     {{ $employer->created_at->format('M d, Y') }}
