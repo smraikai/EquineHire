@@ -8,6 +8,21 @@
 @section('content')
     <div class="container py-12 mx-auto">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
+            @if ($errors->any())
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="overflow-hidden bg-white rounded-lg shadow">
                 <div class="p-6">
                     <div class="sm:flex sm:items-center">
@@ -78,7 +93,18 @@
                                                     {{ $jobListing->jobApplications()->count() }}
                                                 </td>
                                                 <td class="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
-                                                    {{ $jobListing->created_at->format('M d, Y') }}
+                                                    <form method="POST" action="{{ route('admin.job-listings.update-created-at', $jobListing) }}" class="flex items-center space-x-2">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="date" 
+                                                               name="created_at" 
+                                                               value="{{ $jobListing->created_at->format('Y-m-d') }}"
+                                                               class="text-xs border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                                        <button type="submit" 
+                                                                class="px-2 py-1 text-xs text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                            Update
+                                                        </button>
+                                                    </form>
                                                 </td>
                                                 <td
                                                     class="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-0">

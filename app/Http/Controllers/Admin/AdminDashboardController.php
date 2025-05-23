@@ -120,4 +120,16 @@ class AdminDashboardController extends Controller
 
         return back()->with('success', 'Application status updated successfully.');
     }
+
+    public function updateJobListingCreatedAt(Request $request, JobListing $jobListing)
+    {
+        $validated = $request->validate([
+            'created_at' => ['required', 'date'],
+        ]);
+
+        $jobListing->created_at = $validated['created_at'];
+        $jobListing->save();
+
+        return back()->with('success', 'Job listing creation date updated successfully.');
+    }
 }
