@@ -31,6 +31,75 @@
                             <p class="mt-2 text-sm text-gray-700">A list of all job listings in the system.</p>
                         </div>
                     </div>
+                    
+                    <!-- Filters -->
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <form method="GET" action="{{ route('admin.job-listings') }}" class="space-y-4">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <!-- Search -->
+                                <div>
+                                    <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
+                                    <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                                           placeholder="Title or description..."
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Status Filter -->
+                                <div>
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        <option value="">All Statuses</option>
+                                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Boosted Filter -->
+                                <div>
+                                    <label for="boosted" class="block text-sm font-medium text-gray-700">Boosted</label>
+                                    <select name="boosted" id="boosted" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        <option value="">All</option>
+                                        <option value="yes" {{ request('boosted') === 'yes' ? 'selected' : '' }}>Boosted</option>
+                                        <option value="no" {{ request('boosted') === 'no' ? 'selected' : '' }}>Not Boosted</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Employer Filter -->
+                                <div>
+                                    <label for="employer" class="block text-sm font-medium text-gray-700">Employer</label>
+                                    <input type="text" name="employer" id="employer" value="{{ request('employer') }}" 
+                                           placeholder="Employer name..."
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <!-- Date From -->
+                                <div>
+                                    <label for="date_from" class="block text-sm font-medium text-gray-700">Created From</label>
+                                    <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Date To -->
+                                <div>
+                                    <label for="date_to" class="block text-sm font-medium text-gray-700">Created To</label>
+                                    <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Filter Actions -->
+                                <div class="flex items-end space-x-2">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Filter
+                                    </button>
+                                    <a href="{{ route('admin.job-listings') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Clear
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="mt-6 flow-root">
                         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                             <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -42,9 +111,6 @@
                                                 Title</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Employer
-                                            </th>
-                                            <th scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Location
                                             </th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status
@@ -75,18 +141,11 @@
                                                         <span class="italic">No employer</span>
                                                     @endif
                                                 </td>
-                                                <td class="px-3 py-4 text-sm text-gray-500">
-                                                    @if ($jobListing->location)
-                                                        {{ $jobListing->location }}
-                                                    @else
-                                                        <span class="italic">No location</span>
-                                                    @endif
-                                                </td>
                                                 <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                     <span
                                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                {{ $jobListing->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                        {{ ucfirst($jobListing->status) }}
+                                                {{ $jobListing->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                        {{ $jobListing->is_active ? 'Active' : 'Inactive' }}
                                                     </span>
                                                 </td>
                                                 <td class="px-3 py-4 text-sm text-gray-500 text-center">

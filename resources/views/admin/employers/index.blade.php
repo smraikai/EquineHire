@@ -8,6 +8,21 @@
 @section('content')
     <div class="container py-12 mx-auto">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
+            @if ($errors->any())
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="overflow-hidden bg-white rounded-lg shadow">
                 <div class="p-6">
                     <div class="sm:flex sm:items-center">
@@ -15,6 +30,76 @@
                             <h2 class="text-lg font-medium text-gray-900">Employers</h2>
                             <p class="mt-2 text-sm text-gray-700">A list of all employers registered in the system.</p>
                         </div>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <form method="GET" action="{{ route('admin.employers') }}" class="space-y-4">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <!-- Search -->
+                                <div>
+                                    <label for="search" class="block text-sm font-medium text-gray-700">Search</label>
+                                    <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                                           placeholder="Name or description..."
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Subscription Status Filter -->
+                                <div>
+                                    <label for="subscription_status" class="block text-sm font-medium text-gray-700">Subscription Status</label>
+                                    <select name="subscription_status" id="subscription_status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        <option value="">All Statuses</option>
+                                        <option value="active" {{ request('subscription_status') === 'active' ? 'selected' : '' }}>Active Subscription</option>
+                                        <option value="inactive" {{ request('subscription_status') === 'inactive' ? 'selected' : '' }}>Inactive Subscription</option>
+                                        <option value="no_user" {{ request('subscription_status') === 'no_user' ? 'selected' : '' }}>No User</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Location Filter -->
+                                <div>
+                                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                                    <input type="text" name="location" id="location" value="{{ request('location') }}" 
+                                           placeholder="City, state, or country..."
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Job Listings Filter -->
+                                <div>
+                                    <label for="job_listings" class="block text-sm font-medium text-gray-700">Job Listings</label>
+                                    <select name="job_listings" id="job_listings" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                        <option value="">All</option>
+                                        <option value="has_listings" {{ request('job_listings') === 'has_listings' ? 'selected' : '' }}>Has Job Listings</option>
+                                        <option value="no_listings" {{ request('job_listings') === 'no_listings' ? 'selected' : '' }}>No Job Listings</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                <!-- Date From -->
+                                <div>
+                                    <label for="date_from" class="block text-sm font-medium text-gray-700">Created From</label>
+                                    <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Date To -->
+                                <div>
+                                    <label for="date_to" class="block text-sm font-medium text-gray-700">Created To</label>
+                                    <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                
+                                <!-- Filter Actions -->
+                                <div class="flex items-end space-x-2">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Filter
+                                    </button>
+                                    <a href="{{ route('admin.employers') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Clear
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="mt-6 flow-root">
                         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
