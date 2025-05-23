@@ -186,17 +186,19 @@ class JobListing extends Model
         });
 
         // Wrap searchable() calls in try-catch to avoid interruptions
-        // Use 'saved' event for both created and updated to ensure Algolia sync is consistent
-        static::saved(function ($jobListing) {
+        static::created(function ($jobListing) {
             try {
-                if ($jobListing->shouldBeSearchable()) {
-                    $jobListing->searchable(); // Re-index if it should be searchable
-                } else {
-                    // If it should not be searchable, ensure it's removed from the index
-                    $jobListing->unsearchable();
-                }
+                $jobListing->searchable();
             } catch (\Exception $e) {
-                Log::error('Algolia indexing/unindexing failed for JobListing ID '.$jobListing->id.': '.$e->getMessage());
+                Log::error('Algolia indexing failed: '.$e->getMessage());
+            }
+        });
+
+        static::updated(function ($jobListing) {
+            try {
+                $jobListing->searchable();
+            } catch (\Exception $e) {
+                Log::error('Algolia indexing failed: '.$e->getMessage());
             }
         });
 

@@ -87,7 +87,7 @@ class AdminDashboardController extends Controller
 
     public function jobListings()
     {
-        $jobListings = JobListing::with('employer.user')->latest()->paginate(15);
+        $jobListings = JobListing::with('employer')->latest()->paginate(15);
         return view('admin.job-listings.index', compact('jobListings'));
     }
 
@@ -119,16 +119,5 @@ class AdminDashboardController extends Controller
         $application->update(['status' => $validated['status']]);
 
         return back()->with('success', 'Application status updated successfully.');
-    }
-
-    public function updatePublishDate(Request $request, JobListing $jobListing)
-    {
-        $validated = $request->validate([
-            'publish_date' => ['required', 'date'],
-        ]);
-
-        $jobListing->update(['created_at' => $validated['publish_date']]);
-
-        return back()->with('success', 'Job listing publish date updated successfully.');
     }
 }
