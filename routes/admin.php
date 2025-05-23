@@ -11,5 +11,6 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/applications', [AdminDashboardController::class, 'applications'])->name('applications');
     Route::get('/applications/{application}', [AdminDashboardController::class, 'showApplication'])->name('applications.show');
     Route::put('/applications/{application}/status', [AdminDashboardController::class, 'updateApplicationStatus'])->name('applications.update-status');
+    Route::put('/job-listings/{jobListing}/publish-date', [AdminDashboardController::class, 'updatePublishDate'])->name('job-listings.update-publish-date');
     Route::get('/revenue', [AdminDashboardController::class, 'revenue'])->name('revenue');
 });
