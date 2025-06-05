@@ -19,7 +19,7 @@
                             class="items-center hidden px-4 py-2 text-sm font-semibold tracking-widest text-center text-white border border-white rounded-md sm:inline-flex hover:bg-white hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
                             Looking for a job?
                         </a>
-                        <a href="/register"
+                        <a href="/register?type=employer"
                             class="inline-flex items-center px-3 py-2 text-xs font-semibold tracking-widest text-center text-blue-600 bg-white border border-transparent rounded-md sm:text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
                             Post a Job
                         </a>
@@ -48,7 +48,7 @@
                         </p>
                         <div class="mt-5 space-y-3 sm:mt-8 sm:space-y-0 sm:flex sm:justify-center lg:justify-start">
                             <div class="rounded-md shadow">
-                                <a href="/register"
+                                <a href="/register?type=employer"
                                     class="flex items-center justify-center w-full px-6 py-3 text-sm font-medium text-blue-600 bg-white border border-transparent rounded-md sm:px-8 sm:text-base hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
                                     Post a Job
                                 </a>
@@ -481,7 +481,7 @@
                     Join hundreds of equine employers who have found their perfect team members through EquineHire.
                 </p>
                 <div class="flex flex-col mt-10 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 sm:justify-center">
-                    <a href="/register"
+                    <a href="/register?type=employer"
                         class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-blue-600 bg-white border border-transparent rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
                         Get Started Free
                         <x-heroicon-m-chevron-right class="w-5 h-5 ml-2" />
