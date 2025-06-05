@@ -85,3 +85,19 @@ Route::get('/blog', function () {
     return app(BlogController::class)->index();
 })->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+////////////////////////////////////////////////////////////////////
+// Landing Pages
+////////////////////////////////////////////////////////////////////
+Route::get('/lp/post-a-job', function () {
+    $metaTitle = 'Post a Job - Find the Perfect Equine Professional';
+    $metaDescription = 'Post your equine job listing and connect with qualified professionals in the horse industry. Start your subscription today.';
+
+    SEOMeta::setTitle($metaTitle);
+    SEOMeta::setDescription($metaDescription);
+    OpenGraph::setTitle($metaTitle);
+    OpenGraph::setDescription($metaDescription);
+    OpenGraph::setUrl(url('/lp/post-a-job'));
+
+    return view('post-a-job', compact('metaTitle', 'metaDescription'));
+})->name('lp.post-a-job');
