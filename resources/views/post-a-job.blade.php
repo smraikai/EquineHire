@@ -42,7 +42,7 @@
                             <span class="block sm:inline">Without the Hassle</span>
                         </h1>
                         <p
-                            class="mt-3 text-sm text-blue-100 sm:text-base sm:mt-5 sm:text-lg sm:max-w-xl text-balance sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            class="mt-3 text-sm text-blue-100 sm:mt-5 sm:text-lg sm:max-w-xl text-balance sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                             Stop wasting time on generic job boards. EquineHire connects you directly with experienced horse
                             professionals who understand your industry.
                         </p>
