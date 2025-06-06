@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'job.view.counter' => JobListingViewCounter::class,
             'user.type' => CheckUserType::class,
             'admin' => AdminMiddleware::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
         $middleware->append(\App\Http\Middleware\DetectUserLocation::class);
     })
