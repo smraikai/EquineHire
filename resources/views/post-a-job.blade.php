@@ -16,7 +16,7 @@
                     <!-- Buttons -->
                     <div class="flex items-center space-x-2 sm:space-x-4">
                         <a href="{{ route('jobs.index') }}"
-                            class="items-center hidden px-4 py-2 text-sm font-semibold tracking-widest text-center text-white border border-white rounded-md sm:inline-flex hover:bg-white hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                            class="items-center hidden px-4 py-2 text-sm font-semibold tracking-widest text-center text-white rounded-md sm:inline-flex hover:bg-white hover:text-blue-600 focus:outline-none backdrop-blur-sm bg-black/30">
                             Looking for a job?
                         </a>
                         <a href="{{ route('register') }}?type=employer"
@@ -55,7 +55,7 @@
                             <div class="sm:ml-3">
                                 <a href="#pricing"
                                     class="flex items-center justify-center w-full px-6 py-3 text-sm font-medium text-white bg-transparent border border-white rounded-md sm:px-8 sm:text-base hover:border-blue-700 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
-                                    View Pricing Plans
+                                    View Plans
                                 </a>
                             </div>
                         </div>
@@ -227,7 +227,7 @@
             <div class="!pt-0 max-w-7xl sm:mx-auto mx-4 mt-10">
                 <div class="grid max-w-md grid-cols-1 gap-8 mx-auto mt-10 isolate lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     <!-- Basic Plan -->
-                    <div class="p-8 bg-white shadow-md rounded-3xl ring-1 ring-gray-200 xl:p-10">
+                    <div class="p-8 bg-white rounded-lg shadow-md ring-1 ring-gray-200 xl:p-10">
                         <div class="flex items-center justify-between gap-x-4">
                             <h3 class="text-lg font-semibold leading-8 text-gray-900">Basic Plan</h3>
                         </div>
@@ -294,11 +294,9 @@
                     </div>
 
                     <!-- Pro Plan -->
-                    <div class="p-8 bg-white shadow-md rounded-3xl ring-2 ring-blue-500 xl:p-10">
+                    <div class="p-8 bg-white rounded-lg shadow-md ring-1 ring-gray-200 xl:p-10">
                         <div class="flex items-center justify-between gap-x-4">
                             <h3 class="text-lg font-semibold leading-8 text-gray-900">Pro Plan</h3>
-                            <p class="rounded-full bg-blue-600 px-2.5 py-1 text-xs font-semibold leading-5 text-white">Most
-                                popular</p>
                         </div>
                         <p class="flex items-baseline mt-6 gap-x-1">
                             <span class="text-4xl font-bold tracking-tight text-gray-900">$120</span>
@@ -312,7 +310,7 @@
                                         d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                Up to 5 Concurrent Job Posts
+                                <strong>Up to 5 Concurrent Job Posts</strong>
                             </li>
                             <li class="flex gap-x-3">
                                 <svg class="flex-none w-5 h-6 text-blue-600" viewBox="0 0 20 20" fill="currentColor"
@@ -363,7 +361,7 @@
                     </div>
 
                     <!-- Unlimited Plan -->
-                    <div class="p-8 bg-white shadow-md rounded-3xl ring-1 ring-gray-200 xl:p-10">
+                    <div class="p-8 bg-white rounded-lg shadow-md ring-1 ring-gray-200 xl:p-10">
                         <div class="flex items-center justify-between gap-x-4">
                             <h3 class="text-lg font-semibold leading-8 text-gray-900">Unlimited Plan</h3>
                         </div>
@@ -379,7 +377,7 @@
                                         d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                Unlimited Job Posts
+                                <strong>Unlimited Job Posts</strong>
                             </li>
                             <li class="flex gap-x-3">
                                 <svg class="flex-none w-5 h-6 text-blue-600" viewBox="0 0 20 20" fill="currentColor"
@@ -430,6 +428,14 @@
                     </div>
                 </div>
 
+                <div class="flex justify-center mt-8">
+                    <a href="{{ route('register') }}?type=employer"
+                        class="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Start Hiring Today
+                        <x-heroicon-m-chevron-right class="w-5 h-5 ml-2" />
+                    </a>
+                </div>
+
             </div>
         </div>
     </section>
@@ -451,10 +457,6 @@
                 <strong>Sarah Mitchell</strong><br>
                 Owner, Sunset Stables, Texas
             </cite>
-            <div class="flex flex-col mt-6 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <x-buttons.primary-outline href="{{ route('register') }}?type=employer" text="Start Hiring Today" />
-                <x-buttons.secondary-outline href="{{ route('jobs.index') }}" target="_blank" text="View Job Examples" />
-            </div>
         </div>
     </section>
 
@@ -474,12 +476,12 @@
                         Get Started
                         <x-heroicon-m-chevron-right class="w-5 h-5 ml-2" />
                     </a>
-                    <a href="{{ route('jobs.index') }}"
+                    <a href="{{ route('jobs.index') }}" target="_blank"
                         class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white border border-white rounded-md hover:bg-white hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
                         Browse Job Examples
                     </a>
                 </div>
-                <p class="mt-4 text-sm text-blue-200">Create an account for free • Select your plan • Cancel anytime</p>
+                <p class="mt-4 text-sm text-blue-200">Create an account • Select your plan • Cancel anytime</p>
             </div>
         </div>
     </section>
