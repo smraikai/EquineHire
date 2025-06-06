@@ -28,35 +28,32 @@
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-gray-50">
-    <div class="flex flex-col min-h-screen">
-        <!-- Header with Logo -->
-        <header class="lg:px-6 px-4">
-            <div class="w-full py-3 mx-auto">
-                <div class="flex items-center h-16">
-                    <div class="logo">
-                        <a href="https://equinehire.com" class="text-3xl text-gray-900 font-logo">
-                            EquineHire
-                        </a>
-                    </div>
+    <div class="flex flex-col min-h-screen md:flex-row">
+        <!-- Left side: Form content -->
+        <div class="flex flex-col w-full px-4 py-4 md:w-1/2">
+            <!-- Logo -->
+            <div class="mb-12">
+                <div class="logo">
+                    <a href="https://equinehire.com" class="text-3xl text-gray-900 font-logo">
+                        EquineHire
+                    </a>
                 </div>
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main class="flex items-center justify-center flex-1 px-4 sm:px-6 lg:px-8">
-            <div class="w-full max-w-7xl">
-                @yield('content')
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="py-8">
-            <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="text-sm text-center text-gray-500">
-                    © {{ date('Y') }} EquineHire. All rights reserved.
+            <!-- Form Content -->
+            <div class="flex items-center justify-center flex-1">
+                <div class="w-full max-w-xl">
+                    @yield('content')
                 </div>
             </div>
-        </footer>
+        </div>
+
+        <!-- Right side: Full-size image (hidden on mobile) -->
+        <div class="relative hidden w-1/2 md:block">
+            <img src="https://equinehire-static-assets.s3.amazonaws.com/horse-barn-bw-min.jpg" alt="Auth Image"
+                class="object-cover w-full h-full">
+            <div class="absolute inset-0 bg-gradient-to-br from-black/70 to-transparent"></div>
+        </div>
     </div>
 
     @yield('scripts')

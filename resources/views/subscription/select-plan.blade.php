@@ -58,7 +58,7 @@
                         <input type="hidden" value="select-plan" name="source">
                         <button type="submit"
                             class="w-full px-3 py-2 text-sm font-semibold leading-6 text-center text-white bg-blue-600 rounded-md shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:bg-blue-700 focus-visible:outline-blue-600">
-                            Get Started
+                            Choose Plan
                         </button>
                     </form>
                 </div>

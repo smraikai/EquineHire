@@ -13,7 +13,7 @@
         <h1 class="mb-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Welcome to EquineHire!
         </h1>
-        <p class="max-w-2xl mx-auto mb-8 text-lg text-gray-600">
+        <p class="max-w-xl mx-auto mb-8 text-lg text-gray-600">
             Your subscription is now active. You're ready to start posting jobs and finding the perfect equine professionals
             for your team.
         </p>
@@ -26,7 +26,7 @@
             </a>
         </div>
 
-        <div class="max-w-2xl p-6 mx-auto mt-12 rounded-lg bg-blue-50">
+        <div class="max-w-2xl p-12 mx-auto mt-12 rounded-lg bg-blue-50">
             <h3 class="mb-2 text-lg font-semibold text-gray-900">What's Next?</h3>
             <ul class="space-y-2 text-left text-gray-600">
                 <li class="flex items-start">
