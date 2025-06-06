@@ -37,9 +37,8 @@
                         </div>
                         <h1
                             class="mt-2 text-3xl font-extrabold tracking-tight text-white sm:mt-4 sm:text-4xl md:text-5xl lg:text-6xl fancy-title text-balance">
-                            <span class="">Find </span>
-                            <span class="text-emerald-500 ">Qualified Equine Talent</span>
-                            <span class="block sm:inline">Without the Hassle</span>
+                            <span class="">Find Qualified</span>
+                            <span class="text-emerald-500 "> Equine Talent</span>
                         </h1>
                         <p
                             class="mt-3 text-sm text-blue-100 sm:mt-5 sm:text-lg sm:max-w-xl text-balance sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
