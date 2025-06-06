@@ -22,7 +22,7 @@ class SubscriptionCheck
         }
 
         if (!$this->hasActiveSubscription($user)) {
-            return redirect()->route('subscription.plans');
+            return redirect()->route('subscription.select');
         }
 
         return $next($request);

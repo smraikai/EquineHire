@@ -19,6 +19,13 @@ class SubscriptionController extends Controller
         return view('subscription.plans', compact('plans'));
     }
 
+    public function showSubscriptionSelection()
+    {
+        // Show minimal select plan page for new employers
+        $plans = config('subscriptions.plans.' . (app()->environment('local') ? 'local' : 'production'));
+        return view('subscription.select-plan', compact('plans'));
+    }
+
     ////////////////////////////////////////////
     // Checkout
     ////////////////////////////////////////////
@@ -117,6 +124,10 @@ class SubscriptionController extends Controller
         if (Auth::check()) {
             return redirect()->route('subscription.checkout');
         } else {
+            // if coming from select-plan page, preserve the plan selection and go to register
+            if ($request->input('source') === 'select-plan') {
+                return redirect()->route('register');
+            }
             return redirect()->route('register');
         }
     }

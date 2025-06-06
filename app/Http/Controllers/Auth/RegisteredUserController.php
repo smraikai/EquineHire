@@ -61,7 +61,7 @@ class RegisteredUserController extends Controller
                 $planId = $request->session()->get('selected_plan');
                 return redirect()->route('subscription.checkout', ['plan' => $planId]);
             }
-            return redirect()->route('subscription.plans');
+            return redirect()->route('subscription.select');
         }
 
         return redirect()->route('jobs.index');
