@@ -441,22 +441,23 @@
     </section>
 
     <!-- What Our Customers Say Section -->
-    <section class="relative flex flex-col gap-10 px-4 py-12 mx-auto sm:py-16 md:py-20 lg:py-24 md:flex-row max-w-7xl">
-        <div class="w-full mb-8 md:w-1/2 md:mb-0 md:order-2">
-            <img src="https://equinehire.s3.amazonaws.com/eqh-old/equine-hire-c.webp" loading="lazy"
-                alt="Happy equine employer with their team" class="object-cover w-full h-64 md:h-full rounded-xl">
-        </div>
-        <div class="flex flex-col justify-center w-full gap-5 text-left md:w-1/2 md:order-1">
-            <h2 class="text-2xl sm:text-3xl md:text-5xl fancy-title">Trusted by Equine Employers</h2>
-            <x-divider class="self-start" />
-            <blockquote class="text-base text-gray-800 sm:text-lg md:text-xl">
-                "EquineHire helped us find an amazing barn manager within two weeks. The quality of candidates was
-                exceptional and they all truly understood horses."
-            </blockquote>
-            <cite class="text-base text-gray-600 md:text-lg">
-                <strong>Sarah Mitchell</strong><br>
-                Owner, Sunset Stables, Texas
-            </cite>
+    <section class="relative px-6 py-24 overflow-hidden isolate bg-blue-50 sm:py-32 lg:px-8">
+        <div class="max-w-2xl mx-auto lg:max-w-4xl">
+            <a href="https://kroops.com/" target="_blank" rel="noopener noreferrer">
+                <img class="h-12 mx-auto transition-opacity hover:opacity-80"
+                    src="https://kroops.com/cdn/shop/files/Kroops_Logo_-_black_400.png?v=1742386374&width=400"
+                    alt="Kroops">
+            </a>
+            <figure class="mt-10">
+                <blockquote class="text-xl font-medium leading-8 text-center text-gray-900 sm:text-2xl sm:leading-9">
+                    <p>"We have so many resumes we're having a hard time sorting them. We'll definitely be using Equine Hire
+                        in the future."</p>
+                </blockquote>
+                <figcaption class="mt-10 text-center">
+                    <div class="font-semibold text-gray-900">Andrew Tremblay</div>
+                    <div class="text-gray-600">Owner, Kroop's – Equestrian Sunglasses & Goggles</div>
+                </figcaption>
+            </figure>
         </div>
     </section>
 
