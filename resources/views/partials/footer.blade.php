@@ -4,7 +4,7 @@
     <div class="container px-4 mx-auto max-w-7xl">
         <div class="flex flex-wrap">
             <!-- Existing logo section -->
-            <div class="w-full px-0 mb-8 lg:w-1/3 lg:mb-0">
+            <div class="w-full px-0 mb-8 lg:w-2/5 lg:mb-0">
                 <div class="logo">
                     <a href="{{ route('home') }}" class="text-3xl text-gray-900 font-logo">
                         EquineHire
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Existing categories section -->
-            <div class="w-full px-0 mb-8 lg:w-1/3 lg:mb-0">
+            <div class="w-full px-0 mb-8 lg:w-1/5 lg:mb-0">
                 <h5 class="mb-2 font-bold text-gray-900">Explore Jobs</h5>
                 <ul class="space-y-3 list-none footer-links">
                     @foreach (\App\Models\JobListingCategory::all() as $category)
@@ -97,7 +97,7 @@
             </div>
 
             <!-- Existing company section -->
-            <div class="w-full px-0 lg:w-1/3">
+            <div class="w-full px-0 mb-8 lg:w-1/5 lg:mb-0">
                 <h5 class="mb-2 font-bold text-gray-900">Company</h5>
                 <ul class="space-y-3 list-none footer-links">
                     <li><a href="/privacy-policy" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
@@ -109,6 +109,23 @@
                             document.write('<a href=\"mailto:' + name + '@' + domain + '\" class="text-gray-600 hover:text-gray-900">');
                             document.write('Contact</a>');
                         </script>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Our Network section -->
+            <div class="w-full px-0 lg:w-1/5">
+                <h5 class="mb-2 font-bold text-gray-900">Our Network</h5>
+                <ul class="space-y-3 list-none footer-links">
+                    <li>
+                        <a href="https://equineprofinder.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-gray-900">
+                            EquineProFinder
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.bringahalter.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-gray-900">
+                            BringAHalter
+                        </a>
                     </li>
                 </ul>
             </div>
