@@ -68,6 +68,11 @@ class User extends Authenticatable
     ////////////////////////////////////////////////
     public function canCreateJobListing()
     {
+        // Admin users bypass all subscription limits
+        if ($this->email === 'admin@equinehire.com') {
+            return true;
+        }
+
         $subscription = $this->subscriptions()
             ->where('stripe_status', 'active')
             ->latest()
@@ -92,11 +97,21 @@ class User extends Authenticatable
 
     public function canRestoreJobListing()
     {
+        // Admin users bypass all subscription limits
+        if ($this->email === 'admin@equinehire.com') {
+            return true;
+        }
+
         return $this->checkJobListingLimit(1);
     }
 
     private function checkJobListingLimit($additionalCount = 0)
     {
+        // Admin users bypass all subscription limits
+        if ($this->email === 'admin@equinehire.com') {
+            return true;
+        }
+
         $subscription = $this->subscriptions()
             ->where('stripe_status', 'active')
             ->latest()
@@ -126,6 +141,11 @@ class User extends Authenticatable
      */
     public function hasActiveSubscription()
     {
+        // Admin users bypass all subscription limits
+        if ($this->email === 'admin@equinehire.com') {
+            return true;
+        }
+
         return $this->subscriptions()
             ->where('stripe_status', 'active')
             ->exists();
