@@ -11,6 +11,27 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:generate-sitemap')->daily();
 Schedule::command('jobs:remove-expired-boosts')->daily();
+
+// Daily cleanup: Archive jobs for users without active subscriptions
+Schedule::call(function () {
+    $orphanedJobs = App\Models\JobListing::where('is_active', true)
+        ->with('user.subscriptions')
+        ->get()
+        ->filter(function($job) {
+            return !$job->user || !$job->user->hasActiveSubscription();
+        });
+
+    if ($orphanedJobs->count() > 0) {
+        $orphanedJobs->each(function($job) {
+            $job->archive();
+        });
+        Log::info("Daily cleanup: Archived {$orphanedJobs->count()} orphaned jobs");
+    } else {
+        Log::info('Daily cleanup: No orphaned jobs found');
+    }
+})->daily();
+
+// Daily Algolia sync: Re-index all searchable jobs
 Schedule::call(function () {
     $jobs = App\Models\JobListing::all()->filter(function ($job) {
         return $job->shouldBeSearchable();
