@@ -11,4 +11,10 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:generate-sitemap')->daily();
 Schedule::command('jobs:remove-expired-boosts')->daily();
-Schedule::command('scout:import "App\Models\JobListing"')->dailyAt('00:00');
+Schedule::call(function () {
+    $jobs = App\Models\JobListing::all()->filter(function ($job) {
+        return $job->shouldBeSearchable();
+    });
+    $jobs->searchable();
+    Log::info('Daily Algolia sync completed: '.$jobs->count().' jobs indexed');
+})->dailyAt('00:00');
