@@ -29,13 +29,13 @@ Schedule::call(function () {
     } else {
         Log::info('Daily cleanup: No orphaned jobs found');
     }
-})->daily();
+})->dailyAt('23:30');
 
-// Daily Algolia sync: Re-index all searchable jobs
+// Daily Algolia sync: Re-index all searchable jobs (runs after cleanup)
 Schedule::call(function () {
     $jobs = App\Models\JobListing::all()->filter(function ($job) {
         return $job->shouldBeSearchable();
     });
     $jobs->searchable();
     Log::info('Daily Algolia sync completed: '.$jobs->count().' jobs indexed');
-})->dailyAt('00:00');
+})->dailyAt('23:45');
