@@ -143,6 +143,7 @@ class JobListing extends Model
         $array['experience_required'] = $this->experience_required;
         $array['salary_type'] = $this->salary_type;
         $array['remote_position'] = (bool) $this->remote_position;
+        $array['is_active'] = (bool) $this->is_active;
 
         return array_filter($array, function ($value) {
             return ! is_null($value);
